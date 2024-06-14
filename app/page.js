@@ -26,9 +26,9 @@ export default function Home() {
       
       <div className="w-full flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 justify-items-center content-start">
       
-        {createLinkCard("https://gno.flippando.xyz", "Core", coreDescription, "in development", "alpha")}
-        {createLinkCard("https://saga.flippando.xyz", "Project", projectDescription, "in development", "alpha")}
-        {createLinkCard("https://evmos.flippando.xyz", "User", userDescription, "in development", "alpha")}
+        {createLinkCard("/core", "Core", coreDescription, "in development", "alpha")}
+        {createLinkCard("/project", "Project", projectDescription, "in development", "alpha")}
+        {createLinkCard("/user", "User", userDescription, "in development", "alpha")}
       </div>
 
       <Footer />

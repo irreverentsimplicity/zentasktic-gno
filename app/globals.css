@@ -30,3 +30,21 @@ body {
     text-wrap: balance;
   }
 }
+
+
+.logo-img {
+  background-color: #000000;
+  padding: 6px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+  width: 80px;
+}
+.logo-hat {
+fill: #FFFFFF;
+}
+.logo-beard {
+fill: #808080;
+}
+.logo-wording path {
+fill: #FFFFFF;
+}
