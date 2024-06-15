@@ -9,13 +9,13 @@ export default function Home() {
   const projectDescription = "The opinionated implementation, enriched with other data types, such as Actor, Team and Workable hours. Deployed as a realm package."
   const userDescription = "A simple implementation, aimed at a single user, for managing personal workflows. Deployed as a realm package."
   return (
-    <main className="flex flex-col min-h-screen items-center justify-between bg-gradient-to-tr from-purple-500 to-purple-900 text-white p-10">
+    <main className="flex flex-col min-h-screen items-center justify-between bg-gradient-to-tr from-blue-500 to-blue-900 text-white p-10">
       <Image
           className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
           src="/zentasktic-logo.png"
           alt="ZenTasktic"
-          width={200}
-          height={200}
+          width={180}
+          height={180}
           priority
         />
       <div className="flex flex-1 items-center justify-start">
@@ -39,7 +39,7 @@ export default function Home() {
 // Helper function to create link card
 function createLinkCard(url, title, description, status, access) {
   return (
-    <a href={url} className="group rounded-lg border bg-purple-800 border-transparent px-5 py-4 mx-1 transition-colors hover:border-gray-300 hover:bg-purple-400 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+    <a href={url} className="group rounded-lg border bg-blue-900 border-transparent px-5 py-4 mx-1 transition-colors hover:border-gray-300 hover:bg-green-700 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
       <h2 className="mb-3 text-2xl font-bold">
         {title}
       </h2>
