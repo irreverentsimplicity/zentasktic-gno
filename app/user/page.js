@@ -6,6 +6,7 @@ import { Box, Grid, GridItem, Button, Text, VStack, HStack } from '@chakra-ui/re
 import { PieChart, Pie, Cell } from 'recharts';
 import Footer from '../components/Footer';
 import SlidingDrawer from '../components/SlidingDrawer';
+import Header from '../components/Header';
 
 const pieData = [
   { name: 'Red', value: 1 },
@@ -30,6 +31,7 @@ const Dashboard = () => {
   return (
     <div>
     <Box height="80vh" padding="4">
+    <Header appTitle="User"/>
       <Grid templateRows="80% 20%" height="100%">
         <GridItem>
           <Grid templateColumns="30% 70%" height="100%">

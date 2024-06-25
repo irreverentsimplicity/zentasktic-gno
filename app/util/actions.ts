@@ -1,3 +1,6 @@
+'use client';
+
+
 import { saveToLocalStorage } from './localstorage';
 import {
   defaultFaucetTokenKey,
@@ -12,9 +15,6 @@ import {
 import { generateMnemonic } from './crypto';
 import Long from 'long';
 import Config from './config';
-import { constructFaucetError } from './errors';
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 import {
   ErrorTransform
@@ -70,7 +70,7 @@ class Actions {
   private providerJSON: GnoJSONRPCProvider | null = null;
   private faucetToken: string | null = null;
   private rpcURL: string = Config.GNO_JSONRPC_URL;  
-  private flippandoRealm: string = Config.GNO_FLIPPANDO_REALM;
+  private coreRealm: string = Config.GNO_ZENTASKTIC_CORE_REALM;
   private faucetURL: string = Config.FAUCET_URL;
   
   private constructor() {}
@@ -84,8 +84,8 @@ class Actions {
     this.faucetURL = newFaucetUrl;
   }
 
-  public setFlippandoRealm(newFlippandoRealm: string): void {
-    this.flippandoRealm = newFlippandoRealm;
+  public setCoreRealm(newCoreRealm: string): void {
+    this.coreRealm = newCoreRealm;
   }
 
   private async reinitializeProvider(): Promise<void> {
@@ -138,7 +138,7 @@ class Actions {
     try {
       // Initialize the wallet using the saved mnemonic
       this.wallet = await GnoWallet.fromMnemonic(mnemonic);
-      console.log('saved mnemonic ', JSON.stringify(mnemonic))
+      //console.log('saved mnemonic ', JSON.stringify(mnemonic))
       console.log(this.wallet);
       // Initialize the provider
       //this.provider = new GnoWSProvider(wsURL);
@@ -205,7 +205,7 @@ class Actions {
   }
 
   private gkLog(): Boolean {
-    const wnd = window as { gnokeyLog?: Boolean };
+    //const wnd = window as { gnokeyLog?: Boolean };
     //return typeof wnd.gnokeyLog !== 'undefined' && wnd.gnokeyLog;
     return true;
   }
@@ -256,7 +256,7 @@ class Actions {
         const response = await fetch(this.faucetURL, requestOptions);
         const data = await response.json(); // Assuming the server responds with JSON
         console.log("Faucet URL:", this.faucetURL);
-        console.log("Fund Response:", JSON.stringify(data, null, 2));
+        //console.log("Fund Response:", JSON.stringify(data, null, 2));
         
         if (!response.ok) {
             // Log more detailed error information
@@ -283,13 +283,13 @@ class Actions {
         const gkArgs = args?.map((arg) => '-args ' + arg).join(' ') ?? '';
         console.log(
           `$ gnokey maketx call -broadcast ` +
-            `-pkgpath ${this.flippandoRealm} -gas-wanted ${gasWanted} -gas-fee ${defaultTxFee} ` +
+            `-pkgpath ${this.coreRealm} -gas-wanted ${gasWanted} -gas-fee ${defaultTxFee} ` +
             `-func ${method} ${gkArgs} test`
         );
       }
             
       const resp = (await this.wallet?.callMethod(
-        this.flippandoRealm,
+        this.coreRealm,
         method,
         args,
         TransactionEndpoint.BROADCAST_TX_COMMIT,
@@ -300,7 +300,7 @@ class Actions {
         }
       )) as BroadcastTxCommitResult;
       if (gkLog) {
-        console.info('response in call:', JSON.stringify(resp));
+        //console.info('response in call:', JSON.stringify(resp));
         const respData = resp.deliver_tx.ResponseBase.Data;
         if (respData !== null) {
           console.info('response (parsed):', parsedJSONOrRaw(respData, false, "maketx"));
@@ -336,12 +336,12 @@ class Actions {
     if (gkLog) {
       const quotesEscaped = expr.replace(/'/g, `'\\''`);
       console.info(
-        `$ gnokey query vm/qeval --data '${this.flippandoRealm}'$'\\n''${quotesEscaped}'`
+        `$ gnokey query vm/qeval --data '${this.coreRealm}'$'\\n''${quotesEscaped}'`
       );
     }
 
     const resp = (await this.providerJSON?.evaluateExpression(
-      this.flippandoRealm,
+      this.coreRealm,
       expr
     )) as string;
 

@@ -1,2 +1,2 @@
-export const defaultMnemonicKey = 'private-key-mnemonic-two';
-export const defaultFaucetTokenKey = 'flippando';
+export const defaultMnemonicKey = 'private-key-mnemonic-seven';
+export const defaultFaucetTokenKey = 'zentasktic';

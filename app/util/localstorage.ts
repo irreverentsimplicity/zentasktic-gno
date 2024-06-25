@@ -1,3 +1,4 @@
+
 /**
  * Saves the data to local storage
  * @param key the key associated with the data

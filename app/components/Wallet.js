@@ -1,15 +1,16 @@
-import React, {useState} from "react";
+
+import React from "react";
 import { FaWallet} from 'react-icons/fa';
 import { Icon, Select } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
-import { setRpcEndpoint } from "../slices/flippandoSlice";
+import { setRpcEndpoint } from "../slices/coreSlice";
 import Actions from "../util/actions";
 
 
-const Wallet = ({ userBalances, userGnotBalances }) => {
+const Wallet = ({ userGnotBalances }) => {
 
     const dispatch = useDispatch();
-    const rpcEndpoint = useSelector(state => state.flippando.rpcEndpoint);
+    const rpcEndpoint = useSelector(state => state.core.rpcEndpoint);
     
     const handleNetworkChange = async (event) => {
       const newNetwork = event.target.value;
@@ -17,37 +18,29 @@ const Wallet = ({ userBalances, userGnotBalances }) => {
       dispatch(setRpcEndpoint(newNetwork))
       const actionsInstance = await Actions.getInstance();
       let faucetUrl = "";
-      let flippandoRealm = "";
+      let coreRealm = "";
       if (newNetwork === "http://localhost:26657"){
         faucetUrl = "http://127.0.0.1:5050";
-        flippandoRealm = "gno.land/r/demo/flippando"
+        coreRealm = "gno.land/p/demo/zentasktic"
       } else if (newNetwork === "https://rpc.flippando.xyz") {
         faucetUrl = "https://faucet.flippando.xyz";
-        flippandoRealm = "gno.land/r/demo/flippando"
+        coreRealm = "gno.land/p/demo/zentasktic"
       } else if (newNetwork === "https://portal-loop.gnoteam.com"){
         faucetUrl = "https://faucet.flippando.xyz";
-        flippandoRealm = "gno.land/r/demo/flippando/v1"
+        coreRealm = "gno.land/p/demo/zentasktic/v1"
       }
       actionsInstance.setFaucetUrl(faucetUrl);
-      actionsInstance.setFlippandoRealm(flippandoRealm);
+      actionsInstance.setCoreRealm(coreRealm);
       actionsInstance.setRpcUrl(newNetwork);
     };
 
     return (
       <div>
-      {/*<AdenaWallet/>*/}
       <div className="grid grid-cols-5 pb-10 justify-end">
         <div className="col-span-5 flex justify-end pr-10">
-          <div className="rounded-md flex flex-row justify-center items-center mt-3 mr-3 p-2 bg-black-400border border-purple-400" style={{ borderWidth: '0.5px' }}>
-          <Icon as={FaWallet} w={6} h={6} alignSelf="left" color={'purple.600'} pr={1}/>
-            <button className="text-sm font-small gap-6 text-white border-transparent focus:outline-none">
-              {userBalances.availableBalance} liquid / {userBalances.lockedBalance} locked
-              $FLIP
-            </button>
-          </div>
-          <div className="rounded-md flex flex-row justify-center items-center mt-3 p-2 bg-black-400border border-purple-400" style={{ borderWidth: '0.5px' }}>
-          <Icon as={FaWallet} w={6} h={6} alignSelf="left" color={'purple.200'} pr={1}/>
-            <button className="text-sm font-small gap-6 text-white border-transparent focus:outline-none">
+          <div className="rounded-md flex flex-row justify-center items-center mt-3 p-2 bg-black-400 border border-purple-700" style={{ borderWidth: '0.5px' }}>
+          <Icon as={FaWallet} w={6} h={6} alignSelf="left" color={'purple.400'} pr={1}/>
+            <button className="text-sm font-small gap-6 text-purple border-transparent focus:outline-none">
               {userGnotBalances} GNOT
             </button>
           </div>
@@ -62,7 +55,7 @@ const Wallet = ({ userBalances, userGnotBalances }) => {
           _hover={{ bg: 'purple.600' }}
           _focus={{ boxShadow: 'outline' }}>
           <option value="http://localhost:26657">Local node</option>
-          <option value="https://rpc.flippando.xyz" >Flippando RPC</option>
+          <option value="https://rpc.flippando.xyz" >Zentasktic RPC</option>
           <option value="https://portal-loop.gnoteam.com">Portal Loop RPC</option>
         </Select>
         </div>

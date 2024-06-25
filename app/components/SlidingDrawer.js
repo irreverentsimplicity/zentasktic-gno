@@ -9,7 +9,6 @@ import {
     Button,
     useDisclosure,
   } from "@chakra-ui/react";
-  import { useEffect } from "react";
   
   const SlidingDrawer = ({ isOpen, onClose, title, content }) => {
     return (

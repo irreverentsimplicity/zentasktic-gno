@@ -1,7 +1,12 @@
 'use client';
 
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider as ChakraUIProvider } from '@chakra-ui/react';
+//import { theme } from '../theme'; // Adjust the path as needed
 
 export function Providers({ children }) {
-  return <ChakraProvider>{children}</ChakraProvider>;
+  return (
+    <ChakraUIProvider>
+      {children}
+    </ChakraUIProvider>
+  );
 }

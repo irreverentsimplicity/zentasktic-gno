@@ -1,3 +1,5 @@
+'use client'
+
 import Actions from "./actions";
 import {setUserBalances, setUserGnotBalances} from '../slices/flippandoSlice';
 
@@ -9,7 +11,7 @@ export const getGNOTBalances = async (dispatch) => {
       actions.getBalance().then((response) => {
         console.log("getGNOTBalances response in Flip", response);
         let parsedResponse = JSON.parse(response);
-        console.log("parseResponse", JSON.stringify(parsedResponse, null, 2))
+        //console.log("parseResponse", JSON.stringify(parsedResponse, null, 2))
         //setUserGnotBalances(parsedResponse/1000000)
         dispatch(setUserGnotBalances(parsedResponse/1000000))
         if(parsedResponse <= 80000000){
@@ -30,7 +32,7 @@ export const getGNOTBalances = async (dispatch) => {
         if (response !== undefined){
           console.log("fetchUserFLIPBalances response in Flip", response);
           let parsedResponse = JSON.parse(response);
-          console.log("parseResponse", JSON.stringify(response, null, 2))
+          //console.log("parseResponse", JSON.stringify(response, null, 2))
           if(parsedResponse.lockedBalance !== undefined && parsedResponse.availableBalance !== undefined){  
             // get rid of FLIP and convert to FLIP from uflip
             parsedResponse.lockedBalance = (parseInt(parsedResponse.lockedBalance.slice(0, -4)) / 1000).toString();
