@@ -7,19 +7,43 @@ import {
     DrawerContent,
     DrawerCloseButton,
     Button,
-    useDisclosure,
+    Text,
   } from "@chakra-ui/react";
+  import AssessTabBar from "./AssessTabBar";
+  import DecideTabBar from "./DecideTabBar";
+  import DoTabBar from "./DoTabBar";
   
   const SlidingDrawer = ({ isOpen, onClose, title, content }) => {
+    // Determine the color based on the title
+    const getTitleColor = () => {
+      switch (title) {
+        case 'Assess':
+          return 'red.500';
+        case 'Decide':
+          return 'orange.500';
+        case 'Do':
+          return 'green.500';
+        default:
+          return 'black';
+      }
+    };
+  
     return (
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>{title}</DrawerHeader>
+          <DrawerHeader>
+            <Text fontSize="2xl" fontWeight="bold" color={getTitleColor()}>
+              {title}
+            </Text>
+          </DrawerHeader>
   
           <DrawerBody>
-            <p>{content}</p>
+            {title === 'Assess' ? <AssessTabBar /> : 
+             title === 'Decide' ? <DecideTabBar /> : 
+             title === "Do" ? <DoTabBar /> : 
+             <p>{content}</p>}
           </DrawerBody>
   
           <DrawerFooter>
