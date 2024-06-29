@@ -40,6 +40,7 @@ const Dashboard = () => {
 
   useEffect( () => {
     fetchAllTasks()
+    AddTask("some task")
   }, [])
 
   const openDrawer = (title, content) => {
@@ -50,6 +51,28 @@ const Dashboard = () => {
   const closeDrawer = () => {
     setDrawerOpen(false);
   };
+
+  const AddTask = async (task) => {
+    console.log("AddTask");
+    const actions = await Actions.getInstance();
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
+    try {
+        actions.AddTask(task).then((response) => {
+          console.log("AddTask response in Core", response);
+            if (response !== undefined){
+            let parsedResponse = JSON.parse(response);
+            
+            if(parsedResponse.tasks !== undefined && parsedResponse.tasks.length !== 0){  
+              
+              console.log("parseResponse", JSON.stringify(response, null, 2))
+              
+            }
+          }
+        });
+      } catch (err) {
+        console.log("error in calling AddTask", err);
+      }
+  }
 
   const fetchAllTasks = async () => {
     console.log("fetchAllTasks");

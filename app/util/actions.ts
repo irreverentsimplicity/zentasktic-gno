@@ -39,7 +39,7 @@ const cleanUpRealmReturn = (ret: string, callType: string) => {
     return ret.slice(2, -9).replace(/\\"/g, '"');
   }
   else if (callType == "eval"){
-    return ret.slice(2, -21).replace(/\\"/g, '"');
+    return ret.slice(2, -9).replace(/\\"/g, '"');
   }
 };
 const decodeRealmResponse = (resp: string, callType: string) => {
@@ -369,28 +369,21 @@ class Actions {
    ****************/
 
   /**
-   * Generates a width x height canvas with bTokenIDs inside, as a composite NFT
-   * @param playerAddr string
-   * @param width string - canvas width
-   * @param height string - canvas height
-   * @param bTokenIDs array of ints, converted into string, e.g. [1,4] - basic NFTs tooken ids used in the canvas
+   * Adds a new task
+   *
+   * @param taskName string - task name
+   * @param taskDescription string - task description
    */
-  /* remove after implementing ZenTasktic calls
-  async createCompositeNFT(
-    playerAddr: string,
-    width: string,
-    height: string,
-    bTokenIDs: string,
+  
+  async AddTask(
+    taskName: string,
   ): Promise<any> {
-    const response = await this.callMethod('CreateCompositeNFT', [
-      playerAddr,
-      width,
-      height,
-      bTokenIDs
+    const response = await this.callMethod('AddTask', [
+      taskName
     ]);
-    console.log("actions createCompositeNFT response ", JSON.stringify(response))
+    console.log("actions AddTask response ", JSON.stringify(response))
     return response;
-  }*/
+  }
 
   
   /**
