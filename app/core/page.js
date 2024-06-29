@@ -1,11 +1,15 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import { Box, Grid, GridItem, Button, Text, VStack, Divider, HStack } from '@chakra-ui/react';
 import { PieChart, Pie, Cell } from 'recharts';
 import Footer from '../components/Footer';
 import SlidingDrawer from '../components/SlidingDrawer';
 import Header from '../components/Header';
+import Actions from '../util/actions';
+import Config from '../util/config'
+import { getGNOTBalances } from '../util/tokenActions';
 
 const pieData = [
   { name: 'Red', value: 1 },
@@ -18,6 +22,25 @@ const COLORS = ['#FF0000', '#FFA500', '#008000'];
 const Dashboard = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [drawerContent, setDrawerContent] = useState({ title: '', content: '' });
+  const [allTasks, setAllTasks] = useState([])
+  const rpcEndpoint = useSelector(state => state.core.rpcEndpoint);
+  const userGnotBalances = useSelector(state => state.core.userGnotBalances);
+
+  const dispatch = useDispatch()
+  
+  useEffect( () => {
+      getGNOTBalances(dispatch, (result) => {
+        if (result.success) {
+            alert(result.message);
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    });
+  }, [rpcEndpoint]);
+
+  useEffect( () => {
+    fetchAllTasks()
+  }, [])
 
   const openDrawer = (title, content) => {
     setDrawerContent({ title, content });
@@ -28,9 +51,31 @@ const Dashboard = () => {
     setDrawerOpen(false);
   };
 
+  const fetchAllTasks = async () => {
+    console.log("fetchAllTasks");
+    const actions = await Actions.getInstance();
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
+    try {
+      actions.GetAllTasks().then((response) => {
+        console.log("getAllTasks response in Core", response);
+          if (response !== undefined){
+          let parsedResponse = JSON.parse(response);
+          
+          if(parsedResponse.tasks !== undefined && parsedResponse.tasks.length !== 0){  
+            setAllTasks(parsedResponse.tasks)
+            console.log("parseResponse", JSON.stringify(response, null, 2))
+            //dispatch(setUserBasicNFTs(parsedResponse.userNFTs))
+          }
+        }
+      });
+    } catch (err) {
+      console.log("error in calling getAllTasks", err);
+    }
+  };
+
   return (
     <div>
-    <Header appTitle="Core"/>
+    <Header appTitle="Core" userGnotBalances={userGnotBalances}/>
       <Box height="85vh" padding="4" border="1px" borderRadius="md" borderColor="gray.300">
         
         <Grid templateRows="80% 20%" height="100%" padding={2}>

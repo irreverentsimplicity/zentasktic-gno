@@ -39,7 +39,7 @@ const cleanUpRealmReturn = (ret: string, callType: string) => {
     return ret.slice(2, -9).replace(/\\"/g, '"');
   }
   else if (callType == "eval"){
-    return ret.slice(2, -9).replace(/\\"/g, '"');
+    return ret.slice(2, -21).replace(/\\"/g, '"');
   }
 };
 const decodeRealmResponse = (resp: string, callType: string) => {
@@ -71,6 +71,8 @@ class Actions {
   private faucetToken: string | null = null;
   private rpcURL: string = Config.GNO_JSONRPC_URL;  
   private coreRealm: string = Config.GNO_ZENTASKTIC_CORE_REALM;
+  private projectRealm: string = Config.GNO_ZENTASKTIC_PROJECT_REALM;
+  private userRealm: string = Config.GNO_ZENTASKTIC_USER_REALM;
   private faucetURL: string = Config.FAUCET_URL;
   
   private constructor() {}
@@ -360,6 +362,8 @@ class Actions {
     return (await this.wallet?.getAddress()) as string;
   }
 
+  
+
   /****************
    * ZenTasktic engine
    ****************/
@@ -390,17 +394,14 @@ class Actions {
 
   
   /**
-   * Get both locked and unlocked FLIP balances for a user
-   * @param playerAddr string
+   * Get all tasks
    */
-  /* remove after implementing ZenTasktic calls
-  async GetFLIPBalance(
-    playerAddr: string,
-  ): Promise<any> {
-    const response = await this.evaluateExpression("GetFLIPBalance(\"" + playerAddr + "\")")
-    console.log("actions GetFLIPBalance response ", JSON.stringify(response))
+  
+  async GetAllTasks(): Promise<any> {
+    const response = await this.evaluateExpression("GetAllTasks()")
+    console.log("actions GetAllTasks response ", JSON.stringify(response))
     return response;
-  }*/
+  }
 
 
 }

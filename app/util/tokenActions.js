@@ -1,7 +1,7 @@
 'use client'
 
 import Actions from "./actions";
-import {setUserBalances, setUserGnotBalances} from '../slices/flippandoSlice';
+import {setUserGnotBalances} from '../slices/coreSlice';
 
 export const getGNOTBalances = async (dispatch) => {
     console.log(typeof dispatch); 
