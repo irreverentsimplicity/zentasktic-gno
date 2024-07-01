@@ -371,7 +371,6 @@ class Actions {
    * Adds a new task
    *
    * @param taskName string - task name
-   * @param taskDescription string - task description
    */
   
   async AddTask(
@@ -387,8 +386,7 @@ class Actions {
    /**
    * Removes a task
    *
-   * @param taskName string - task name
-   * @param taskDescription string - task description
+   * @param taskId string - task id
    */
   
    async RemoveTask(
@@ -447,6 +445,68 @@ class Actions {
   async GetTasksByRealm(realmId : string): Promise<any> {
     const response = await this.evaluateExpression("GetTasksByRealm(\"" + realmId + "\")")
     console.log("actions GetTasksByRealm response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Adds a new context
+   *
+   * @param contextName string - context name
+   */
+  
+  async AddContext(
+    contextName: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddContext', [
+      contextName
+    ]);
+    console.log("actions AddContext response ", JSON.stringify(response))
+    return response;
+  }
+
+
+   /**
+   * Removes a context
+   *
+   * @param contextName string - task name
+   */
+  
+   async RemoveContext(
+    contextId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveContext', [
+      contextId
+    ]);
+    console.log("actions RemoveContext response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Updates a context
+   *
+   * @param contextId string - context id
+   * @param contextName string - context name
+   */
+  
+  async UpdateContext(
+    contextId: string,
+    contextName: string,
+  ): Promise<any> {
+    const response = await this.callMethod('EditContext', [
+      contextId,
+      contextName
+    ]);
+    console.log("actions EditContext response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Get all contexts
+   */
+  
+  async GetAllContexts(): Promise<any> {
+    const response = await this.evaluateExpression("GetAllContexts()")
+    console.log("actions GetAllContexts response ", JSON.stringify(response))
     return response;
   }
 
