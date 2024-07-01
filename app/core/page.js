@@ -10,22 +10,32 @@ import Header from '../components/Header';
 import Actions from '../util/actions';
 import Config from '../util/config'
 import { getGNOTBalances } from '../util/tokenActions';
+import { setCoreAssessTasks, setCoreDecideTasks, setCoreDoTasks } from '../slices/coreSlice';
 
-const pieData = [
-  { name: 'Red', value: 1 },
-  { name: 'Orange', value: 1 },
-  { name: 'Green', value: 1 }
-];
+
 
 const COLORS = ['#FF0000', '#FFA500', '#008000'];
 
 const Dashboard = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [drawerContent, setDrawerContent] = useState({ title: '', content: '' });
-  const [allTasks, setAllTasks] = useState([])
+  const assessTasks = useSelector(state => state.core.coreAssessTasks) || [];
+  const assessProjects = useSelector(state => state.core.coreAssessProjects) || [];
+  const decideTasks = useSelector(state => state.core.coreDecideTasks) || [];
+  const decideProjects = useSelector(state => state.core.coreDecideProjects) || [];
+  const doTasks = useSelector(state => state.core.coreDoTasks) || [];
+  const doProjects = useSelector(state => state.core.coreDoProjects) || [];
+  
   const rpcEndpoint = useSelector(state => state.core.rpcEndpoint);
   const userGnotBalances = useSelector(state => state.core.userGnotBalances);
 
+  const pieData = [
+    { name: 'Assess', value: assessTasks.length != 0 ? assessTasks.length : 1 },
+    { name: 'Decide', value: decideTasks.length != 0 ? decideTasks.length : 1 },
+    { name: 'Do', value: doTasks.length != 0 ? doTasks.length : 1 }
+  ];
+
+  console.log("assessTasks.length ", assessTasks.length)
   const dispatch = useDispatch()
   
   useEffect( () => {
@@ -39,9 +49,26 @@ const Dashboard = () => {
   }, [rpcEndpoint]);
 
   useEffect( () => {
-    fetchAllTasks()
-    AddTask("some task")
+    fetchAllTasksByRealm("1")
+    // uncomment when adding Collections
+    //fetchAllTasksByRealm("4")
   }, [])
+
+  useEffect( () => {
+    fetchAllTasksByRealm("2")
+    // uncomment when adding Collections
+    //fetchAllTasksByRealm("4")
+  }, [])
+
+  useEffect( () => {
+    fetchAllTasksByRealm("3")
+    // uncomment when adding Collections
+    //fetchAllTasksByRealm("4")
+  }, [])
+
+  
+
+  
 
   const openDrawer = (title, content) => {
     setDrawerContent({ title, content });
@@ -52,42 +79,26 @@ const Dashboard = () => {
     setDrawerOpen(false);
   };
 
-  const AddTask = async (task) => {
-    console.log("AddTask");
+  const fetchAllTasksByRealm = async (realmId) => {
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
-        actions.AddTask(task).then((response) => {
-          console.log("AddTask response in Core", response);
-            if (response !== undefined){
-            let parsedResponse = JSON.parse(response);
-            
-            if(parsedResponse.tasks !== undefined && parsedResponse.tasks.length !== 0){  
-              
-              console.log("parseResponse", JSON.stringify(response, null, 2))
-              
-            }
-          }
-        });
-      } catch (err) {
-        console.log("error in calling AddTask", err);
-      }
-  }
-
-  const fetchAllTasks = async () => {
-    console.log("fetchAllTasks");
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
-    try {
-      actions.GetAllTasks().then((response) => {
-        console.log("getAllTasks response in Core", response);
+      actions.GetTasksByRealm(realmId).then((response) => {
+        console.log("getTasksByRealm response in Core, for realm: " +  response + " " + realmId);
           if (response !== undefined){
           let parsedResponse = JSON.parse(response);
           
           if(parsedResponse.tasks !== undefined && parsedResponse.tasks.length !== 0){  
-            setAllTasks(parsedResponse.tasks)
             console.log("parseResponse", JSON.stringify(response, null, 2))
-            //dispatch(setUserBasicNFTs(parsedResponse.userNFTs))
+            if (realmId == "1"){
+                dispatch(setCoreAssessTasks(parsedResponse.tasks))
+            }
+            else if (realmId == "2"){
+                dispatch(setCoreDecideTasks(parsedResponse.tasks))
+            }
+            else if (realmId == "3"){
+                dispatch(setCoreDoTasks(parsedResponse.tasks))
+            }
           }
         }
       });

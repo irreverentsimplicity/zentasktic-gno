@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import CoreTasks from './CoreTasks';
 
 const AssessTabBar = () => {
   return (
@@ -41,7 +42,7 @@ const AssessTabBar = () => {
 
       <TabPanels>
         <TabPanel>
-          <p>Tasks content goes here.</p>
+          <CoreTasks/>
         </TabPanel>
         <TabPanel>
           <p>Projects content goes here.</p>

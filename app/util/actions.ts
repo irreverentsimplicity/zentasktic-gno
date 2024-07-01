@@ -22,11 +22,6 @@ import {
 import { UserFundedError } from '../types/errors';
 
 // ENV values //
-const wsURL: string = Config.GNO_WS_URL;
-//const rpcURL: string = Config.GNO_JSONRPC_URL;
-//const flippandoRealm: string = Config.GNO_FLIPPANDO_REALM;
-//const faucetURL: string = Config.FAUCET_URL;
-//const faucetURL: string = "https://faucet.flippando.xyz";
 const defaultGasWanted: Long = new Long(800_000_0);
 const customTXFee = '100000ugnot'
 
@@ -34,7 +29,10 @@ const cleanUpRealmReturn = (ret: string, callType: string) => {
   // maketx adds and extra quote at the end of the string
   // so we need to have 2 slice values, one from 9 chars, for eval transaction
   // and one from 11 chars, for maketx
-  console.log("ret ", ret)
+  console.log("ret in cleanupRealmReturn", ret)
+  if (ret.trim() == "(undefined)"){
+    return ""
+  }
   if (callType == "maketx"){
     return ret.slice(2, -9).replace(/\\"/g, '"');
   }
@@ -42,6 +40,7 @@ const cleanUpRealmReturn = (ret: string, callType: string) => {
     return ret.slice(2, -9).replace(/\\"/g, '"');
   }
 };
+
 const decodeRealmResponse = (resp: string, callType: string) => {
   console.log("resp in decodeResponse ", resp)
   return cleanUpRealmReturn(atob(resp), callType);
@@ -385,14 +384,69 @@ class Actions {
     return response;
   }
 
-  
-  /**
-   * Get all tasks
+   /**
+   * Removes a task
+   *
+   * @param taskName string - task name
+   * @param taskDescription string - task description
    */
   
-  async GetAllTasks(): Promise<any> {
-    const response = await this.evaluateExpression("GetAllTasks()")
-    console.log("actions GetAllTasks response ", JSON.stringify(response))
+   async RemoveTask(
+    taskId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveTask', [
+      taskId
+    ]);
+    console.log("actions RemoveTask response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Updates a task
+   *
+   * @param taskId string - task id
+   * @param taskBody string - task body
+   */
+  
+  async UpdateTask(
+    taskId: string,
+    taskBody: string,
+  ): Promise<any> {
+    const response = await this.callMethod('EditTask', [
+      taskId,
+      taskBody
+    ]);
+    console.log("actions EditTask response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Moves a task to a realm
+   *
+   * @param taskId string - task id
+   * * @param taskId string - realm id: 1 - Assess, 2 - Decide, 3 - Do, 4 - Collections
+   */
+  
+  async MoveTaskToRealm(
+    taskId: string,
+    realmId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('MoveTaskToRealm', [
+      taskId,
+      realmId
+    ]);
+    console.log("actions MoveTaskToRealm response ", JSON.stringify(response))
+    return response;
+  }
+
+  
+  /**
+   * Get tasks by realm
+   */
+  
+  async GetTasksByRealm(realmId : string): Promise<any> {
+    const response = await this.evaluateExpression("GetTasksByRealm(\"" + realmId + "\")")
+    console.log("actions GetTasksByRealm response ", JSON.stringify(response))
     return response;
   }
 
