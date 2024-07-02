@@ -6,18 +6,20 @@ const DecideTabBar = () => {
     <Tabs variant="enclosed-colored">
       <TabList>
         <Tab
-          _selected={{ bg: "orange.400", color: "white" }}
-          _hover={{ bg: "orange.400", color: "white" }}
-          _active={{ color: "orange.400" }}
-          color="orange.400"
+          _selected={{ bg: "#FFA500", color: "white" }}
+          _hover={{ bg: "#FFA500", color: "white" }}
+          _active={{ color: "#FFA500" }}
+          color="#FFA500"
+          fontWeight="bold"
         >
           Undecided
         </Tab>
         <Tab
-          _selected={{ bg: "red.400", color: "white" }}
-          _hover={{ bg: "red.400", color: "white" }}
-          _active={{ color: "red.400" }}
-          color="red.400"
+          _selected={{ bg: "#FF0000", color: "white" }}
+          _hover={{ bg: "#FF0000", color: "white" }}
+          _active={{ color: "#FF0000" }}
+          color="#FF0000"
+          fontWeight="bold"
         >
           Stalled
         </Tab>
@@ -26,8 +28,18 @@ const DecideTabBar = () => {
           _hover={{ bg: "green.400", color: "white" }}
           _active={{ color: "green.400" }}
           color="green.400"
+          fontWeight="bold"
         >
           Ready to Do
+        </Tab>
+        <Tab
+          _selected={{ bg: "#FFA500", color: "white" }}
+          _hover={{ bg: "#FFA500", color: "white" }}
+          _active={{ color: "#FFA500" }}
+          color="#FFA500"
+          fontWeight="bold"
+        >
+          @ By Context
         </Tab>
       </TabList>
 
@@ -40,6 +52,9 @@ const DecideTabBar = () => {
         </TabPanel>
         <TabPanel>
           <p>Ready to Do content goes here.</p>
+        </TabPanel>
+        <TabPanel>
+          <p>By Context content goes here.</p>
         </TabPanel>
       </TabPanels>
     </Tabs>

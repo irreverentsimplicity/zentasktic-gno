@@ -18,11 +18,11 @@ import {
     const getTitleColor = () => {
       switch (title) {
         case 'Assess':
-          return 'red.500';
+          return '#FF0000';
         case 'Decide':
-          return 'orange.500';
+          return '#FFA500';
         case 'Do':
-          return 'green.500';
+          return '#008000';
         default:
           return 'black';
       }

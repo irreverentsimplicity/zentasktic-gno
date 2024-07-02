@@ -9,34 +9,38 @@ const AssessTabBar = () => {
     <Tabs variant="enclosed-colored" colorScheme="red">
       <TabList>
         <Tab
-          _selected={{ bg: "red.400", color: "white" }}
-          _hover={{ bg: "red.400", color: "white" }}
-          _active={{ color: "red.400" }}
-          color="red.400"
+          _selected={{ bg: "#FF0000", color: "white" }}
+          _hover={{ bg: "#FF0000", color: "white" }}
+          _active={{ color: "#FF0000" }}
+          color="#FF0000"
+          fontWeight="bold"
         >
             Tasks
         </Tab>
         <Tab
-          _selected={{ bg: "red.400", color: "white" }}
-          _hover={{ bg: "red.400", color: "white" }}
-          _active={{ color: "red.400" }}
-          color="red.400"
+          _selected={{ bg: "#FF0000", color: "white" }}
+          _hover={{ bg: "#FF0000", color: "white" }}
+          _active={{ color: "#FF0000" }}
+          color="#FF0000"
+          fontWeight="bold"
         >
             Projects
         </Tab>
         <Tab
-          _selected={{ bg: "red.400", color: "white" }}
-          _hover={{ bg: "red.400", color: "white" }}
-          _active={{ color: "red.400" }}
-          color="red.400"
+          _selected={{ bg: "#FF0000", color: "white" }}
+          _hover={{ bg: "#FF0000", color: "white" }}
+          _active={{ color: "#FF0000" }}
+          color="#FF0000"
+          fontWeight="bold"
         >
             Contexts
         </Tab>
         <Tab
-          _selected={{ bg: "red.400", color: "white" }}
-          _hover={{ bg: "red.400", color: "white" }}
-          _active={{ color: "red.400" }}
-          color="red.400"
+          _selected={{ bg: "#FF0000", color: "white" }}
+          _hover={{ bg: "#FF0000", color: "white" }}
+          _active={{ color: "#FF0000" }}
+          color="#FF0000"
+          fontWeight="bold"
         >
             Collections
         </Tab>

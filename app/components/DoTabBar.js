@@ -78,10 +78,11 @@ const DoTabBar = () => {
     <Tabs variant="enclosed-colored" onChange={(index) => setSelectedTab(index === 3 ? '@Contexts' : null)}>
       <TabList>
         <Tab
-          _selected={{ bg: "green.400", color: "white" }}
-          _hover={{ bg: "green.400", color: "white" }}
-          _active={{ color: "green.400" }}
-          color="green.400"
+          _selected={{ bg: "#008000", color: "white" }}
+          _hover={{ bg: "#008000", color: "white" }}
+          _active={{ color: "#008000" }}
+          color="#008000"
+          fontWeight="bold"
         >
           <HStack>
             <Box as={TodayIcon} />
@@ -89,10 +90,11 @@ const DoTabBar = () => {
           </HStack>
         </Tab>
         <Tab
-          _selected={{ bg: "green.400", color: "white" }}
-          _hover={{ bg: "green.400", color: "white" }}
-          _active={{ color: "green.400" }}
-          color="green.400"
+          _selected={{ bg: "#008000", color: "white" }}
+          _hover={{ bg: "#008000", color: "white" }}
+          _active={{ color: "#008000" }}
+          color="#008000"
+          fontWeight="bold"
         >
           <HStack>
             <Box as={TomorrowIcon} />
@@ -100,10 +102,11 @@ const DoTabBar = () => {
           </HStack>
         </Tab>
         <Tab
-          _selected={{ bg: "green.400", color: "white" }}
-          _hover={{ bg: "green.400", color: "white" }}
-          _active={{ color: "green.400" }}
-          color="green.400"
+          _selected={{ bg: "#008000", color: "white" }}
+          _hover={{ bg: "#008000", color: "white" }}
+          _active={{ color: "#008000" }}
+          color="#008000"
+          fontWeight="bold"
         >
           <HStack>
             <Box as={SoonIcon} />
@@ -111,12 +114,13 @@ const DoTabBar = () => {
           </HStack>
         </Tab>
         <Tab
-          _selected={{ bg: "green.400", color: "white" }}
-          _hover={{ bg: "green.400", color: "white" }}
-          _active={{ color: "green.400" }}
-          color="green.400"
+          _selected={{ bg: "#008000", color: "white" }}
+          _hover={{ bg: "#008000", color: "white" }}
+          _active={{ color: "#008000" }}
+          color="#008000"
+          fontWeight="bold"
         >
-          <Text>@Contexts</Text>
+          <Text>@ By Context</Text>
         </Tab>
       </TabList>
 
