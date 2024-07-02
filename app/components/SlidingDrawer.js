@@ -29,7 +29,7 @@ import {
     };
   
     return (
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />

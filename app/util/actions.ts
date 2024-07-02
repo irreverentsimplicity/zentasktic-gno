@@ -437,6 +437,26 @@ class Actions {
     return response;
   }
 
+  /**
+   * Attaches a task to a project
+   *
+   * @param taskBody string - new task body
+   * @param projectId string - project id
+   */
+  
+  async AttachTaskToProject(
+    taskBody: string,
+    projectId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AttachTaskToProject', [
+      taskBody,
+      projectId
+    ]);
+    console.log("actions AttachTaskToProject response ", JSON.stringify(response))
+    return response;
+  }
+
+
   
   /**
    * Get tasks by realm
