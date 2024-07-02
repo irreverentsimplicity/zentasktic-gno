@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Actions from '../util/actions';
 import Config from '../util/config';
 import { Box, IconButton, Textarea, Button, List, ListItem, Flex, Spinner } from '@chakra-ui/react';
 import { DeleteIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { setCoreAssessTasks } from '../slices/coreSlice';
+import { fetchAllTasksByRealm } from '../util/fetchers';
 
 const CoreTasks = () => {
   const coreTasks = useSelector(state => state.core.coreAssessTasks);
@@ -17,13 +17,17 @@ const CoreTasks = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [sendingTaskId, setSendingTaskId] = useState(null);
 
+  useEffect(() => {
+    fetchAllTasksByRealm(dispatch, "1");
+  }, []);
+
   const handleAddTask = async () => {
     setIsAdding(true);
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
         await actions.AddTask(newTask);
-        fetchAllTasks();
+        fetchAllTasksByRealm(dispatch, "1");
       } catch (err) {
         console.log("error in calling AddTask", err);
       }
@@ -37,7 +41,7 @@ const CoreTasks = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
         await actions.RemoveTask(taskId);
-        fetchAllTasks();
+        fetchAllTasksByRealm(dispatch, "1");
       } catch (err) {
         console.log("error in calling RemoveTask", err);
       }
@@ -50,7 +54,7 @@ const CoreTasks = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
         await actions.MoveTaskToRealm(taskId, "2");
-        fetchAllTasks();
+        fetchAllTasksByRealm(dispatch, "1");
       } catch (err) {
         console.log("error in calling handleSendTaskToDecide", err);
       }
@@ -77,26 +81,7 @@ const CoreTasks = () => {
     setEditTaskBody('');
   };
 
-  const fetchAllTasks = async () => {
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
-    try {
-      actions.GetTasksByRealm("1").then((response) => {
-        console.log("GetTasksByRealm response in CoreTasks", response);
-          if (response !== undefined){
-          let parsedResponse = JSON.parse(response);
-          
-          if(parsedResponse.tasks !== undefined){  
-            console.log("parseResponse", JSON.stringify(response, null, 2))
-            parsedResponse.tasks.sort((a, b) => parseInt(b.taskId) - parseInt(a.taskId));
-            dispatch(setCoreAssessTasks(parsedResponse.tasks))
-          }
-        }
-      });
-    } catch (err) {
-      console.log("error in calling getAllTasks", err);
-    }
-  };
+  
 
   return (
     <Box>
@@ -131,7 +116,7 @@ const CoreTasks = () => {
                     onChange={(e) => setEditTaskBody(e.target.value)}
                     mr={2}
                   />
-                  <Button onClick={() => handleUpdateTask(task)} colorScheme="green" isLoading={isUpdating}>
+                  <Button onClick={() => handleUpdateTask(task)} colorScheme="blue" isLoading={isUpdating}>
                     {isUpdating ? <Spinner size="sm" /> : 'Update'}
                   </Button>
                 </Flex>

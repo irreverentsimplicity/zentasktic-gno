@@ -1,5 +1,8 @@
 import React from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import UndecidedTasks from './UndecidedTasks';
+import StalledTasks from './StalledTasks';
+import ReadyToDoTasks from './ReadyToDoTasks';
 
 const DecideTabBar = () => {
   return (
@@ -45,13 +48,13 @@ const DecideTabBar = () => {
 
       <TabPanels>
         <TabPanel>
-          <p>Undecided content goes here.</p>
+          <UndecidedTasks/>
         </TabPanel>
         <TabPanel>
-          <p>Stalled content goes here.</p>
+          <StalledTasks/>
         </TabPanel>
         <TabPanel>
-          <p>Ready to Do content goes here.</p>
+          <ReadyToDoTasks/>
         </TabPanel>
         <TabPanel>
           <p>By Context content goes here.</p>

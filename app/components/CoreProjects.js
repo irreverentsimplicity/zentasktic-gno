@@ -5,7 +5,8 @@ import Config from '../util/config';
 import { Box, IconButton, Textarea, Button, List, ListItem, Flex, Spinner, Input, Badge } from '@chakra-ui/react';
 import { DeleteIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { FaTasks } from 'react-icons/fa';
-import { setCoreAssessProjects } from '../slices/coreSlice';
+import { FaEject } from 'react-icons/fa';
+import { fetchAssessProjects, fetchAllTasksByRealm } from '../util/fetchers';
 
 const CoreProjects = () => {
   const coreProjects = useSelector(state => state.core.coreAssessProjects);
@@ -14,6 +15,9 @@ const CoreProjects = () => {
   const [editProjectId, setEditProjectId] = useState(null);
   const [editProjectBody, setEditProjectBody] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [isAddingTask, setIsAddingTask] = useState(false);
+  const [detachingTaskId, setDetachingTaskId] = useState(false);
+  const [deletingTaskId, setDeletingTaskId] = useState(false);
   const [deletingProjectId, setDeletingProjectId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [sendingProjectId, setSendingProjectId] = useState(null);
@@ -21,21 +25,23 @@ const CoreProjects = () => {
   const [newTask, setNewTask] = useState('');
 
   useEffect(() => {
-    fetchAllProjects();
+    fetchAssessProjects(dispatch);
   }, []);
 
   const handleAddProject = async () => {
-    setIsAdding(true);
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
-    try {
-      await actions.AddProject(newProject);
-      fetchAllProjects();
-    } catch (err) {
-      console.log("error in calling AddProject", err);
+    if (newProject.length >= 3) {
+        setIsAdding(true);
+        const actions = await Actions.getInstance();
+        actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+        try {
+        await actions.AddProject(newProject);
+        fetchAssessProjects(dispatch);
+        } catch (err) {
+        console.log("error in calling AddProject", err);
+        }
+        setIsAdding(false);
+        setNewProject('');  
     }
-    setIsAdding(false);
-    setNewProject('');
   };
 
   const handleDeleteProject = async (projectId) => {
@@ -44,7 +50,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.RemoveProject(projectId);
-      fetchAllProjects();
+      fetchAssessProjects(dispatch);
     } catch (err) {
       console.log("error in calling RemoveProject", err);
     }
@@ -57,7 +63,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, "2");
-      fetchAllProjects();
+      fetchAssessProjects(dispatch);
     } catch (err) {
       console.log("error in calling handleSendProjectToDecide", err);
     }
@@ -75,7 +81,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.UpdateProject(editProjectId, editProjectBody);
-      fetchAllProjects();
+      fetchAssessProjects(dispatch);
     } catch (err) {
       console.log("error in calling UpdateProject", err);
     }
@@ -84,38 +90,52 @@ const CoreProjects = () => {
     setEditProjectBody('');
   };
 
-  const fetchAllProjects = async () => {
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
-    try {
-      actions.GetProjectsByRealm("1").then((response) => {
-        console.log("GetProjectsByRealm response in CoreProjects", response);
-        if (response !== undefined) {
-          let parsedResponse = JSON.parse(response);
-          if (parsedResponse.projects !== undefined) {
-            console.log("parseResponse", JSON.stringify(response, null, 2));
-            parsedResponse.projects.sort((a, b) => parseInt(b.projectId) - parseInt(a.projectId));
-            dispatch(setCoreAssessProjects(parsedResponse.projects));
-          }
+  const handleAddTaskToProject = async (projectId) => {
+    if (newTask.length >= 3){
+        setIsAddingTask(true);
+        const actions = await Actions.getInstance();
+        actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+        try {
+        await actions.AttachTaskToProject(newTask, projectId);
+        fetchAssessProjects(dispatch);
+        } catch (err) {
+        console.log("error in calling AttachTaskToProject", err);
         }
-      });
-    } catch (err) {
-      console.log("error in calling getAllProjects", err);
+        setIsAddingTask(false);
+        setNewTask('');
     }
   };
 
-  const handleAddTaskToProject = async (projectId) => {
-    // Add API call here to add task to the project
-    // Handle adding task
+  const handleEditTask = (taskId, taskBody, projectId) => {
+    // Logic to edit task
+  };
+
+  const handleDeleteTask = async (taskId, projectId) => {
+    setDeletingTaskId(taskId)
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
-      await actions.AttachTaskToProject(newTask, projectId);
-      fetchAllProjects();
+    await actions.RemoveTaskFromProject(taskId, projectId);
+    fetchAssessProjects(dispatch);
     } catch (err) {
-      console.log("error in calling AttachTaskToProject", err);
+    console.log("error in calling DetachTaskFromProject", err);
+    }
+    setDeletingTaskId(null)
+  };
+
+  const handleDetachTaskFromProject = async (taskId, projectId) => {
+    setDetachingTaskId(taskId)
+    const actions = await Actions.getInstance();
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    try {
+    await actions.DetachTaskFromProject(taskId, projectId);
+    fetchAssessProjects(dispatch);
+    fetchAllTasksByRealm(dispatch, "1")
+    } catch (err) {
+    console.log("error in calling DetachTaskFromProject", err);
     }
     setNewTask('');
+    setDetachingTaskId(null)
   };
 
   return (
@@ -147,12 +167,12 @@ const CoreProjects = () => {
                 />
                 {editProjectId === project.projectId ? (
                   <Flex flex="1" alignItems="center">
-                    <Textarea
+                    <Input
                       value={editProjectBody}
                       onChange={(e) => setEditProjectBody(e.target.value)}
                       mr={2}
                     />
-                    <Button onClick={() => handleUpdateProject(project)} colorScheme="green" isLoading={isUpdating}>
+                    <Button onClick={() => handleUpdateProject(project)} colorScheme="blue" isLoading={isUpdating}>
                       {isUpdating ? <Spinner size="sm" /> : 'Update'}
                     </Button>
                   </Flex>
@@ -181,30 +201,51 @@ const CoreProjects = () => {
                             colorScheme="orange"
                             ml={2}
                         />
-                        </Flex>
+                    </Flex>
                   </Flex>
                 )}
               </Flex>
               {addingTaskId === project.projectId && (
-                <Box mt={2}>
-                  <Textarea
+                <Flex mt={2} ml={12}> 
+                  <Input
                     value={newTask}
                     onChange={(e) => setNewTask(e.target.value)}
-                    placeholder="Add a new task"
+                    placeholder="Add task to project"
                   />
-                  <Button onClick={() => handleAddTaskToProject(project.projectId)} colorScheme="blue" mt={2}>
-                    Add Task
+                  <Button onClick={() => handleAddTaskToProject(project.projectId)} colorScheme="blue" ml={2} isLoading={isAddingTask}>
+                    {isAddingTask ? <Spinner size="sm" /> : 'Add Task'}
                   </Button>
-                </Box>
+                </Flex>
               )}
-              {addingTaskId === project.projectId && project.projectTasks && (
-                <List mt={2} spacing={2}>
-                  {project.projectTasks.map((task, index) => (
-                    <ListItem key={index} pl={4}>
+              {addingTaskId === project.projectId && project.projectTasks.length !== 0 && (
+                <List mt={2} ml={12} spacing={2} borderWidth="1px" borderRadius="md" p={2}>
+                {project.projectTasks.map((task, index) => (
+                  <ListItem key={index} pl={2} display="flex" alignItems="center">
+                    <IconButton
+                      icon={deletingTaskId === task.tasktId ? <Spinner size="sm" /> : <DeleteIcon />}  
+                      isLoading={deletingTaskId === task.taskId}
+                      onClick={() => handleDeleteTask(task.taskId, project.projectId)}
+                      colorScheme="linkedin"
+                      mr={2}
+                    />
+                    <Box
+                      flex="1"
+                      cursor="pointer"
+                      _hover={{ bg: "gray.100" }}
+                      onClick={() => handleEditTask(task.taskId, task.taskBody)}
+                    >
                       {task.taskBody}
-                    </ListItem>
-                  ))}
-                </List>
+                    </Box>
+                    <IconButton
+                      icon={detachingTaskId === task.tasktId ? <Spinner size="sm" /> : <FaEject />}  
+                      isLoading={detachingTaskId === task.taskId}
+                      onClick={() => handleDetachTaskFromProject(task.taskId, project.projectId)}
+                      colorScheme="blackAlpha"
+                      ml={2}
+                    />
+                  </ListItem>
+                ))}
+              </List>
               )}
             </ListItem>
           ))

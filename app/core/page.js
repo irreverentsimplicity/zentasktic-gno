@@ -11,6 +11,7 @@ import Actions from '../util/actions';
 import Config from '../util/config'
 import { getGNOTBalances } from '../util/tokenActions';
 import { setCoreAssessTasks, setCoreDecideTasks, setCoreDoTasks } from '../slices/coreSlice';
+import { fetchAllTasksByRealm } from '../util/fetchers';
 
 
 
@@ -49,26 +50,18 @@ const Dashboard = () => {
   }, [rpcEndpoint]);
 
   useEffect( () => {
-    fetchAllTasksByRealm("1")
-    // uncomment when adding Collections
-    //fetchAllTasksByRealm("4")
+    fetchAllTasksByRealm(dispatch, "1")
   }, [])
 
   useEffect( () => {
-    fetchAllTasksByRealm("2")
-    // uncomment when adding Collections
-    //fetchAllTasksByRealm("4")
+    fetchAllTasksByRealm(dispatch, "2")
   }, [])
 
   useEffect( () => {
-    fetchAllTasksByRealm("3")
+    fetchAllTasksByRealm(dispatch, "3")
     // uncomment when adding Collections
-    //fetchAllTasksByRealm("4")
+    //fetchAllTasksByRealm(dispatch,"4")
   }, [])
-
-  
-
-  
 
   const openDrawer = (title, content) => {
     setDrawerContent({ title, content });
@@ -77,34 +70,6 @@ const Dashboard = () => {
 
   const closeDrawer = () => {
     setDrawerOpen(false);
-  };
-
-  const fetchAllTasksByRealm = async (realmId) => {
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
-    try {
-      actions.GetTasksByRealm(realmId).then((response) => {
-        console.log("getTasksByRealm response in Core, for realm: " +  response + " " + realmId);
-          if (response !== undefined){
-          let parsedResponse = JSON.parse(response);
-          
-          if(parsedResponse.tasks !== undefined && parsedResponse.tasks.length !== 0){  
-            console.log("parseResponse", JSON.stringify(response, null, 2))
-            if (realmId == "1"){
-                dispatch(setCoreAssessTasks(parsedResponse.tasks))
-            }
-            else if (realmId == "2"){
-                dispatch(setCoreDecideTasks(parsedResponse.tasks))
-            }
-            else if (realmId == "3"){
-                dispatch(setCoreDoTasks(parsedResponse.tasks))
-            }
-          }
-        }
-      });
-    } catch (err) {
-      console.log("error in calling getAllTasks", err);
-    }
   };
 
   return (

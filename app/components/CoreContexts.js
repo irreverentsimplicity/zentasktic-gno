@@ -4,7 +4,7 @@ import Actions from '../util/actions';
 import Config from '../util/config';
 import { Box, IconButton, Input, Button, List, ListItem, Flex, Spinner } from '@chakra-ui/react';
 import { DeleteIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { setCoreContexts } from '../slices/coreSlice';
+import { fetchAllContexts } from '../util/fetchers';
 
 const CoreContexts = () => {
   const coreContexts = useSelector(state => state.core.coreContexts);
@@ -65,27 +65,6 @@ const CoreContexts = () => {
     setIsUpdating(false);
     setEditContextId(null);
     setEditContextName('');
-  };
-
-  const fetchAllContexts = async () => {
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
-    try {
-      actions.GetAllContexts().then((response) => {
-        console.log("GetAllContexts response in CoreContexts", response);
-          if (response !== undefined){
-          let parsedResponse = JSON.parse(response);
-          
-          if(parsedResponse.contexts !== undefined){  
-            console.log("parseResponse", JSON.stringify(response, null, 2))
-            parsedResponse.contexts.sort((a, b) => parseInt(b.contextId) - parseInt(a.contextId));
-            dispatch(setCoreContexts(parsedResponse.contexts))
-          }
-        }
-      });
-    } catch (err) {
-      console.log("error in calling getAllContexts", err);
-    }
   };
 
   return (

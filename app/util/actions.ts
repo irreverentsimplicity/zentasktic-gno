@@ -456,6 +456,44 @@ class Actions {
     return response;
   }
 
+  /**
+   * Detaches a task from a project
+   *
+   * @param projectTaskId string - project task id
+   * @param projectId string - project id
+   */
+  
+  async DetachTaskFromProject(
+    projectTaskId: string,
+    projectId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('DetachTaskFromProject', [
+      projectTaskId,
+      projectId
+    ]);
+    console.log("actions DetachTaskFromProject response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Removes a task from a project
+   *
+   * @param projectTaskId string - project task id
+   * @param projectId string - project id
+   */
+  
+  async RemoveTaskFromProject(
+    projectTaskId: string,
+    projectId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveTaskFromProject', [
+      projectTaskId,
+      projectId
+    ]);
+    console.log("actions RemoveTaskFromProject response ", JSON.stringify(response))
+    return response;
+  }
+
 
   
   /**
