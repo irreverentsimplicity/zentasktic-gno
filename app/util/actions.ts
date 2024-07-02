@@ -422,7 +422,7 @@ class Actions {
    * Moves a task to a realm
    *
    * @param taskId string - task id
-   * * @param taskId string - realm id: 1 - Assess, 2 - Decide, 3 - Do, 4 - Collections
+   * @param realmId string - realm id: 1 - Assess, 2 - Decide, 3 - Do, 4 - Collections
    */
   
   async MoveTaskToRealm(
@@ -447,6 +447,92 @@ class Actions {
     console.log("actions GetTasksByRealm response ", JSON.stringify(response))
     return response;
   }
+
+
+  // projects
+
+  /**
+   * Adds a new project
+   *
+   * @param projectName string - project name
+   */
+  
+  async AddProject(
+    projectName: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddProject', [
+      projectName
+    ]);
+    console.log("actions AddProject response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Removes a project
+   *
+   * @param projectId string - project id
+   */
+  
+  async RemoveProject(
+    projectId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveProject', [
+      projectId
+    ]);
+    console.log("actions RemoveProject response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Updates a project
+   *
+   * @param projectId string - project id
+   * @param projectBody string - project body
+   */
+  
+  async UpdateProject(
+    projectId: string,
+    projectBody: string,
+  ): Promise<any> {
+    const response = await this.callMethod('EditProject', [
+      projectId,
+      projectBody
+    ]);
+    console.log("actions EditProject response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Moves a project to a realm
+   *
+   * @param projectId string - project id
+   * @param realmId string - realm id: 1 - Assess, 2 - Decide, 3 - Do, 4 - Collections
+   */
+  
+  async MoveProjectToRealm(
+    projectId: string,
+    realmId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('MoveProjectToRealm', [
+      projectId,
+      realmId
+    ]);
+    console.log("actions MoveProjectToRealm response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Get projects by realm
+   */
+  
+  async GetProjectsByRealm(realmId : string): Promise<any> {
+    const response = await this.evaluateExpression("GetProjectsByRealm(\"" + realmId + "\")")
+    console.log("actions GetProjectsByRealm response ", JSON.stringify(response))
+    return response;
+  }
+
+
+  // contexts
 
   /**
    * Adds a new context

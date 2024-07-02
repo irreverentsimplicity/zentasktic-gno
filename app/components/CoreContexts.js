@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Actions from '../util/actions';
 import Config from '../util/config';
@@ -15,6 +15,10 @@ const CoreContexts = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [deletingContextId, setDeletingContextId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  useEffect( () => {
+    fetchAllContexts()
+  }, [])
 
   const handleAddContext = async () => {
     setIsAdding(true);
@@ -112,7 +116,7 @@ const CoreContexts = () => {
               />
               {editContextId === context.contextId ? (
                 <Flex flex="1" alignItems="center">
-                  <Textarea
+                  <Input
                     value={editContextName}
                     onChange={(e) => setEditContextName(e.target.value)}
                     mr={2}
