@@ -10,8 +10,7 @@ import Header from '../components/Header';
 import Actions from '../util/actions';
 import Config from '../util/config'
 import { getGNOTBalances } from '../util/tokenActions';
-import { setCoreAssessTasks, setCoreDecideTasks, setCoreDoTasks } from '../slices/coreSlice';
-import { fetchAllTasksByRealm } from '../util/fetchers';
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm } from '../util/fetchers';
 
 
 
@@ -30,13 +29,23 @@ const Dashboard = () => {
   const rpcEndpoint = useSelector(state => state.core.rpcEndpoint);
   const userGnotBalances = useSelector(state => state.core.userGnotBalances);
 
+  const assessData = assessTasks.length + assessProjects.length
+  const decideData = decideTasks.length + decideProjects.length
+  const doData = doTasks.length + doProjects.length
+
   const pieData = [
-    { name: 'Assess', value: assessTasks.length != 0 ? assessTasks.length : 1 },
-    { name: 'Decide', value: decideTasks.length != 0 ? decideTasks.length : 1 },
-    { name: 'Do', value: doTasks.length != 0 ? doTasks.length : 1 }
+    { name: 'Assess', value: assessData != 0 ? assessData : 1 },
+    { name: 'Decide', value: decideData != 0 ? decideData : 1 },
+    { name: 'Do', value: doData != 0 ? doData : 1 }
   ];
 
   console.log("assessTasks.length ", assessTasks.length)
+  console.log("decideTasks.length ", decideTasks.length)
+  console.log("doTasks.length ", doTasks.length)
+  console.log("assessProjects.length ", assessProjects.length)
+  console.log("decideProjects.length ", decideProjects.length)
+  console.log("do.doProjects ", doProjects.length)
+  
   const dispatch = useDispatch()
   
   useEffect( () => {
@@ -51,14 +60,17 @@ const Dashboard = () => {
 
   useEffect( () => {
     fetchAllTasksByRealm(dispatch, "1")
+    fetchAllProjectsByRealm(dispatch, "1")
   }, [])
 
   useEffect( () => {
     fetchAllTasksByRealm(dispatch, "2")
+    fetchAllProjectsByRealm(dispatch, "2")
   }, [])
 
   useEffect( () => {
     fetchAllTasksByRealm(dispatch, "3")
+    fetchAllProjectsByRealm(dispatch, "3")
     // uncomment when adding Collections
     //fetchAllTasksByRealm(dispatch,"4")
   }, [])

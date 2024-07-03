@@ -6,7 +6,7 @@ import { Box, IconButton, Textarea, Button, List, ListItem, Flex, Spinner, Input
 import { DeleteIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { FaTasks } from 'react-icons/fa';
 import { FaEject } from 'react-icons/fa';
-import { fetchAssessProjects, fetchAllTasksByRealm } from '../util/fetchers';
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm } from '../util/fetchers';
 
 const CoreProjects = () => {
   const coreProjects = useSelector(state => state.core.coreAssessProjects);
@@ -25,7 +25,7 @@ const CoreProjects = () => {
   const [newTask, setNewTask] = useState('');
 
   useEffect(() => {
-    fetchAssessProjects(dispatch);
+    fetchAllProjectsByRealm(dispatch, "1");
   }, []);
 
   const handleAddProject = async () => {
@@ -35,7 +35,7 @@ const CoreProjects = () => {
         actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
         try {
         await actions.AddProject(newProject);
-        fetchAssessProjects(dispatch);
+        fetchAllProjectsByRealm(dispatch, "1");
         } catch (err) {
         console.log("error in calling AddProject", err);
         }
@@ -50,7 +50,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.RemoveProject(projectId);
-      fetchAssessProjects(dispatch);
+      fetchAllProjectsByRealm(dispatch, "1");
     } catch (err) {
       console.log("error in calling RemoveProject", err);
     }
@@ -63,7 +63,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, "2");
-      fetchAssessProjects(dispatch);
+      fetchAllProjectsByRealm(dispatch, "1");
     } catch (err) {
       console.log("error in calling handleSendProjectToDecide", err);
     }
@@ -81,7 +81,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.UpdateProject(editProjectId, editProjectBody);
-      fetchAssessProjects(dispatch);
+      fetchAllProjectsByRealm(dispatch, "1");
     } catch (err) {
       console.log("error in calling UpdateProject", err);
     }
@@ -97,7 +97,7 @@ const CoreProjects = () => {
         actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
         try {
         await actions.AttachTaskToProject(newTask, projectId);
-        fetchAssessProjects(dispatch);
+        fetchAllProjectsByRealm(dispatch, "1");
         } catch (err) {
         console.log("error in calling AttachTaskToProject", err);
         }
@@ -116,7 +116,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
     await actions.RemoveTaskFromProject(taskId, projectId);
-    fetchAssessProjects(dispatch);
+    fetchAllProjectsByRealm(dispatch, "1");
     } catch (err) {
     console.log("error in calling DetachTaskFromProject", err);
     }
@@ -129,7 +129,7 @@ const CoreProjects = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
     await actions.DetachTaskFromProject(taskId, projectId);
-    fetchAssessProjects(dispatch);
+    fetchAllProjectsByRealm(dispatch, "1");
     fetchAllTasksByRealm(dispatch, "1")
     } catch (err) {
     console.log("error in calling DetachTaskFromProject", err);

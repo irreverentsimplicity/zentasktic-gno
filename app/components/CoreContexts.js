@@ -17,7 +17,7 @@ const CoreContexts = () => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect( () => {
-    fetchAllContexts()
+    fetchAllContexts(dispatch)
   }, [])
 
   const handleAddContext = async () => {
@@ -26,7 +26,7 @@ const CoreContexts = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
         await actions.AddContext(newContext);
-        fetchAllContexts();
+        fetchAllContexts(dispatch);
       } catch (err) {
         console.log("error in calling AddContext", err);
       }
@@ -40,7 +40,7 @@ const CoreContexts = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
         await actions.RemoveContext(contextId);
-        fetchAllContexts();
+        fetchAllContexts(dispatch);
       } catch (err) {
         console.log("error in calling RemoveContext", err);
       }
@@ -58,7 +58,7 @@ const CoreContexts = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
         await actions.UpdateContext(editContextId, editContextName);
-        fetchAllContexts();
+        fetchAllContexts(dispatch);
       } catch (err) {
         console.log("error in calling UpdateContext", err);
       }

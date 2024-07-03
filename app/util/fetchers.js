@@ -1,6 +1,13 @@
 import Actions from "./actions";  
 import Config from "../util/config";
-import { setCoreAssessTasks, setCoreDecideTasks, setCoreDoTasks, setCoreAssessProjects, setCoreContexts } from "../slices/coreSlice";
+import { 
+    setCoreAssessTasks, 
+    setCoreDecideTasks, 
+    setCoreDoTasks, 
+    setCoreAssessProjects, 
+    setCoreDecideProjects,
+    setCoreDoProjects, 
+    setCoreContexts } from "../slices/coreSlice";
 
 export const fetchAllTasksByRealm = async (dispatch, realmId) => {
 
@@ -31,32 +38,41 @@ export const fetchAllTasksByRealm = async (dispatch, realmId) => {
     }
 };
 
-export const fetchAssessProjects = async (dispatch) => {
+export const fetchAllProjectsByRealm = async (dispatch, realmId) => {
+
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
-        actions.GetProjectsByRealm("1").then((response) => {
-        console.log("GetProjectsByRealm response in CoreProjects", response);
-        if (response !== undefined) {
+        actions.GetProjectsByRealm(realmId).then((response) => {
+        console.log("GetProjectsByRealm response in Core, for realm: " +  response + " " + realmId);
+            if (response !== undefined){
             let parsedResponse = JSON.parse(response);
-            if (parsedResponse.projects !== undefined) {
-            console.log("parseResponse", JSON.stringify(response, null, 2));
-            parsedResponse.projects.sort((a, b) => parseInt(b.projectId) - parseInt(a.projectId));
-            dispatch(setCoreAssessProjects(parsedResponse.projects));
+            
+            if(parsedResponse.projects !== undefined && parsedResponse.projects.length !== 0){  
+            console.log("parseResponse", JSON.stringify(response, null, 2))
+            if (realmId == "1"){
+                dispatch(setCoreAssessProjects(parsedResponse.projects))
+            }
+            else if (realmId == "2"){
+                dispatch(setCoreDecideProjects(parsedResponse.projects))
+            }
+            else if (realmId == "3"){
+                dispatch(setCoreDoProjects(parsedResponse.projects))
+            }
             }
         }
-        });
+    });
     } catch (err) {
-        console.log("error in calling getAllProjects", err);
+        console.log("error in calling GetProjectsByRealm", err);
     }
 };
 
-export const fetchAllContexts = async () => {
+export const fetchAllContexts = async (dispatch) => {
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
       actions.GetAllContexts().then((response) => {
-        console.log("GetAllContexts response in CoreContexts", response);
+        console.log("GetAllContexts response in fetchers", response);
           if (response !== undefined){
           let parsedResponse = JSON.parse(response);
           
