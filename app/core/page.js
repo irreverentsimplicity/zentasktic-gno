@@ -62,7 +62,7 @@ const Dashboard = () => {
     fetchAllTasksByRealm(dispatch, "1")
     fetchAllProjectsByRealm(dispatch, "1")
     fetchAllContexts(dispatch)
-  }, [])
+  }, [dispatch])
 
   useEffect( () => {
     fetchAllTasksByRealm(dispatch, "2")

@@ -81,8 +81,6 @@ const CoreTasks = () => {
     setEditTaskBody('');
   };
 
-  
-
   return (
     <Box>
       <Flex mb={4}>

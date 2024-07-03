@@ -9,7 +9,7 @@ import {
   ListItem,
   Spinner,
   Text,
-  VStack,
+  Wrap,
   HStack,
   Button,
   Collapse,
@@ -62,11 +62,11 @@ const UndecidedTasks = () => {
     setSendingTaskId(null);
   };
 
-  const assignContextToTask = async (taskId, contextId) => {
+  const assignContextToTask = async (contextId, taskId) => {
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
-      await actions.AssignContextToTask(taskId, contextId);
+      await actions.AddContextToTask(contextId, taskId);
       fetchAllTasksByRealm(dispatch, '2');
       return true;
     } catch (err) {
@@ -77,17 +77,29 @@ const UndecidedTasks = () => {
 
   const assignDueDateToTask = async (taskId, date) => {
     const actions = await Actions.getInstance();
+    console.log("date", date)
+    //taskDate = formatDate(date)
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
-      await actions.AssignDueDateToTask(taskId, date.toISOString());
+      await actions.AssignDueDateToTask(taskId, formatDate(date));
       fetchAllTasksByRealm(dispatch, '2');
     } catch (err) {
       console.log('error in calling assignDueDateToTask', err);
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = new Intl.DateTimeFormat('en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(date);
+    return formattedDate;
+  };
+
   const getUndecidedTasks = (tasks) => {
-    return tasks.filter((task) => !task.taskContextId && !task.taskDue);
+    return tasks.filter((task) => !task.taskContextId || !task.taskDue);
   };
 
   return (
@@ -110,18 +122,19 @@ const UndecidedTasks = () => {
                   <Text>{task.taskBody}</Text>
                   <HStack spacing={2} justify="flex-end">
                     <Text fontSize="sm" color="gray.500">
-                      {task.taskContextId ? task.taskContextId : '@no context'}
+                        @{task.taskContextId ? contexts.find(context => context.contextId === task.taskContextId)?.contextName : 'no context'}
                     </Text>
                     <Text fontSize="sm" color="gray.500">
-                      {task.taskDue ? task.taskDue : '@no due date'}
+                      {task.taskDue ? task.taskDue : 'no due date'}
                     </Text>
                   </HStack>
                 </Box>
                 <IconButton
                   isLoading={sendingTaskId === task.taskId}
+                  isDisabled = {true}
                   icon={sendingTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
                   onClick={() => handleSendToDo(task.taskId)}
-                  colorScheme="green"
+                  colorScheme="gray"
                   ml={2}
                 />
               </ListItem>
@@ -130,21 +143,18 @@ const UndecidedTasks = () => {
                   <SimpleGrid columns={2} spacing={4}>
                     <Box>
                       <Text mb={2} borderBottom="1px" borderColor="gray.300">Set context</Text>
-                      <VStack spacing={2} align="start">
+                      <Wrap spacing={2} align="center">
                         {contexts.map((context) => (
                           <Button
                             key={context.contextId}
                             onClick={async () => {
-                              const success = await assignContextToTask(task.taskId, context.contextId);
-                              if (success) {
-                                setExpandedTaskId(null);
-                              }
+                              const success = await assignContextToTask(context.contextId, task.taskId);
                             }}
                           >
-                            {context.contextName}
+                            @{context.contextName}
                           </Button>
                         ))}
-                      </VStack>
+                      </Wrap>
                     </Box>
                     <Box>
                       <Text mb={2} borderBottom="1px" borderColor="gray.300">Set due date</Text>

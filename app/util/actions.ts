@@ -494,7 +494,43 @@ class Actions {
     return response;
   }
 
+  /**
+   * Adds a context to a task
+   *
+   * @param contextId string - context id
+   * @param taskId string - task id
+   */
 
+  async AddContextToTask(
+    contextId: string,
+    taskId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddContextToTask', [
+      contextId,
+      taskId
+    ]);
+    console.log("actions AddContextToTask response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Adds a due date to a task
+   *
+   * @param taskId string - task id
+   * @param date string - date, formatted "YYYY-MM-DD"
+   */
+
+  async AssignDueDateToTask(
+    taskId: string,
+    date: string,
+  ): Promise<any> {
+    const response = await this.callMethod('SetTaskDueDate', [
+      taskId,
+      date
+    ]);
+    console.log("actions AddDateToTask response ", JSON.stringify(response))
+    return response;
+  }
   
   /**
    * Get tasks by realm
