@@ -19,7 +19,7 @@ export const fetchAllTasksByRealm = async (dispatch, realmId) => {
             if (response !== undefined){
             let parsedResponse = JSON.parse(response);
             
-            if(parsedResponse.tasks !== undefined && parsedResponse.tasks.length !== 0){  
+            if(parsedResponse.tasks !== undefined){  
             console.log("parseResponse", JSON.stringify(response, null, 2))
             if (realmId == "1"){
                 dispatch(setCoreAssessTasks(parsedResponse.tasks))
@@ -48,7 +48,7 @@ export const fetchAllProjectsByRealm = async (dispatch, realmId) => {
             if (response !== undefined){
             let parsedResponse = JSON.parse(response);
             
-            if(parsedResponse.projects !== undefined && parsedResponse.projects.length !== 0){  
+            if(parsedResponse.projects !== undefined){  
             console.log("parseResponse", JSON.stringify(response, null, 2))
             if (realmId == "1"){
                 dispatch(setCoreAssessProjects(parsedResponse.projects))

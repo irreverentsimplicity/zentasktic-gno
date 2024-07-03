@@ -72,7 +72,7 @@ const CoreTasks = () => {
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
         await actions.UpdateTask(editTaskId, editTaskBody);
-        fetchAllTasks();
+        fetchAllTasksByRealm(dispatch, "1");
       } catch (err) {
         console.log("error in calling UpdateTask", err);
       }

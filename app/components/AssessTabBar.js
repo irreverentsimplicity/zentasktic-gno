@@ -1,10 +1,16 @@
 import React from 'react';
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Badge, HStack } from '@chakra-ui/react';
 import CoreTasks from './CoreTasks';
 import CoreContexts from './CoreContexts';
 import CoreProjects from './CoreProjects';
 
 const AssessTabBar = () => {
+  const coreTasks = useSelector((state) => state.core.coreAssessTasks) || [];
+  const coreProjects = useSelector((state) => state.core.coreAssessProjects) || [];
+  const coreContexts = useSelector((state) => state.core.coreContexts) || [];
+  const coreCollections = useSelector((state) => state.core.coreCollections) || [];
+
   return (
     <Tabs variant="enclosed-colored" colorScheme="red">
       <TabList>
@@ -15,7 +21,10 @@ const AssessTabBar = () => {
           color="#FF0000"
           fontWeight="bold"
         >
-            Tasks
+          <HStack spacing={4}>
+            <span>Tasks</span>
+            <Badge colorScheme="red">{coreTasks.length}</Badge>
+          </HStack>
         </Tab>
         <Tab
           _selected={{ bg: "#FF0000", color: "white" }}
@@ -24,7 +33,10 @@ const AssessTabBar = () => {
           color="#FF0000"
           fontWeight="bold"
         >
-            Projects
+          <HStack spacing={4}>
+            <span>Projects</span>
+            <Badge colorScheme="red">{coreProjects.length}</Badge>
+          </HStack>
         </Tab>
         <Tab
           _selected={{ bg: "#FF0000", color: "white" }}
@@ -33,7 +45,10 @@ const AssessTabBar = () => {
           color="#FF0000"
           fontWeight="bold"
         >
-            Contexts
+          <HStack spacing={4}>
+            <span>Contexts</span>
+            <Badge colorScheme="red">{coreContexts.length}</Badge>
+          </HStack>
         </Tab>
         <Tab
           _selected={{ bg: "#FF0000", color: "white" }}
@@ -42,13 +57,16 @@ const AssessTabBar = () => {
           color="#FF0000"
           fontWeight="bold"
         >
-            Collections
+          <HStack spacing={4}>
+            <span>Collections</span>
+            <Badge colorScheme="red">{coreCollections.length}</Badge>
+          </HStack>
         </Tab>
       </TabList>
 
       <TabPanels>
         <TabPanel>
-          <CoreTasks/>
+          <CoreTasks />
         </TabPanel>
         <TabPanel>
           <CoreProjects />
@@ -57,7 +75,7 @@ const AssessTabBar = () => {
           <CoreContexts />
         </TabPanel>
         <TabPanel>
-          <p>Collections content goes here.</p>
+          <p>No collections available</p>
         </TabPanel>
       </TabPanels>
     </Tabs>

@@ -20,22 +20,25 @@ import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { fetchAllContexts, fetchAllTasksByRealm } from '../util/fetchers';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import '../styles/Home.module.css'; // Import custom CSS for calendar
 
 const StalledTasks = () => {
   const coreTasks = useSelector((state) => state.core.coreDecideTasks);
   const contexts = useSelector((state) => state.core.coreContexts);
   const dispatch = useDispatch();
-  const [sendingTaskId, setSendingTaskId] = useState(null);
+  const [sendingToAssessTaskId, setSendingToAssessTaskId] = useState(null);
+  const [sendingToDoTaskId, setSendingToDoTaskId] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [loadingContextTaskId, setLoadingContextTaskId] = useState(null);
+  const [loadingDueDateTaskId, setLoadingDueDateTaskId] = useState(null);
 
   useEffect(() => {
     fetchAllTasksByRealm(dispatch, "2");
-  }, []);
-
+  }, [dispatch]);
 
   const handleSendToAssess = async (taskId) => {
-    setSendingTaskId(taskId);
+    setSendingToAssessTaskId(taskId);
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
@@ -45,11 +48,11 @@ const StalledTasks = () => {
     } catch (err) {
       console.log("error in calling handleSendToAssess", err);
     }
-    setSendingTaskId(null);
+    setSendingToAssessTaskId(null);
   };
 
   const handleSendToDo = async (taskId) => {
-    setSendingTaskId(taskId);
+    setSendingToDoTaskId(taskId);
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
     try {
@@ -59,26 +62,26 @@ const StalledTasks = () => {
     } catch (err) {
       console.log("error in calling handleSendToDo", err);
     }
-    setSendingTaskId(null);
+    setSendingToDoTaskId(null);
   };
 
   const assignContextToTask = async (contextId, taskId) => {
+    setLoadingContextTaskId(taskId);
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.AddContextToTask(contextId, taskId);
       fetchAllTasksByRealm(dispatch, '2');
-      return true;
     } catch (err) {
       console.log('error in calling assignContextToTask', err);
-      return false;
     }
+    setLoadingContextTaskId(null);
   };
 
+
   const assignDueDateToTask = async (taskId, date) => {
+    setLoadingDueDateTaskId(taskId);
     const actions = await Actions.getInstance();
-    console.log("date", date)
-    //taskDate = formatDate(date)
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
       await actions.AssignDueDateToTask(taskId, formatDate(date));
@@ -86,6 +89,7 @@ const StalledTasks = () => {
     } catch (err) {
       console.log('error in calling assignDueDateToTask', err);
     }
+    setLoadingDueDateTaskId(null);
   };
 
   const formatDate = (dateString) => {
@@ -118,29 +122,52 @@ const StalledTasks = () => {
             <Box key={task.taskId}>
               <ListItem display="flex" alignItems="center">
                 <IconButton
-                  icon={sendingTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowBackIcon />}
+                  icon={sendingToAssessTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowBackIcon />}
                   onClick={() => handleSendToAssess(task.taskId)}
                   colorScheme="red"
                   mr={2}
-                  isLoading={sendingTaskId === task.taskId}
+                  isLoading={sendingToAssessTaskId === task.taskId}
                 />
-                <Box flex="1" cursor="pointer" onClick={() => setExpandedTaskId(expandedTaskId === task.taskId ? null : task.taskId)}>
-                  <Text>{task.taskBody}</Text>
-                  <HStack spacing={2} justify="flex-end">
-                    <Text fontSize="sm" color="gray.500">
-                        @{task.taskContextId ? contexts.find(context => context.contextId === task.taskContextId)?.contextName : '@no context'}
-                    </Text>
-                    <Text fontSize="sm" color="gray.500">
-                      {task.taskDue ? task.taskDue : 'no due date'}
-                    </Text>
-                  </HStack>
+                <Box
+                flex="1"
+                cursor="pointer"
+                onClick={() => setExpandedTaskId(expandedTaskId === task.taskId ? null : task.taskId)}
+                >
+                <Text>{task.taskBody}</Text>
+                <HStack spacing={2} justify="flex-end">
+                    <Box
+                    bg={task.taskContextId ? "orange.200" : "gray.200"}
+                    borderRadius="md"
+                    p={1}
+                    >
+                    {loadingContextTaskId === task.taskId ? (
+                      <Spinner size="sm" />
+                    ) : (
+                      <Text fontSize="sm" color="gray.700">
+                        @{task.taskContextId ? contexts.find(context => context.contextId === task.taskContextId)?.contextName : 'no context'}
+                      </Text>
+                    )}
+                    </Box>
+                    <Box
+                    bg={task.taskDue ? "red.200" : "gray.200"}
+                    borderRadius="md"
+                    p={1}
+                    >
+                     {loadingDueDateTaskId === task.taskId ? (
+                      <Spinner size="sm" />
+                    ) : (
+                      <Text fontSize="sm" color="gray.700">
+                        {task.taskDue ? task.taskDue : 'no due date'}
+                      </Text>
+                    )}
+                    </Box>
+                </HStack>
                 </Box>
                 <IconButton
-                  isLoading={sendingTaskId === task.taskId}
-                  isDisabled = {true}
-                  icon={sendingTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
+                  isLoading={sendingToDoTaskId === task.taskId}
+                  icon={sendingToDoTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
                   onClick={() => handleSendToDo(task.taskId)}
-                  colorScheme="gray"
+                  colorScheme="green"
                   ml={2}
                 />
               </ListItem>
@@ -169,7 +196,13 @@ const StalledTasks = () => {
                           setSelectedDate(date);
                           assignDueDateToTask(task.taskId, date);
                         }}
-                        value={selectedDate}
+                        value={task.taskDue ? new Date(task.taskDue) : selectedDate}
+                        tileClassName={({ date, view }) => {
+                          if (task.taskDue && new Date(task.taskDue).toDateString() === date.toDateString()) {
+                            return 'highlight-date';
+                          }
+                          return null;
+                        }}
                       />
                     </Box>
                   </SimpleGrid>
