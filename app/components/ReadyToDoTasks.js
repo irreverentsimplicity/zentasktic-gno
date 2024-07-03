@@ -106,7 +106,10 @@ const ReadyToDoTasks = () => {
   const isDateInFuture = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
-    return date > now;
+    // Reset time portion of both dates to midnight
+  date.setHours(0, 0, 0, 0);
+  now.setHours(0, 0, 0, 0);
+    return date >= now;
   };
 
   const getReadyToDoTasks = (tasks) => {

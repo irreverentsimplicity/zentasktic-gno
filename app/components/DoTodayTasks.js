@@ -62,6 +62,9 @@ const DoTodayTasks = () => {
     const isDateToday = (dateString) => {
       const date = new Date(dateString);
       const now = new Date();
+      // Reset time portion of both dates to midnight
+  date.setHours(0, 0, 0, 0);
+  now.setHours(0, 0, 0, 0);
       return date.toDateString() === now.toDateString();
     };
   
