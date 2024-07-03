@@ -10,7 +10,7 @@ import Header from '../components/Header';
 import Actions from '../util/actions';
 import Config from '../util/config'
 import { getGNOTBalances } from '../util/tokenActions';
-import { fetchAllTasksByRealm, fetchAllProjectsByRealm } from '../util/fetchers';
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts } from '../util/fetchers';
 
 
 
@@ -45,7 +45,7 @@ const Dashboard = () => {
   console.log("assessProjects.length ", assessProjects.length)
   console.log("decideProjects.length ", decideProjects.length)
   console.log("do.doProjects ", doProjects.length)
-  
+
   const dispatch = useDispatch()
   
   useEffect( () => {
@@ -61,6 +61,7 @@ const Dashboard = () => {
   useEffect( () => {
     fetchAllTasksByRealm(dispatch, "1")
     fetchAllProjectsByRealm(dispatch, "1")
+    fetchAllContexts(dispatch)
   }, [])
 
   useEffect( () => {
