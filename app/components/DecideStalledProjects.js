@@ -22,7 +22,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/Home.module.css'; // Import custom CSS for calendar
 
-const StalledTasks = () => {
+const DecideStalledProjects = () => {
   const coreTasks = useSelector((state) => state.core.coreDecideTasks);
   const contexts = useSelector((state) => state.core.coreContexts);
   const dispatch = useDispatch();
@@ -219,4 +219,4 @@ const StalledTasks = () => {
   );
 };
 
-export default StalledTasks;
+export default DecideStalledProjects;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, Badge } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import UndecidedTasks from './UndecidedTasks';
-import StalledTasks from './StalledTasks';
-import ReadyToDoTasks from './ReadyToDoTasks';
+import DecideUndecidedProjects from './DecideUndecidedProjects';
+import DecideStalledProjects from './DecideStalledProjects';
+import DecideReadyToDoProjects from './DecideReadyToDoProjects';
 
-const DecideTabBar = () => {
-  const decideTasks = useSelector((state) => state.core.coreDecideTasks) || [];
+const DecideProjectsTabBar = () => {
+  const decideProjects = useSelector((state) => state.core.coreDecideProjects) || [];
 
   const isDateInPast = (dateString) => {
     const date = new Date(dateString);
@@ -27,13 +27,13 @@ const DecideTabBar = () => {
   };
 
 
-  const stalledTasks = decideTasks.filter(task => task.taskContextId && task.taskDue && isDateInPast(task.taskDue));  
-  const undecidedTasks = decideTasks.filter((task) => !task.taskContextId || !task.taskDue);
-  const readyToDoTasks = decideTasks.filter(task => task.taskContextId && task.taskDue && isDateInFuture(task.taskDue));
+  const stalledProjects = decideProjects.filter(project => project.projectContextId && project.projectDue && isDateInPast(project.projectDue));  
+  const undecidedProjects = decideProjects.filter((project) => !project.projectContextId || !project.projectDue);
+  const readyToDoProjects = decideProjects.filter(project => project.projectContextId && project.projectDue && isDateInFuture(project.projectDue));
   
   return (
     <Tabs variant="enclosed-colored">
-      <TabList>
+      <TabList justifyContent={"flex-end"}>
         <Tab
           _selected={{ bg: "#FFA500", color: "white" }}
           _hover={{ bg: "#FFA500", color: "white" }}
@@ -43,7 +43,7 @@ const DecideTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Undecided</span>
-            <Badge colorScheme="orange">{undecidedTasks.length}</Badge>
+            <Badge colorScheme="orange">{undecidedProjects.length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -55,7 +55,7 @@ const DecideTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Stalled</span>
-            <Badge colorScheme="red">{stalledTasks.length}</Badge>
+            <Badge colorScheme="red">{stalledProjects.length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -67,7 +67,7 @@ const DecideTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Ready To Do</span>
-            <Badge colorScheme="green">{readyToDoTasks.length}</Badge>
+            <Badge colorScheme="green">{readyToDoProjects.length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -83,13 +83,13 @@ const DecideTabBar = () => {
 
       <TabPanels>
         <TabPanel>
-          <UndecidedTasks/>
+          <DecideUndecidedProjects/>
         </TabPanel>
         <TabPanel>
-          <StalledTasks/>
+          <DecideStalledProjects/>
         </TabPanel>
         <TabPanel>
-          <ReadyToDoTasks/>
+          <DecideReadyToDoProjects/>
         </TabPanel>
         <TabPanel>
           <p>By Context content goes here.</p>
@@ -99,4 +99,4 @@ const DecideTabBar = () => {
   );
 };
 
-export default DecideTabBar;
+export default DecideProjectsTabBar;

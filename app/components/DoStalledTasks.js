@@ -7,9 +7,9 @@ import TaskList from './DoTasksList';
 
 const DoStalledTasks = () => {
     const coreTasks = useSelector((state) => state.core.coreDoTasks);
-    const coreContexts = useSelector((state) => state.core.coreContexts);
     const dispatch = useDispatch();
     const [sendingTaskId, setSendingTaskId] = useState(null);
+    const [markAsDoneTaskId, setMarkAsDoneTaskId] = useState(null);
   
     useEffect(() => {
       fetchAllTasksByRealm(dispatch, "3");
@@ -29,7 +29,7 @@ const DoStalledTasks = () => {
     };
   
     const handleMarkAsDone = async (taskId) => {
-      setSendingTaskId(taskId);
+      setMarkAsDoneTaskId(taskId);
       const actions = await Actions.getInstance();
       actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
       try {
@@ -38,7 +38,7 @@ const DoStalledTasks = () => {
       } catch (err) {
         console.log("error in calling handleMarkAsDone", err);
       }
-      setSendingTaskId(null);
+      setMarkAsDoneTaskId(null);
     };
   
     const isDateInPast = (dateString) => {
@@ -57,6 +57,7 @@ const DoStalledTasks = () => {
       handleSendToDecide={handleSendToDecide} 
       handleMarkAsDone={handleMarkAsDone} 
       sendingTaskId={sendingTaskId}
+      markAsDoneTaskId={markAsDoneTaskId}
       />;
   };
 

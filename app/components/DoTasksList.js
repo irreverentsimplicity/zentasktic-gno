@@ -10,10 +10,8 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, CheckIcon } from '@chakra-ui/icons';
-import 'react-calendar/dist/Calendar.css';
-import '../styles/Home.module.css'; // Import custom CSS for calendar
 
-const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId }) => {
+const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, markAsDoneTaskId }) => {
 
   const contexts = useSelector(state => state.core.coreContexts)
   
@@ -66,11 +64,11 @@ const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId }
                 </HStack>
               </Box>
               <IconButton
-                icon={sendingTaskId === task.taskId ? <Spinner size="sm" /> : <CheckIcon />}
+                icon={markAsDoneTaskId === task.taskId ? <Spinner size="sm" /> : <CheckIcon />}
                 onClick={() => handleMarkAsDone(task.taskId)}
                 colorScheme="green"
                 ml={2}
-                isLoading={sendingTaskId === task.taskId}
+                isLoading={markAsDoneTaskId === task.taskId}
               />
             </ListItem>
           </Box>

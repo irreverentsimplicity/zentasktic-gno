@@ -10,7 +10,7 @@ import {
     Text,
   } from "@chakra-ui/react";
   import AssessTabBar from "./AssessTabBar";
-  import DecideTabBar from "./DecideTabBar";
+  import DecideSliderContent from "./DecideSliderContent";
   import DoTabBar from "./DoTabBar";
   
   const SlidingDrawer = ({ isOpen, onClose, title, content }) => {
@@ -41,7 +41,7 @@ import {
   
           <DrawerBody>
             {title === 'Assess' ? <AssessTabBar /> : 
-             title === 'Decide' ? <DecideTabBar /> : 
+             title === 'Decide' ? <DecideSliderContent /> : 
              title === "Do" ? <DoTabBar /> : 
              <p>{content}</p>}
           </DrawerBody>

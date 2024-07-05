@@ -2,25 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Actions from '../util/actions';
 import Config from '../util/config';
-import {
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  Spinner,
-  Text,
-  HStack,
-  Tabs, 
-  TabList, 
-  TabPanels, 
-  Tab, 
-  TabPanel, 
-} from '@chakra-ui/react';
-import { ArrowForwardIcon, CheckIcon } from '@chakra-ui/icons';
 import { fetchAllTasksByRealm } from '../util/fetchers';
-import 'react-calendar/dist/Calendar.css';
-import '../styles/Home.module.css'; // Import custom CSS for calendar
-import ContextsTabBar from './ContextsTabBar';
 import TaskList from './DoTasksList';
 
 const DoTodayTasks = () => {
@@ -28,6 +10,7 @@ const DoTodayTasks = () => {
     const coreContexts = useSelector((state) => state.core.coreContexts);
     const dispatch = useDispatch();
     const [sendingTaskId, setSendingTaskId] = useState(null);
+    const [markAsDoneTaskId, setMarkAsDoneTaskId] = useState(null);
   
     useEffect(() => {
       fetchAllTasksByRealm(dispatch, "3");
@@ -47,7 +30,7 @@ const DoTodayTasks = () => {
     };
   
     const handleMarkAsDone = async (taskId) => {
-      setSendingTaskId(taskId);
+      setMarkAsDoneTaskId(taskId);
       const actions = await Actions.getInstance();
       actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
       try {
@@ -56,7 +39,7 @@ const DoTodayTasks = () => {
       } catch (err) {
         console.log("error in calling handleMarkAsDone", err);
       }
-      setSendingTaskId(null);
+      setMarkAsDoneTaskId(null);
     };
   
     const isDateToday = (dateString) => {
@@ -74,6 +57,7 @@ const DoTodayTasks = () => {
       handleSendToDecide={handleSendToDecide} 
       handleMarkAsDone={handleMarkAsDone} 
       sendingTaskId={sendingTaskId}
+      markAsDoneTaskId={markAsDoneTaskId}
       />;
   };
 

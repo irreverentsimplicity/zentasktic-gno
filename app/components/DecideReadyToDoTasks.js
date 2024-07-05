@@ -22,7 +22,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/Home.module.css'; // Import custom CSS for calendar
 
-const ReadyToDoTasks = () => {
+const DecideReadyToDoTasks = () => {
     const coreTasks = useSelector((state) => state.core.coreDecideTasks);
     const contexts = useSelector((state) => state.core.coreContexts);
     const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const ReadyToDoTasks = () => {
   
     useEffect(() => {
       fetchAllTasksByRealm(dispatch, "2");
-    }, []);
+    }, [dispatch]);
 
 
   const handleSendToAssess = async (taskId) => {
@@ -220,4 +220,4 @@ const ReadyToDoTasks = () => {
   );
 };
 
-export default ReadyToDoTasks;
+export default DecideReadyToDoTasks;

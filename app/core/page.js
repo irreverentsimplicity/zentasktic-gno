@@ -71,7 +71,7 @@ const Dashboard = () => {
     setZenStatus(`There are ${totalItems} items in your system. The most active area is ${mostActiveArea}.`);
     setAssessContent(`There are ${assessTasks.length} tasks, and ${assessProjects.length} projects ready to be assessed. `);
     setDecideContent(`There are ${decideTasks.length} tasks, and ${decideProjects.length} projects you can decide upon right now. `);
-    setDoContent(`There are ${doTasks.length} tasks, and ${doProjects.length} projects you want to do.`)
+    setDoContent(`There are ${doTasks.length} tasks, and ${doProjects.length} projects you are executing right now.`)
   }, [assessTasks, assessProjects, decideTasks, decideProjects, doTasks, doProjects]);
 
   useEffect(() => {
