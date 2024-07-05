@@ -455,6 +455,27 @@ class Actions {
     console.log("actions AttachTaskToProject response ", JSON.stringify(response))
     return response;
   }
+  /**
+   * Edits a project task
+   *
+   * @param taskProjectId string - the id of the task in the project
+   * @param taskBody string - new task body
+   * @param projectId string - project id
+   */
+
+  async EditProjectTask(
+    taskProjectId: string,
+    taskBody: string,
+    projectId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('EditProjectTask', [
+      taskProjectId,
+      taskBody,
+      projectId
+    ]);
+    console.log("actions EditProjectTask response ", JSON.stringify(response))
+    return response;
+  }
 
   /**
    * Detaches a task from a project

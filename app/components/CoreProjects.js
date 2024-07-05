@@ -14,6 +14,9 @@ const CoreProjects = () => {
   const [newProject, setNewProject] = useState('');
   const [editProjectId, setEditProjectId] = useState(null);
   const [editProjectBody, setEditProjectBody] = useState('');
+  const [editTaskCurrentProjectId, setEditTaskCurrentProjectId] = useState(null);
+  const [editTaskProjectId, setEditTaskProjectId] = useState(null);
+  const [editTaskProjectBody, setEditTaskProjectBody] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [detachingTaskId, setDetachingTaskId] = useState(false);
@@ -64,6 +67,7 @@ const CoreProjects = () => {
     try {
       await actions.MoveProjectToRealm(projectId, "2");
       fetchAllProjectsByRealm(dispatch, "1");
+      fetchAllProjectsByRealm(dispatch, "2");
     } catch (err) {
       console.log("error in calling handleSendProjectToDecide", err);
     }
@@ -106,8 +110,27 @@ const CoreProjects = () => {
     }
   };
 
-  const handleEditTask = (taskId, taskBody, projectId) => {
-    // Logic to edit task
+  const handleEditProjectTask = (projectTaskId, projectTaskBody, projectId) => {
+    setEditTaskCurrentProjectId(projectId)
+    setEditTaskProjectId(projectTaskId);
+    setEditTaskProjectBody(projectTaskBody);
+  };
+
+  const handleUpdateProjectTask = async () => {
+    setIsUpdating(true);
+    const actions = await Actions.getInstance();
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
+    try {
+        await actions.EditProjectTask(editTaskProjectId, editTaskProjectBody, editTaskCurrentProjectId);
+        fetchAllTasksByRealm(dispatch, "1");
+      } catch (err) {
+        console.log("error in calling EditProjectTask", err);
+      }
+    setIsUpdating(false);
+    setEditTaskCurrentProjectId(null);
+    setEditTaskProjectId(null);
+    setEditTaskProjectBody('');
+    fetchAllProjectsByRealm(dispatch, "1")
   };
 
   const handleDeleteTask = async (taskId, projectId) => {
@@ -225,24 +248,35 @@ const CoreProjects = () => {
                       icon={deletingTaskId === task.tasktId ? <Spinner size="sm" /> : <DeleteIcon />}  
                       isLoading={deletingTaskId === task.taskId}
                       onClick={() => handleDeleteTask(task.taskId, project.projectId)}
-                      colorScheme="linkedin"
+                      colorScheme="red"
                       mr={2}
                     />
-                    <Box
-                      flex="1"
-                      cursor="pointer"
-                      _hover={{ bg: "gray.100" }}
-                      onClick={() => handleEditTask(task.taskId, task.taskBody)}
-                    >
-                      {task.taskBody}
-                    </Box>
-                    <IconButton
-                      icon={detachingTaskId === task.tasktId ? <Spinner size="sm" /> : <FaEject />}  
-                      isLoading={detachingTaskId === task.taskId}
-                      onClick={() => handleDetachTaskFromProject(task.taskId, project.projectId)}
-                      colorScheme="blackAlpha"
-                      ml={2}
-                    />
+                    {editTaskProjectId === task.taskId ? (
+                      <Flex flex="1" alignItems="center">
+                        <Textarea
+                          value={editTaskProjectBody}
+                          onChange={(e) => setEditTaskProjectBody(e.target.value)}
+                          mr={2}
+                        />
+                        <Button onClick={() => handleUpdateProjectTask(task)} colorScheme="blue" isLoading={isUpdating}>
+                          {isUpdating ? <Spinner size="sm" /> : 'Update'}
+                        </Button>
+                      </Flex>
+                    ) : (
+                      <Flex flex="1" alignItems="center" _hover={{ bg: "gray.100" }}>
+                        <Box onClick={() => handleEditProjectTask(task.taskId, task.taskBody, project.projectId)} flex="1" cursor="pointer">
+                          {task.taskBody}
+                        </Box>
+                        <IconButton
+                            icon={detachingTaskId === task.tasktId ? <Spinner size="sm" /> : <FaEject />}  
+                            isLoading={detachingTaskId === task.taskId}
+                            onClick={() => handleDetachTaskFromProject(task.taskId, project.projectId)}
+                            colorScheme="linkedin"
+                            ml={2}
+                          />
+                      </Flex>
+                    )}
+                    
                   </ListItem>
                 ))}
               </List>

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Badge, HStack } from '@chakra-ui/react';
+import { Button, Badge, HStack, Box } from '@chakra-ui/react';
 import { AiOutlineFileText, AiOutlineProject } from 'react-icons/ai';
 
 const ToggleSwitch = ({ tasksTotal, projectsTotal, onToggle, active }) => {
   return (
+    <Box mb={2}>
     <HStack spacing={0}>
       <Button
         onClick={() => onToggle('tasks')}
@@ -28,6 +29,7 @@ const ToggleSwitch = ({ tasksTotal, projectsTotal, onToggle, active }) => {
         Projects <Badge ml={2} colorScheme={active === 'projects' ? 'red' : 'orange'}>{projectsTotal}</Badge>
       </Button>
     </HStack>
+    </Box>
   );
 };
 

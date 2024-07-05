@@ -34,7 +34,7 @@ const DoStalledTasks = () => {
       actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "4");
-        fetchAllTasksByRealm(dispatch, "2");
+        fetchAllTasksByRealm(dispatch, "3");
       } catch (err) {
         console.log("error in calling handleMarkAsDone", err);
       }

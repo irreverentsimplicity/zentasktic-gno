@@ -33,7 +33,7 @@ const DecideProjectsTabBar = () => {
   
   return (
     <Tabs variant="enclosed-colored">
-      <TabList justifyContent={"flex-end"}>
+      <TabList justifyContent={"flex-start"}>
         <Tab
           _selected={{ bg: "#FFA500", color: "white" }}
           _hover={{ bg: "#FFA500", color: "white" }}

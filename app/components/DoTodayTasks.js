@@ -6,8 +6,7 @@ import { fetchAllTasksByRealm } from '../util/fetchers';
 import TaskList from './DoTasksList';
 
 const DoTodayTasks = () => {
-    const coreTasks = useSelector((state) => state.core.coreDoTasks);
-    const coreContexts = useSelector((state) => state.core.coreContexts);
+    const coreTasks = useSelector((state) => state.core.coreDoTasks)
     const dispatch = useDispatch();
     const [sendingTaskId, setSendingTaskId] = useState(null);
     const [markAsDoneTaskId, setMarkAsDoneTaskId] = useState(null);
@@ -35,7 +34,7 @@ const DoTodayTasks = () => {
       actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "4");
-        fetchAllTasksByRealm(dispatch, "2");
+        fetchAllTasksByRealm(dispatch, "3");
       } catch (err) {
         console.log("error in calling handleMarkAsDone", err);
       }

@@ -33,7 +33,7 @@ import {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>
+          <DrawerHeader pb={0}>
             <Text fontSize="2xl" fontWeight="bold" color={getTitleColor()}>
               {title}
             </Text>

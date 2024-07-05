@@ -169,6 +169,7 @@ const Dashboard = () => {
                       height="85%"
                       cursor="pointer"
                       onClick={() => openDrawer('Assess', 'Assess Content')}
+                      _hover={{backgroundColor: "gray.100"}}
                     >
                       <Box width="90%" display="flex" flexDirection="column" justifyContent="flex-start">
                         <Text fontSize="2xl" fontWeight="bold" color="red.500" alignSelf="flex-start">
@@ -213,6 +214,7 @@ const Dashboard = () => {
                       height="85%"
                       cursor="pointer"
                       onClick={() => openDrawer('Decide', 'Decide Content')}
+                      _hover={{backgroundColor: "gray.100"}}
                     >
                       <Box width="90%" display="flex" flexDirection="column" justifyContent="flex-start">
                         <Text fontSize="2xl" fontWeight="bold" color="orange.500" alignSelf="flex-start">
@@ -258,6 +260,7 @@ const Dashboard = () => {
                       height="85%"
                       cursor="pointer"
                       onClick={() => openDrawer('Do', 'Do Content')}
+                      _hover={{backgroundColor: "gray.100"}}
                     >
                       <Box width="90%" display="flex" flexDirection="column" justifyContent="flex-start">
                         <Text fontSize="2xl" fontWeight="bold" color="green.500" alignSelf="flex-start">
