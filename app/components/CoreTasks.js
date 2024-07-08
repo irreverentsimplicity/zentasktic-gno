@@ -22,17 +22,19 @@ const CoreTasks = () => {
   }, []);
 
   const handleAddTask = async () => {
-    setIsAdding(true);
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
-    try {
-        await actions.AddTask(newTask);
-        fetchAllTasksByRealm(dispatch, "1");
-      } catch (err) {
-        console.log("error in calling AddTask", err);
-      }
-    setIsAdding(false);
-    setNewTask('');
+    if (newTask.length >= 3 && newTask.length <= 1000) {
+      setIsAdding(true);
+      const actions = await Actions.getInstance();
+      actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
+      try {
+          await actions.AddTask(newTask);
+          fetchAllTasksByRealm(dispatch, "1");
+        } catch (err) {
+          console.log("error in calling AddTask", err);
+        }
+      setIsAdding(false);
+      setNewTask('');
+    }
   };
 
   const handleDeleteTask = async (taskId) => {
@@ -67,18 +69,20 @@ const CoreTasks = () => {
   };
 
   const handleUpdateTask = async () => {
-    setIsUpdating(true);
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
-    try {
-        await actions.UpdateTask(editTaskId, editTaskBody);
-        fetchAllTasksByRealm(dispatch, "1");
-      } catch (err) {
-        console.log("error in calling UpdateTask", err);
-      }
-    setIsUpdating(false);
-    setEditTaskId(null);
-    setEditTaskBody('');
+    if (editTaskBody.length >= 3 && editTaskBody.length <= 1000) {
+      setIsUpdating(true);
+      const actions = await Actions.getInstance();
+      actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
+      try {
+          await actions.UpdateTask(editTaskId, editTaskBody);
+          fetchAllTasksByRealm(dispatch, "1");
+        } catch (err) {
+          console.log("error in calling UpdateTask", err);
+        }
+      setIsUpdating(false);
+      setEditTaskId(null);
+      setEditTaskBody('');
+    }
   };
 
   return (

@@ -618,6 +618,44 @@ class Actions {
   }
 
   /**
+   * Adds a context to a project
+   *
+   * @param contextId string - context id
+   * @param projectId string - task id
+   */
+
+  async AddContextToProject(
+    contextId: string,
+    projectId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddContextToProject', [
+      contextId,
+      projectId
+    ]);
+    console.log("actions AddContextToProject response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Adds a due date to a project
+   *
+   * @param projectId string - task id
+   * @param date string - date, formatted "YYYY-MM-DD"
+   */
+
+  async AssignDueDateToProject(
+    projectId: string,
+    date: string,
+  ): Promise<any> {
+    const response = await this.callMethod('SetProjectDueDate', [
+      projectId,
+      date
+    ]);
+    console.log("actions SetProjectDueDate response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
    * Moves a project to a realm
    *
    * @param projectId string - project id

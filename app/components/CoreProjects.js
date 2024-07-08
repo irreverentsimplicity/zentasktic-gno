@@ -32,7 +32,7 @@ const CoreProjects = () => {
   }, []);
 
   const handleAddProject = async () => {
-    if (newProject.length >= 3) {
+    if (newProject.length >= 3 && newProject.length <= 1000) {
         setIsAdding(true);
         const actions = await Actions.getInstance();
         actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
@@ -80,18 +80,20 @@ const CoreProjects = () => {
   };
 
   const handleUpdateProject = async () => {
-    setIsUpdating(true);
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
-    try {
-      await actions.UpdateProject(editProjectId, editProjectBody);
-      fetchAllProjectsByRealm(dispatch, "1");
-    } catch (err) {
-      console.log("error in calling UpdateProject", err);
+    if (editProjectBody.length >= 3 && editProjectBody.length <= 1000) {
+      setIsUpdating(true);
+      const actions = await Actions.getInstance();
+      actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+      try {
+        await actions.UpdateProject(editProjectId, editProjectBody);
+        fetchAllProjectsByRealm(dispatch, "1");
+      } catch (err) {
+        console.log("error in calling UpdateProject", err);
+      }
+      setIsUpdating(false);
+      setEditProjectId(null);
+      setEditProjectBody('');
     }
-    setIsUpdating(false);
-    setEditProjectId(null);
-    setEditProjectBody('');
   };
 
   const handleAddTaskToProject = async (projectId) => {
@@ -200,10 +202,10 @@ const CoreProjects = () => {
                     </Button>
                   </Flex>
                 ) : (
-                  <Flex flex="1" alignItems="center" _hover={{ bg: "gray.100" }}>
-                    <Box onClick={() => handleEditProject(project)} flex="1" cursor="pointer">
+                  <Flex flex="1" alignItems="center">
+                    <Flex onClick={() => handleEditProject(project)} flex="1" cursor="pointer" _hover={{ bg: "gray.100" }}>
                       {project.projectBody}
-                    </Box>
+                    </Flex>
                     <Flex alignItems="center">
                         <Box position="relative" display="inline-block" ml={2}>
                             <IconButton
@@ -241,7 +243,8 @@ const CoreProjects = () => {
                 </Flex>
               )}
               {addingTaskId === project.projectId && project.projectTasks.length !== 0 && (
-                <List mt={2} ml={12} spacing={2} borderWidth="1px" borderRadius="md" p={2}>
+                <Box mt={2} ml={12} mb={4} p={4} rounded="md" borderWidth="1px" borderColor="gray.300" bg="gray.50">
+                <List ml={0} spacing={2}>
                 {project.projectTasks.map((task, index) => (
                   <ListItem key={index} pl={2} display="flex" alignItems="center">
                     <IconButton
@@ -280,6 +283,7 @@ const CoreProjects = () => {
                   </ListItem>
                 ))}
               </List>
+              </Box>
               )}
             </ListItem>
           ))

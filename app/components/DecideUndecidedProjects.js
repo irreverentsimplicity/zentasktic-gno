@@ -156,9 +156,10 @@ const DecideUndecidedProjects = () => {
                   />
                   <Box
                     flex="1"
+                    p={2}
                     cursor="pointer"
                     onClick={() => setExpandedProjectId(expandedProjectId === project.projectId ? null : project.projectId)}
-                    _hover={{ backgroundColor: "gray.100" }}
+                    _hover={{ backgroundColor: "gray.100", borderRadius: "md" }}
                   >
                     <Text>{project.projectBody}</Text>
                     <HStack spacing={2} justify="flex-end">
@@ -224,7 +225,7 @@ const DecideUndecidedProjects = () => {
                   <Box mt={4} mb={4} p={4} rounded="md" borderWidth="1px" bg="gray.50" zIndex={1}>
                     <SimpleGrid columns={2} spacing={4}>
                       <Box>
-                        <Text mb={2} borderBottom="1px" borderColor="gray.300">Set context</Text>
+                        <Text mb={2} borderBottom="1px" borderColor="gray.300">Set project context</Text>
                         <Wrap spacing={2} align="center">
                           {contexts.map((context) => (
                             <Button
@@ -239,7 +240,7 @@ const DecideUndecidedProjects = () => {
                         </Wrap>
                       </Box>
                       <Box>
-                        <Text mb={2} borderBottom="1px" borderColor="gray.300">Set due date</Text>
+                        <Text mb={2} borderBottom="1px" borderColor="gray.300">Set project due date</Text>
                         <Calendar
                           onChange={(date) => {
                             setSelectedDate(date);
