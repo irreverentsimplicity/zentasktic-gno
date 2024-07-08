@@ -621,7 +621,7 @@ class Actions {
    * Adds a context to a project
    *
    * @param contextId string - context id
-   * @param projectId string - task id
+   * @param projectId string - project id
    */
 
   async AddContextToProject(
@@ -639,7 +639,7 @@ class Actions {
   /**
    * Adds a due date to a project
    *
-   * @param projectId string - task id
+   * @param projectId string - project id
    * @param date string - date, formatted "YYYY-MM-DD"
    */
 
@@ -652,6 +652,50 @@ class Actions {
       date
     ]);
     console.log("actions SetProjectDueDate response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Adds a context to a project task
+   *
+   * @param contextId string - context id
+   * @param projectId string - project id
+   * @param projectTaskId string - project task id
+   */
+
+  async AddContextToProjectTask(
+    contextId: string,
+    projectId: string,
+    projectTaskId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddContextToProjectTask', [
+      contextId,
+      projectId,
+      projectTaskId
+    ]);
+    console.log("actions AddContextToProjectTask response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Adds a due date to a project task
+   *
+   * @param projectId string - project id
+   * @param projectTaskId string - project task id
+   * @param date string - date, formatted "YYYY-MM-DD"
+   */
+
+  async AssignDueDateToProjectTask(
+    projectId: string,
+    projectTaskId: string,
+    date: string,
+  ): Promise<any> {
+    const response = await this.callMethod('SetProjectTaskDueDate', [
+      projectId,
+      projectTaskId,
+      date
+    ]);
+    console.log("actions SetProjectTaskDueDate response ", JSON.stringify(response))
     return response;
   }
 

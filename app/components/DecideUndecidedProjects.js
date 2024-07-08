@@ -94,22 +94,22 @@ const DecideUndecidedProjects = () => {
     setLoadingDueDateProjectId(null);
   };
 
-  const assignContextToProjectTask = async (contextId, taskId) => {
+  const assignContextToProjectTask = async (contextId, projectId, projectTaskId) => {
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
-      await actions.AssignContextToProjectTask(contextId, taskId);
+      await actions.AddContextToProjectTask(contextId, projectId, projectTaskId);
       fetchAllProjectsByRealm(dispatch, '2');
     } catch (err) {
       console.log('error in calling assignContextToProjectTask', err);
     }
   };
 
-  const assignDueDateToProjectTask = async (taskId, date) => {
+  const assignDueDateToProjectTask = async (projectId, projectTaskId, date) => {
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
-      await actions.AssignDueDateToProjectTask(taskId, formatDate(date));
+      await actions.AssignDueDateToProjectTask(projectId, projectTaskId, formatDate(date));
       fetchAllProjectsByRealm(dispatch, '2');
     } catch (err) {
       console.log('error in calling assignDueDateToProjectTask', err);
@@ -299,7 +299,7 @@ const DecideUndecidedProjects = () => {
                                       <Button
                                         key={context.contextId}
                                         onClick={async () => {
-                                          await assignContextToProjectTask(context.contextId, task.taskId);
+                                          await assignContextToProjectTask(context.contextId, project.projectId, task.taskId);
                                         }}
                                       >
                                         @{context.contextName}
@@ -312,7 +312,7 @@ const DecideUndecidedProjects = () => {
                                   <Calendar
                                     onChange={(date) => {
                                       setSelectedDate(date);
-                                      assignDueDateToProjectTask(task.taskId, date);
+                                      assignDueDateToProjectTask(project.projectId, task.taskId, date);
                                     }}
                                     value={task.taskDue ? new Date(task.taskDue) : selectedDate}
                                     tileClassName={({ date, view }) => {
