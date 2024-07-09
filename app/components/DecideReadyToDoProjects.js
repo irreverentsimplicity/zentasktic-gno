@@ -28,6 +28,7 @@ const DecideReadyToDoProjects = () => {
   const contexts = useSelector((state) => state.core.coreContexts);
   const dispatch = useDispatch();
   const [sendingProjectId, setSendingProjectId] = useState(null);
+  const [sendingToDoProjectId, setSendingToDoProjectId] = useState(null)
   const [expandedProjectId, setExpandedProjectId] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loadingContextProjectId, setLoadingContextProjectId] = useState(null);
@@ -57,7 +58,7 @@ const DecideReadyToDoProjects = () => {
   };
 
   const handleSendToDo = async (projectId) => {
-    setSendingProjectId(projectId);
+    setSendingToDoProjectId(projectId);
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
@@ -67,7 +68,7 @@ const DecideReadyToDoProjects = () => {
     } catch (err) {
       console.log('error in calling handleSendToDo', err);
     }
-    setSendingProjectId(null);
+    setSendingToDoProjectId(null);
   };
 
   const assignContextToProject = async (contextId, projectId) => {
@@ -120,19 +121,6 @@ const DecideReadyToDoProjects = () => {
       console.log('error in calling assignDueDateToProjectTask', err);
     }
     setLoadingDueDateProjectTaskId(null)
-  };
-
-  const assignDueDateToTask = async (taskId, date) => {
-    setLoadingDueDateTaskId(taskId);
-    const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
-    try {
-      await actions.AssignDueDateToTask(taskId, formatDate(date));
-      fetchAllTasksByRealm(dispatch, '2');
-    } catch (err) {
-      console.log('error in calling assignDueDateToTask', err);
-    }
-    setLoadingDueDateTaskId(null);
   };
 
   const formatDate = (dateString) => {
@@ -249,12 +237,12 @@ const DecideReadyToDoProjects = () => {
                       </Box>
                     )}
                     <IconButton
-                      isDisabled
-                      icon={<ArrowForwardIcon />}
-                      onClick={() => handleSendToDo(project.projectId)}
-                      colorScheme="gray"
-                      ml={1}
-                    />
+                    icon={sendingToDoProjectId === project.projectId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
+                    onClick={() => handleSendToDo(project.projectId)}
+                    colorScheme="green"
+                    mr={2}
+                    isLoading={sendingToDoProjectId === project.projectId}
+                  />
                   </HStack>
                 </ListItem>
                 <Collapse in={expandedProjectId === project.projectId} animateOpacity>
