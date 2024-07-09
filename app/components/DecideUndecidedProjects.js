@@ -34,6 +34,8 @@ const DecideUndecidedProjects = () => {
   const [loadingDueDateProjectId, setLoadingDueDateProjectId] = useState(null);
   const [expandedTaskProjectId, setExpandedTaskProjectId] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
+  const [loadingContextProjectTaskId, setLoadingContextProjectTaskId] = useState(null)
+  const [loadingDueDateProjectTaskId, setLoadingDueDateProjectTaskId] = useState(null)
 
   useEffect(() => {
     fetchAllProjectsByRealm(dispatch, '2');
@@ -95,6 +97,7 @@ const DecideUndecidedProjects = () => {
   };
 
   const assignContextToProjectTask = async (contextId, projectId, projectTaskId) => {
+    setLoadingContextProjectTaskId(projectTaskId)
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
@@ -103,9 +106,11 @@ const DecideUndecidedProjects = () => {
     } catch (err) {
       console.log('error in calling assignContextToProjectTask', err);
     }
+    setLoadingContextProjectTaskId(null)
   };
 
   const assignDueDateToProjectTask = async (projectId, projectTaskId, date) => {
+    setLoadingDueDateProjectTaskId(projectTaskId)
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
@@ -114,6 +119,7 @@ const DecideUndecidedProjects = () => {
     } catch (err) {
       console.log('error in calling assignDueDateToProjectTask', err);
     }
+    setLoadingDueDateProjectTaskId(null)
   };
 
   const formatDate = (dateString) => {
@@ -126,9 +132,27 @@ const DecideUndecidedProjects = () => {
     return formattedDate;
   };
 
-  const getUndecidedProjects = (projects) => {
-    return projects.filter((project) => !project.projectContextId || !project.projectDue);
+  const isDateInPast = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    // Reset time portion of both dates to midnight
+  date.setHours(0, 0, 0, 0);
+  now.setHours(0, 0, 0, 0);
+    return date < now;
   };
+
+  const getUndecidedProjects = (projects) => {
+    return projects.filter((project) => {
+      const isProjectUndecided = !project.projectContextId || !project.projectDue;
+  
+      const isAnyTaskUndecided = project.projectTasks && project.projectTasks.some((task) => {
+        return !task.taskContextId || !task.taskDue;
+      });
+  
+      return isProjectUndecided || isAnyTaskUndecided;
+    });
+  };
+  
 
   const getTaskCounts = (tasks) => {
     const undecidedTasks = tasks.filter(task => !task.taskContextId || !task.taskDue);
@@ -177,7 +201,7 @@ const DecideUndecidedProjects = () => {
                         )}
                       </Box>
                       <Box
-                        bg={project.projectDue ? "orange.200" : "gray.200"}
+                        bg={project.projectDue ? (isDateInPast(project.projectDue) ? "red.100" : "green.200" ) : "gray.200"}
                         borderRadius="md"
                         p={1}
                       >
@@ -274,18 +298,26 @@ const DecideUndecidedProjects = () => {
                                 borderRadius="md"
                                 p={1}
                               >
+                              {loadingContextProjectTaskId === task.taskId ? (
+                                <Spinner size="sm" />
+                              ) : (
                                 <Text fontSize="sm" color="gray.700">
                                   @{task.taskContextId ? contexts.find(context => context.contextId === task.taskContextId)?.contextName : 'no context'}
                                 </Text>
+                              )}
                               </Box>
                               <Box
-                                bg={task.taskDue ? "orange.200" : "gray.200"}
+                                bg={task.taskDue ? (isDateInPast(task.taskDue) ? "red.100" : "green.200") : "gray.200"}
                                 borderRadius="md"
                                 p={1}
                               >
+                              {loadingDueDateProjectTaskId === task.taskId ? (
+                                <Spinner size="sm" />
+                              ) : (
                                 <Text fontSize="sm" color="gray.700">
                                   {task.taskDue ? task.taskDue : 'no due date'}
                                 </Text>
+                              )}
                               </Box>
                             </HStack>
                           </ListItem>

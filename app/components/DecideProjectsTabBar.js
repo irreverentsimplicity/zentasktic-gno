@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import DecideUndecidedProjects from './DecideUndecidedProjects';
 import DecideStalledProjects from './DecideStalledProjects';
 import DecideReadyToDoProjects from './DecideReadyToDoProjects';
+import CoreProjects from './CoreProjects';
 
 const DecideProjectsTabBar = () => {
   const decideProjects = useSelector((state) => state.core.coreDecideProjects) || [];
@@ -12,8 +13,8 @@ const DecideProjectsTabBar = () => {
     const date = new Date(dateString);
     const now = new Date();
     // Reset time portion of both dates to midnight
-  date.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
     return date < now;
   };
 
@@ -21,15 +22,51 @@ const DecideProjectsTabBar = () => {
     const date = new Date(dateString);
     const now = new Date();
     // Reset time portion of both dates to midnight
-  date.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
     return date >= now;
   };
 
 
-  const stalledProjects = decideProjects.filter(project => project.projectContextId && project.projectDue && isDateInPast(project.projectDue));  
-  const undecidedProjects = decideProjects.filter((project) => !project.projectContextId || !project.projectDue);
-  const readyToDoProjects = decideProjects.filter(project => project.projectContextId && project.projectDue && isDateInFuture(project.projectDue));
+  const stalledProjects = (decideProjects) => {
+    return decideProjects.filter((project) => {
+      const isProjectStalled = project.projectContextId && project.projectDue && isDateInPast(project.projectDue);
+  
+      const areAllTasksReadyToDo = project.projectTasks && project.projectTasks.every((task) => {
+        return task.taskContextId && task.taskDue;
+      });
+  
+      const isAnyTaskStalled = project.projectTasks && project.projectTasks.some((task) => {
+        return task.taskContextId && task.taskDue && isDateInPast(task.taskDue);
+      });
+  
+      return project.projectContextId && project.projectDue && areAllTasksReadyToDo && (isProjectStalled || isAnyTaskStalled);
+    });
+  };
+
+  const undecidedProjects = (decideProjects) => {
+    return decideProjects.filter((project) => {
+      const isProjectUndecided = !project.projectContextId || !project.projectDue;
+  
+      const isAnyTaskUndecided = project.projectTasks && project.projectTasks.some((task) => {
+        return !task.taskContextId || !task.taskDue;
+      });
+  
+      return isProjectUndecided || isAnyTaskUndecided;
+    });
+  };
+
+  const readyToDoProjects = (decideProjects) => {
+    return decideProjects.filter((project) => {
+      const isProjectReadyToDo = project.projectContextId && project.projectDue && isDateInFuture(project.projectDue);
+  
+      const areAllTasksReadyToDo = project.projectTasks && project.projectTasks.every((task) => {
+        return task.taskContextId && task.taskDue && isDateInFuture(task.taskDue);
+      });
+  
+      return isProjectReadyToDo && areAllTasksReadyToDo;
+    });
+  };
   
   return (
     <Tabs variant="enclosed-colored">
@@ -43,7 +80,7 @@ const DecideProjectsTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Undecided</span>
-            <Badge colorScheme="orange">{undecidedProjects.length}</Badge>
+            <Badge colorScheme="orange">{undecidedProjects(decideProjects).length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -55,7 +92,7 @@ const DecideProjectsTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Stalled</span>
-            <Badge colorScheme="red">{stalledProjects.length}</Badge>
+            <Badge colorScheme="red">{stalledProjects(decideProjects).length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -67,7 +104,7 @@ const DecideProjectsTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Ready To Do</span>
-            <Badge colorScheme="green">{readyToDoProjects.length}</Badge>
+            <Badge colorScheme="green">{readyToDoProjects(decideProjects).length}</Badge>
           </HStack>
         </Tab>
         <Tab
