@@ -10,19 +10,12 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, CheckIcon } from '@chakra-ui/icons';
+import { isDateInPast } from '../util/dates';
 
 const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, markAsDoneTaskId }) => {
 
   const contexts = useSelector(state => state.core.coreContexts)
   
-  const isDateInPast = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    date.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-    return date < now;
-  };
-
   return (
   <Box>
     <List spacing={3}>

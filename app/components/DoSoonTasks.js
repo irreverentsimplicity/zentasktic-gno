@@ -2,26 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Actions from '../util/actions';
 import Config from '../util/config';
-import {
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  Spinner,
-  Text,
-  HStack,
-  Tabs, 
-  TabList, 
-  TabPanels, 
-  Tab, 
-  TabPanel, 
-} from '@chakra-ui/react';
-import { ArrowForwardIcon, CheckIcon } from '@chakra-ui/icons';
 import { fetchAllTasksByRealm } from '../util/fetchers';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/Home.module.css'; // Import custom CSS for calendar
 import ContextsTabBar from './ContextsTabBar';
 import TaskList from './DoTasksList';
+import { isDateSoon } from '../util/dates';
 
 const DoSoonTasks = () => {
     const coreTasks = useSelector((state) => state.core.coreDoTasks);
@@ -57,14 +43,6 @@ const DoSoonTasks = () => {
         console.log("error in calling handleMarkAsDone", err);
       }
       setSendingTaskId(null);
-    };
-  
-    const isDateSoon = (dateString) => {
-      const date = new Date(dateString);
-      const now = new Date();
-      const tomorrow = new Date(now);
-      tomorrow.setDate(now.getDate() + 1);
-      return date > tomorrow;
     };
   
     const soonTasks = coreTasks.filter(task => isDateSoon(task.taskDue));

@@ -20,6 +20,7 @@ import { ArrowBackIcon, CheckIcon } from '@chakra-ui/icons';
 import { fetchAllContexts, fetchAllProjectsByRealm } from '../util/fetchers';
 import { FaTasks } from 'react-icons/fa';
 import '../styles/Home.module.css'; // Import custom CSS for calendar
+import { isDateToday, isDateInPast, isDateInFuture } from '../util/dates';
 
 const DoTodayProjects = () => {
   const coreDoProjects = useSelector((state) => state.core.coreDoProjects);
@@ -77,31 +78,6 @@ const DoTodayProjects = () => {
     setMarkAsDoneProjectTaskId(null);
   };
 
-  const isDateToday = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-    date.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-    return date.toDateString() === now.toDateString();
-  };
-
-  const isDateInPast = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-  date.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
-    return date < now;
-  };
-  const isDateInFuture = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-    date.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-    return date >= now;
-  };
   
   const getTodayProjects = (projects) => {
     return projects.filter((project) => {

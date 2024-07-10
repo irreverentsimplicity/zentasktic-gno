@@ -17,7 +17,8 @@ import {
   Divider
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { fetchAllContexts, fetchAllTasksByRealm } from '../util/fetchers';
+import { fetchAllTasksByRealm } from '../util/fetchers';
+import { formatDate, isDateInPast } from '../util/dates';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/Home.module.css'; // Import custom CSS for calendar
@@ -92,24 +93,6 @@ const DecideStalledTasks = () => {
     setLoadingDueDateTaskId(null);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const formattedDate = new Intl.DateTimeFormat('en-CA', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date);
-    return formattedDate;
-  };
-
-  const isDateInPast = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-  date.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
-    return date < now;
-  };
 
   const getStalledTasks = (tasks) => {
     return tasks.filter(task => task.taskContextId && task.taskDue && isDateInPast(task.taskDue));

@@ -4,6 +4,7 @@ import Actions from '../util/actions';
 import Config from '../util/config';
 import { fetchAllTasksByRealm } from '../util/fetchers';
 import TaskList from './DoTasksList';
+import { isDateToday } from '../util/dates';
 
 const DoTodayTasks = () => {
     const coreTasks = useSelector((state) => state.core.coreDoTasks)
@@ -39,15 +40,6 @@ const DoTodayTasks = () => {
         console.log("error in calling handleMarkAsDone", err);
       }
       setMarkAsDoneTaskId(null);
-    };
-  
-    const isDateToday = (dateString) => {
-      const date = new Date(dateString);
-      const now = new Date();
-      // Reset time portion of both dates to midnight
-      date.setHours(0, 0, 0, 0);
-      now.setHours(0, 0, 0, 0);
-      return date.toDateString() === now.toDateString();
     };
   
     const todayTasks = coreTasks.filter(task => isDateToday(task.taskDue));

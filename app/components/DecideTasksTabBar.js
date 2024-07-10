@@ -4,28 +4,10 @@ import { useSelector } from 'react-redux';
 import DecideUndecidedTasks from './DecideUndecidedTasks';
 import DecideStalledTasks from './DecideStalledTasks';
 import DecideReadyToDoTasks from './DecideReadyToDoTasks';
+import { isDateInFuture, isDateInPast } from '../util/dates';
 
 const DecideTasksTabBar = () => {
   const decideTasks = useSelector((state) => state.core.coreDecideTasks) || [];
-
-  const isDateInPast = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-  date.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
-    return date < now;
-  };
-
-  const isDateInFuture = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-  date.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
-    return date >= now;
-  };
-
 
   const stalledTasks = decideTasks.filter(task => task.taskContextId && task.taskDue && isDateInPast(task.taskDue));  
   const undecidedTasks = decideTasks.filter((task) => !task.taskContextId || !task.taskDue);

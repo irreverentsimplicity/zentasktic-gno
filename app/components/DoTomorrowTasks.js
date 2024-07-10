@@ -4,6 +4,7 @@ import Actions from '../util/actions';
 import Config from '../util/config';
 import { fetchAllTasksByRealm } from '../util/fetchers';
 import TaskList from './DoTasksList';
+import { isDateTomorrow } from '../util/dates';
 
 const DoTomorrowTasks = () => {
     const coreTasks = useSelector((state) => state.core.coreDoTasks);
@@ -42,14 +43,7 @@ const DoTomorrowTasks = () => {
       setMarkAsDoneTaskId(null);
     };
   
-    const isDateTomorrow = (dateString) => {
-      const date = new Date(dateString);
-      const now = new Date();
-      const tomorrow = new Date(now);
-      tomorrow.setDate(now.getDate() + 1);
-      return date.toDateString() === tomorrow.toDateString();
-    };
-  
+
     const tomorrowTasks = coreTasks.filter(task => isDateTomorrow(task.taskDue));
     return <TaskList 
       tasks={tomorrowTasks} 

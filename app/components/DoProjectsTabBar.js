@@ -4,29 +4,10 @@ import { useSelector } from 'react-redux';
 import DecideUndecidedProjects from './DecideUndecidedProjects';
 import DecideStalledProjects from './DecideStalledProjects';
 import DecideReadyToDoProjects from './DecideReadyToDoProjects';
-import CoreProjects from './CoreProjects';
+import { isDateInFuture, isDateInPast } from '../util/dates';
 
 const DecideProjectsTabBar = () => {
   const decideProjects = useSelector((state) => state.core.coreDecideProjects) || [];
-
-  const isDateInPast = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-    date.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-    return date < now;
-  };
-
-  const isDateInFuture = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-    date.setHours(0, 0, 0, 0);
-    now.setHours(0, 0, 0, 0);
-    return date >= now;
-  };
-
 
   const stalledProjects = (decideProjects) => {
     return decideProjects.filter((project) => {

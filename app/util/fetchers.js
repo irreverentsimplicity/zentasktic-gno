@@ -86,4 +86,4 @@ export const fetchAllContexts = async (dispatch) => {
     } catch (err) {
       console.log("error in calling getAllContexts", err);
     }
-  };
+};

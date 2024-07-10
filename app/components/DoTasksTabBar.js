@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -15,6 +15,7 @@ import DoStalledTasks from './DoStalledTasks';
 import DoTodayTasks from './DoTodayTasks';
 import DoTomorrowTasks from './DoTomorrowTasks';
 import DoSoonTasks from './DoSoonTasks';
+import { isDateToday, isDateTomorrow, isDateSoon, isDateInPast } from '../util/dates';
 
 const TodayIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,37 +46,6 @@ const DoTasksTabBar = () => {
   const [selectedTab, setSelectedTab] = useState(null);
   const [loading, setLoading] = useState(false);
   const doTasks = useSelector((state) => state.core.coreDoTasks) || [];
-
-  const isDateInPast = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    // Reset time portion of both dates to midnight
-  date.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
-    return date < now;
-  };
-
-  const isDateToday = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    return date.toDateString() === now.toDateString();
-  };
-
-  const isDateTomorrow = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setDate(now.getDate() + 1);
-    return date.toDateString() === tomorrow.toDateString();
-  };
-
-  const isDateSoon = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setDate(now.getDate() + 1);
-    return date > tomorrow;
-  };
 
   const stalledTasks = doTasks.filter(task => isDateInPast(task.taskDue));
   const todayTasks = doTasks.filter(task => isDateToday(task.taskDue));
