@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Box } from '@chakra-ui/react';
 import ToggleSwitch from './ToggleSwitch';
 import DoTasksTabBar from './DoTasksTabBar';
-import DoProjectsTabBar from './DoProjectsTabBarFromTasks';
+import DoProjectsTabBar from './DoProjectsTabBar';
 
 const DoSliderContent = () => {
   const doTasks = useSelector((state) => state.core.coreDoTasks) || [];

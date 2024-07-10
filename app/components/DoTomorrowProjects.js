@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Actions from '../util/actions';
 import Config from '../util/config';
-import { fetchAllProjectsByRealm } from '../util/fetchers';
+import { fetchAllContexts, fetchAllProjectsByRealm } from '../util/fetchers';
 import '../styles/Home.module.css'; // Import custom CSS for calendar
-import { isDateInPast } from '../util/dates';
+import { isDateTomorrow } from '../util/dates';
 import ProjectsList from './DoProjectsList';
 
-const DoStalledProjects = () => {
+const DoTomorrowProjects = () => {
   const coreDoProjects = useSelector((state) => state.core.coreDoProjects);
   const dispatch = useDispatch();
   const [sendingProjectId, setSendingProjectId] = useState(null);
@@ -16,6 +16,7 @@ const DoStalledProjects = () => {
 
   useEffect(() => {
     fetchAllProjectsByRealm(dispatch, '3');
+    fetchAllContexts(dispatch);
   }, [dispatch]);
 
   const handleSendToDecide = async (projectId) => {
@@ -58,25 +59,20 @@ const DoStalledProjects = () => {
     setMarkAsDoneProjectTaskId(null);
   };
 
-  const getStalledProjects = (projects) => {
+  const getTomorrowProjects = (projects) => {
     return projects.filter((project) => {
-      const isProjectStalled = project.projectContextId && project.projectDue && isDateInPast(project.projectDue);
+      const isProjectTomorrow = project.projectContextId && project.projectDue && isDateTomorrow(project.projectDue);
   
-      const areAllTasksReadyToDo = project.projectTasks && project.projectTasks.every((task) => {
-        return task.taskContextId && task.taskDue;
+      const areAllTasksTomorrow = project.projectTasks && project.projectTasks.every((task) => {
+        return task.taskContextId && task.taskDue && isDateTomorrow(task.taskDue);
       });
   
-      const isAnyTaskStalled = project.projectTasks && project.projectTasks.some((task) => {
-        return task.taskContextId && task.taskDue && isDateInPast(task.taskDue);
-      });
-  
-      return project.projectContextId && project.projectDue && areAllTasksReadyToDo && (isProjectStalled || isAnyTaskStalled);
+      return project.projectContextId && project.projectDue && areAllTasksTomorrow && isProjectTomorrow;
     });
   };
 
-  
   return <ProjectsList 
-      projects={getStalledProjects(coreDoProjects)} 
+      projects={getTomorrowProjects(coreDoProjects)} 
       handleSendToDecide={handleSendToDecide} 
       handleMarkAsDone={handleMarkAsDone}
       handleProjectTaskMarkAsDone={handleProjectTaskMarkAsDone}
@@ -87,4 +83,4 @@ const DoStalledProjects = () => {
 
 };
 
-export default DoStalledProjects;
+export default DoTomorrowProjects;
