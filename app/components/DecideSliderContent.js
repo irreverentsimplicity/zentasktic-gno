@@ -18,7 +18,7 @@ const DecideSliderContent = () => {
   return (
     <Box>
        <Box display="flex" justifyContent="flex-end" mb={3}>
-      <ToggleSwitch tasksTotal={decideTasks.length} projectsTotal={decideProjects.length} onToggle={handleToggle} active={activeTab}/>
+      <ToggleSwitch tasksTotal={decideTasks.length} projectsTotal={decideProjects.length} onToggle={handleToggle} active={activeTab} realm={'decide'}/>
       </Box>
       {activeTab === 'tasks' ? <DecideTasksTabBar /> : <DecideProjectsTabBar />}
     </Box>

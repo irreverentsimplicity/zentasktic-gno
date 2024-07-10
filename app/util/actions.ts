@@ -718,6 +718,27 @@ class Actions {
     return response;
   }
 
+
+  /**
+   * Marks a task in a project as done (changes its realm id to 4)
+   *
+   * @param projectId string - project id
+   * @param projectTaskId string - the project task's id
+   */
+  
+  async MarkProjectTaskAsDone(
+    projectId: string,
+    projectTaskId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('MarkProjectTaskAsDone', [
+      projectId,
+      projectTaskId
+    ]);
+    console.log("actions MarkProjectTaskAsDone response ", JSON.stringify(response))
+    return response;
+  }
+  
+
   /**
    * Get projects by realm
    */

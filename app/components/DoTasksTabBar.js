@@ -41,7 +41,7 @@ const TodayIcon = () => (
     </svg>
   );
 
-const DoTabBar = () => {
+const DoTasksTabBar = () => {
   const [selectedTab, setSelectedTab] = useState(null);
   const [loading, setLoading] = useState(false);
   const doTasks = useSelector((state) => state.core.coreDoTasks) || [];
@@ -170,4 +170,4 @@ const DoTabBar = () => {
   );
 };
 
-export default DoTabBar;
+export default DoTasksTabBar;

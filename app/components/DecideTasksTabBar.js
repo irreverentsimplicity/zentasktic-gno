@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, Badge } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import DecideUndecidedTasks from './DecideUndecidedTasks';
-import DecideStalledTasks from './DecideStalledProjects';
+import DecideStalledTasks from './DecideStalledTasks';
 import DecideReadyToDoTasks from './DecideReadyToDoTasks';
 
 const DecideTasksTabBar = () => {

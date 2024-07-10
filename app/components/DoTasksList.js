@@ -18,6 +18,8 @@ const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, 
   const isDateInPast = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
+    date.setHours(0, 0, 0, 0);
+    now.setHours(0, 0, 0, 0);
     return date < now;
   };
 
@@ -44,7 +46,7 @@ const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, 
                 <Text>{task.taskBody}</Text>
                 <HStack spacing={2} justify="flex-end">
                   <Box
-                    bg={task.taskContextId ? "orange.200" : "gray.200"}
+                    bg={task.taskContextId ? "green.200" : "gray.200"}
                     borderRadius="md"
                     p={1}
                   >

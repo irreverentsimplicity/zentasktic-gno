@@ -177,7 +177,7 @@ const DecideStalledProjects = () => {
     <Box>
       <List spacing={3}>
         {getStalledProjects(coreProjects).length === 0 ? (
-          <ListItem>No undecided projects available</ListItem>
+          <ListItem>No stalled projects available</ListItem>
         ) : (
           getStalledProjects(coreProjects).map((project) => {
             const taskCounts = getTaskCounts(project.projectTasks || []);

@@ -11,7 +11,7 @@ import {
   } from "@chakra-ui/react";
   import AssessTabBar from "./AssessTabBar";
   import DecideSliderContent from "./DecideSliderContent";
-  import DoTabBar from "./DoTabBar";
+  import DoSliderContent from "./DoSliderContent";
   
   const SlidingDrawer = ({ isOpen, onClose, title, content }) => {
     // Determine the color based on the title
@@ -42,7 +42,7 @@ import {
           <DrawerBody>
             {title === 'Assess' ? <AssessTabBar /> : 
              title === 'Decide' ? <DecideSliderContent /> : 
-             title === "Do" ? <DoTabBar /> : 
+             title === "Do" ? <DoSliderContent /> : 
              <p>{content}</p>}
           </DrawerBody>
   
