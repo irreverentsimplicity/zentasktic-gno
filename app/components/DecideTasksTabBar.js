@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import DecideUndecidedTasks from './DecideUndecidedTasks';
 import DecideStalledTasks from './DecideStalledTasks';
 import DecideReadyToDoTasks from './DecideReadyToDoTasks';
+import DecideTasksByContext from './DecideTasksBycontext';
 import { isDateInFuture, isDateInPast } from '../util/dates';
 
 const DecideTasksTabBar = () => {
@@ -74,7 +75,7 @@ const DecideTasksTabBar = () => {
           <DecideReadyToDoTasks/>
         </TabPanel>
         <TabPanel>
-          <p>By Context content goes here.</p>
+          <DecideTasksByContext/>
         </TabPanel>
       </TabPanels>
     </Tabs>

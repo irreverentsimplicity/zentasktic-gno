@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Actions from '../util/actions';
 import Config from '../util/config';
-import { fetchAllContexts, fetchAllProjectsByRealm } from '../util/fetchers';
+import { fetchAllProjectsByRealm } from '../util/fetchers';
 import '../styles/Home.module.css'; // Import custom CSS for calendar
 import { isDateTomorrow } from '../util/dates';
 import ProjectsList from './DoProjectsList';
@@ -16,7 +16,6 @@ const DoTomorrowProjects = () => {
 
   useEffect(() => {
     fetchAllProjectsByRealm(dispatch, '3');
-    fetchAllContexts(dispatch);
   }, [dispatch]);
 
   const handleSendToDecide = async (projectId) => {
@@ -60,15 +59,7 @@ const DoTomorrowProjects = () => {
   };
 
   const getTomorrowProjects = (projects) => {
-    return projects.filter((project) => {
-      const isProjectTomorrow = project.projectContextId && project.projectDue && isDateTomorrow(project.projectDue);
-  
-      const areAllTasksTomorrow = project.projectTasks && project.projectTasks.every((task) => {
-        return task.taskContextId && task.taskDue && isDateTomorrow(task.taskDue);
-      });
-  
-      return project.projectContextId && project.projectDue && areAllTasksTomorrow && isProjectTomorrow;
-    });
+    return projects.filter(project => isDateTomorrow(project.projectDue));
   };
 
   return <ProjectsList 
