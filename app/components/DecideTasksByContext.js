@@ -119,49 +119,51 @@ const DecideTasksByContext = () => {
               key={contextId}
               borderWidth="1px"
               borderRadius="lg"
-              p={4}
+              mb={4}
               style={{width: "100%"}}
-              cursor="pointer"
-              _hover={{ backgroundColor: "gray.100" }}
-              bg={expandedContextId === contextId ? "gray.100" : "white"}
-              onClick={() => setExpandedContextId(expandedContextId === contextId ? null : contextId)}
             >
-              <Flex align="center">
+              <Flex
+                p={4}
+                cursor="pointer"
+                align="center"
+                _hover={{ backgroundColor: "gray.100" }}
+                bg={expandedContextId === contextId ? "gray.100" : "white"}
+                onClick={() => setExpandedContextId(expandedContextId === contextId ? null : contextId)}
+              >
                 <IconButton
                   icon={expandedContextId === contextId ? <ChevronDownIcon /> : <ChevronRightIcon />}
                   colorScheme="orange"
-                  variant="ghost"
                   aria-label="Expand"
+                  size={"2xl"}
                   mr={2}
                 />
-                <Button variant="ghost" flex="1">
+                <Button variant="ghost" flex="1" width={100} colorScheme="orange">
                   {contextName} <Badge ml="2" colorScheme="gray">{tasks.length}</Badge>
                 </Button>
               </Flex>
-              <Collapse in={expandedContextId === contextId} animateOpacity style={{width: "100%"}}>
-                <Box mt={4}>
+              <Collapse in={expandedContextId === contextId} animateOpacity>
+                <Box p={4} borderTopWidth="1px">
                   <List spacing={3}>
                     {tasks.map((task) => (
                       <Box key={task.taskId}>
-                        <ListItem display="flex" alignItems="center">
+                        <ListItem
+                          display="flex"
+                          alignItems="center"
+                          _hover={{ backgroundColor: "gray.100" }}
+                          cursor="pointer"
+                          onClick={() => setExpandedTaskId(expandedTaskId === task.taskId ? null : task.taskId)}
+                        >
                           <IconButton
                             icon={sendingToAssessTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowBackIcon />}
                             onClick={(e) => {
-                              e.stopPropagation()
-                              handleSendToAssess(task.taskId)
+                              e.stopPropagation();
+                              handleSendToAssess(task.taskId);
                             }}
                             colorScheme="red"
                             mr={2}
                             isLoading={sendingToAssessTaskId === task.taskId}
                           />
-                          <Box
-                            flex="1"
-                            cursor="pointer"
-                            onClick={(e) => {
-                              e.stopPropagation(); // Prevent triggering the parent Box click
-                              setExpandedTaskId(expandedTaskId === task.taskId ? null : task.taskId);
-                            }}
-                          >
+                          <Box flex="1">
                             <Text>{task.taskBody}</Text>
                             <HStack spacing={2} justify="flex-end">
                               <Box
@@ -196,8 +198,8 @@ const DecideTasksByContext = () => {
                             isLoading={sendingToDoTaskId === task.taskId}
                             icon={sendingToDoTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
                             onClick={(e) => {
-                              e.stopPropagation()
-                              handleSendToDo(task.taskId)
+                              e.stopPropagation();
+                              handleSendToDo(task.taskId);
                             }}
                             colorScheme="green"
                             ml={2}
@@ -213,7 +215,7 @@ const DecideTasksByContext = () => {
                                     <Button
                                       key={context.contextId}
                                       onClick={async (e) => {
-                                        e.stopPropagation()
+                                        e.stopPropagation();
                                         const success = await assignContextToTask(context.contextId, task.taskId);
                                       }}
                                     >
@@ -226,7 +228,7 @@ const DecideTasksByContext = () => {
                                 <Text mb={2} borderBottom="1px" borderColor="gray.300">Set due date</Text>
                                 <Calendar
                                   onChange={(date, e) => {
-                                    e.stopPropagation()
+                                    e.stopPropagation();
                                     setSelectedDate(date);
                                     assignDueDateToTask(task.taskId, date);
                                   }}
