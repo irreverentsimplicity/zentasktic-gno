@@ -15,6 +15,7 @@ import DoStalledTasks from './DoStalledTasks';
 import DoTodayTasks from './DoTodayTasks';
 import DoTomorrowTasks from './DoTomorrowTasks';
 import DoSoonTasks from './DoSoonTasks';
+import DoTasksByContext from './DoTasksByContext';
 import { isDateToday, isDateTomorrow, isDateSoon, isDateInPast } from '../util/dates';
 
 const TodayIcon = () => (
@@ -133,7 +134,7 @@ const DoTasksTabBar = () => {
           <DoSoonTasks />
         </TabPanel>
         <TabPanel>
-          Contexts
+          <DoTasksByContext />
         </TabPanel>
       </TabPanels>
     </Tabs>

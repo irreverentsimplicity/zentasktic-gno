@@ -132,9 +132,9 @@ const DecideTasksByContext = () => {
               >
                 <IconButton
                   icon={expandedContextId === contextId ? <ChevronDownIcon /> : <ChevronRightIcon />}
-                  colorScheme="orange"
+                  colorScheme="gray"
                   aria-label="Expand"
-                  size={"2xl"}
+                  size={"md"}
                   mr={2}
                 />
                 <Button variant="ghost" flex="1" width={100} colorScheme="orange">

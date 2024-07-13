@@ -14,6 +14,7 @@ const DoSoonTasks = () => {
     const coreContexts = useSelector((state) => state.core.coreContexts);
     const dispatch = useDispatch();
     const [sendingTaskId, setSendingTaskId] = useState(null);
+    const [markAsDoneTaskId, setMarkAsDoneTaskId] = useState(null);
   
     useEffect(() => {
       fetchAllTasksByRealm(dispatch, "3");
@@ -33,7 +34,7 @@ const DoSoonTasks = () => {
     };
   
     const handleMarkAsDone = async (taskId) => {
-      setSendingTaskId(taskId);
+      setMarkAsDoneTaskId(taskId);
       const actions = await Actions.getInstance();
       actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
       try {
@@ -42,7 +43,7 @@ const DoSoonTasks = () => {
       } catch (err) {
         console.log("error in calling handleMarkAsDone", err);
       }
-      setSendingTaskId(null);
+      setMarkAsDoneTaskId(null);
     };
   
     const soonTasks = coreTasks.filter(task => isDateSoon(task.taskDue));
@@ -51,6 +52,7 @@ const DoSoonTasks = () => {
       handleSendToDecide={handleSendToDecide} 
       handleMarkAsDone={handleMarkAsDone} 
       sendingTaskId={sendingTaskId}
+      markAsDoneTaskId={markAsDoneTaskId}
       />;  
   };
 
