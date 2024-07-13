@@ -196,12 +196,15 @@ const DecideTasksByContext = () => {
                           </Box>
                           <IconButton
                             isLoading={sendingToDoTaskId === task.taskId}
+                            isDisabled={!task.taskDue}
                             icon={sendingToDoTaskId === task.taskId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleSendToDo(task.taskId);
+                              if(task.taskDue){
+                                handleSendToDo(task.taskId);
+                              }
                             }}
-                            colorScheme="green"
+                            colorScheme={!task.tasDue ? "green" : "gray"}
                             ml={2}
                           />
                         </ListItem>
