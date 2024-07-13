@@ -7,21 +7,12 @@ import {
   Button,
   Badge,
   Collapse,
-  List,
-  ListItem,
-  Spinner,
-  Text,
   Wrap,
-  HStack,
   IconButton,
-  SimpleGrid,
   Flex,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { fetchAllProjectsByRealm } from '../util/fetchers';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import { formatDate, isDateInPast } from '../util/dates';
 import ProjectsList from './DoProjectsList';
 
 const DoProjectsByContext = () => {
