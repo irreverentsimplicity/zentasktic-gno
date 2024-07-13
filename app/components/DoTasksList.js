@@ -35,7 +35,8 @@ const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, 
               <Box
                 flex="1"
                 cursor="pointer"
-              >
+                _hover={{ backgroundColor: "gray.100" }} borderWidth="1px" rounded="md" p="2"
+                >
                 <Text>{task.taskBody}</Text>
                 <HStack spacing={2} justify="flex-end">
                   <Box

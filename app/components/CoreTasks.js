@@ -105,12 +105,12 @@ const CoreTasks = () => {
           coreTasks.map((task) => (
             <ListItem key={task.taskId} display="flex" alignItems="center">
               <IconButton
-                icon={deletingTaskId === task.taskId ? <Spinner size="sm" /> : <DeleteIcon />}
-                onClick={() => handleDeleteTask(task.taskId)}
-                colorScheme="red"
-                mr={2}
-                isLoading={deletingTaskId === task.taskId}
-              />
+                      icon={deletingTaskId === task.taskId ? <Spinner size="sm" /> : <DeleteIcon size="sm" />}
+                      onClick={() => handleDeleteTask(task.taskId)}
+                      colorScheme="red"
+                      mr={2}
+                      isLoading={deletingTaskId === task.taskId}
+                    />
               {editTaskId === task.taskId ? (
                 <Flex flex="1" alignItems="center">
                   <Textarea
@@ -123,8 +123,14 @@ const CoreTasks = () => {
                   </Button>
                 </Flex>
               ) : (
-                <Flex flex="1" alignItems="center" _hover={{ bg: "gray.100" }}>
-                  <Box onClick={() => handleEditTask(task)} flex="1" cursor="pointer">
+                <Flex flex="1" alignItems="center" >
+                  <Box
+                    flex="1"
+                    cursor="pointer"
+                    onClick={() => handleEditTask(task)}
+                    _hover={{ backgroundColor: "gray.100" }} borderWidth="1px" rounded="md" p="2"
+                    >
+                      
                     {task.taskBody}
                   </Box>
                   <IconButton

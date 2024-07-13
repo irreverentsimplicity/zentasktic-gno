@@ -149,7 +149,7 @@ const DecideTasksByContext = () => {
                         <ListItem
                           display="flex"
                           alignItems="center"
-                          _hover={{ backgroundColor: "gray.100" }}
+                          
                           cursor="pointer"
                           onClick={() => setExpandedTaskId(expandedTaskId === task.taskId ? null : task.taskId)}
                         >
@@ -163,7 +163,7 @@ const DecideTasksByContext = () => {
                             mr={2}
                             isLoading={sendingToAssessTaskId === task.taskId}
                           />
-                          <Box flex="1">
+                          <Box flex="1" _hover={{ backgroundColor: "gray.100" }} borderWidth="1px" rounded="md" p="2">
                             <Text>{task.taskBody}</Text>
                             <HStack spacing={2} justify="flex-end">
                               <Box

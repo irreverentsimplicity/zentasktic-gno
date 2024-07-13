@@ -118,6 +118,7 @@ const DecideStalledTasks = () => {
                 flex="1"
                 cursor="pointer"
                 onClick={() => setExpandedTaskId(expandedTaskId === task.taskId ? null : task.taskId)}
+                _hover={{ backgroundColor: "gray.100" }} borderWidth="1px" rounded="md" p="2"
                 >
                 <Text>{task.taskBody}</Text>
                 <HStack spacing={2} justify="flex-end">

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import DecideUndecidedTasks from './DecideUndecidedTasks';
 import DecideStalledTasks from './DecideStalledTasks';
 import DecideReadyToDoTasks from './DecideReadyToDoTasks';
-import DecideTasksByContext from './DecideTasksBycontext';
+import DecideTasksByContext from './DecideTasksByContext';
 import { isDateInFuture, isDateInPast } from '../util/dates';
 
 const DecideTasksTabBar = () => {

@@ -203,7 +203,9 @@ const CoreProjects = () => {
                   </Flex>
                 ) : (
                   <Flex flex="1" alignItems="center">
-                    <Flex onClick={() => handleEditProject(project)} flex="1" cursor="pointer" _hover={{ bg: "gray.100" }}>
+                    <Flex onClick={() => handleEditProject(project)} flex="1" cursor="pointer" 
+                    _hover={{ bg: "gray.100" }}
+                    borderWidth="1px" rounded="md" p="2">
                       {project.projectBody}
                     </Flex>
                     <Flex alignItems="center">

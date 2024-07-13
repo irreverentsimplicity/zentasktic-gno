@@ -68,8 +68,6 @@ const DecideProjectList = ({
       return task.taskContextId && task.taskDue && isDateInPast(task.taskDue);
     });
 
-    console.log("isProjectStalled, " + isProjectStalled + " areAllTasksReadyToDo, " + areAllTasksReadyToDo + " isAnyTaskStalled, " + isAnyTaskStalled)
-
     return project.projectContextId && project.projectDue && !isProjectStalled && areAllTasksReadyToDo && !isAnyTaskStalled;
   
 };
@@ -91,91 +89,104 @@ const DecideProjectList = ({
                   mr={2}
                   isLoading={sendingProjectId === project.projectId}
                 />
-                <IconButton
-                    icon={expandedProjectId === project.projectId ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                <Box borderWidth="1px" rounded="md" display={"flex"} flexDirection={"row"} flex={"1"} p={2}>
+                    <IconButton
+                        icon={expandedProjectId === project.projectId ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                        onClick={() => setExpandedProjectId(expandedProjectId === project.projectId ? null : project.projectId)}
+                        colorScheme="gray"
+                        aria-label="Expand"
+                        backgroundColor={expandedProjectId === project.projectId ? "blue.100" : "gray.100"}
+                        size={"md"}
+                        _hover={"transparent"}
+                        mr={2}
+                        />
+                    <Box
+                    flex="1"
+                    p={2}
+                    cursor="pointer"
                     onClick={() => setExpandedProjectId(expandedProjectId === project.projectId ? null : project.projectId)}
-                    colorScheme="gray"
-                    aria-label="Expand"
-                    size={"md"}
-                    mr={2}
-                    />
-                <Box
-                  flex="1"
-                  p={2}
-                  cursor="pointer"
-                  onClick={() => setExpandedProjectId(expandedProjectId === project.projectId ? null : project.projectId)}
-                  _hover={{ backgroundColor: "gray.100", borderRadius: "md" }}
-                >
-                  <Text>{project.projectBody}</Text>
-                  <HStack spacing={2} justify="flex-end">
-                    <Box
-                      bg={project.projectContextId ? "green.200" : "gray.200"}
-                      borderRadius="md"
-                      p={1}
+                    _hover={{ backgroundColor: "gray.100", borderRadius: "md" }}
                     >
-                      {loadingContextProjectId === project.projectId ? (
-                        <Spinner size="sm" />
-                      ) : (
-                        <Text fontSize="sm" color="gray.700">
-                          @{project.projectContextId ? contexts.find(context => context.contextId === project.projectContextId)?.contextName : 'no context'}
-                        </Text>
-                      )}
+                    <Text>{project.projectBody}</Text>
+                    <HStack spacing={2} justify="flex-end">
+                        <Box
+                        bg={project.projectContextId ? "green.200" : "gray.200"}
+                        borderRadius="md"
+                        p={1}
+                        >
+                        {loadingContextProjectId === project.projectId ? (
+                            <Spinner size="sm" />
+                        ) : (
+                            <Text fontSize="sm" color="gray.700">
+                            @{project.projectContextId ? contexts.find(context => context.contextId === project.projectContextId)?.contextName : 'no context'}
+                            </Text>
+                        )}
+                        </Box>
+                        <Box
+                        bg={project.projectDue ? (isDateInFuture(project.projectDue) ?  "green.200" : "red.200") : "gray.200"}
+                        borderRadius="md"
+                        p={1}
+                        >
+                        {loadingDueDateProjectId === project.projectId ? (
+                            <Spinner size="sm" />
+                        ) : (
+                            <Text fontSize="sm" color="gray.700">
+                            {project.projectDue ? project.projectDue : 'no due date'}
+                            </Text>
+                        )}
+                        </Box>
+                    </HStack>
                     </Box>
-                    <Box
-                      bg={project.projectDue ? (isDateInFuture(project.projectDue) ?  "green.200" : "red.200") : "gray.200"}
-                      borderRadius="md"
-                      p={1}
-                    >
-                      {loadingDueDateProjectId === project.projectId ? (
-                        <Spinner size="sm" />
-                      ) : (
-                        <Text fontSize="sm" color="gray.700">
-                          {project.projectDue ? project.projectDue : 'no due date'}
-                        </Text>
-                      )}
-                    </Box>
-                  </HStack>
+                    <HStack spacing={2} ml={2}>
+                    {taskCounts.undecidedTasks > 0 && (
+                        <Box position="relative">
+                        <IconButton
+                            icon={<FaTasks color="gray" />}
+                            aria-label="Undecided Tasks"
+                            onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
+                            backgroundColor={expandedTaskProjectId === project.projectId ? "blue.100" : "gray.100"}
+                            _hover={"transparent"}
+                        />
+                        <Badge position="absolute" top="-1" right="-1" colorScheme="gray">{taskCounts.undecidedTasks}</Badge>
+                        </Box>
+                    )}
+                    {taskCounts.stalledTasks > 0 && (
+                        <Box position="relative">
+                        <IconButton
+                            icon={<FaTasks color="red" />}
+                            aria-label="Stalled Tasks"
+                            onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
+                            backgroundColor={expandedTaskProjectId === project.projectId ? "blue.100" : "gray.100"}
+                            _hover={"transparent"}
+                        />
+                        <Badge position="absolute" top="-1" right="-1" colorScheme="red">{taskCounts.stalledTasks}</Badge>
+                        </Box>
+                    )}
+                    {taskCounts.readyToDoTasks > 0 && (
+                        <Box position="relative">
+                        <IconButton
+                            icon={<FaTasks color="green" />}
+                            aria-label="Ready To Do Tasks"
+                            onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
+                            backgroundColor={expandedTaskProjectId === project.projectId ? "blue.100" : "gray.100"}
+                            _hover={"transparent"}
+                        />
+                        <Badge position="absolute" top="-1" right="-1" colorScheme="green">{taskCounts.readyToDoTasks}</Badge>
+                        
+                        </Box>
+                    )}
+                    
+                    </HStack>
+                    
                 </Box>
-                <HStack spacing={2} ml={2}>
-                  {taskCounts.undecidedTasks > 0 && (
-                    <Box position="relative">
-                      <IconButton
-                        icon={<FaTasks color="gray" />}
-                        aria-label="Undecided Tasks"
-                        onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
-                      />
-                      <Badge position="absolute" top="-1" right="-1" colorScheme="gray">{taskCounts.undecidedTasks}</Badge>
-                    </Box>
-                  )}
-                  {taskCounts.stalledTasks > 0 && (
-                    <Box position="relative">
-                      <IconButton
-                        icon={<FaTasks color="red" />}
-                        aria-label="Stalled Tasks"
-                        onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
-                      />
-                      <Badge position="absolute" top="-1" right="-1" colorScheme="red">{taskCounts.stalledTasks}</Badge>
-                    </Box>
-                  )}
-                  {taskCounts.readyToDoTasks > 0 && (
-                    <Box position="relative">
-                      <IconButton
-                        icon={<FaTasks color="green" />}
-                        aria-label="Ready To Do Tasks"
-                        onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
-                      />
-                      <Badge position="absolute" top="-1" right="-1" colorScheme="green">{taskCounts.readyToDoTasks}</Badge>
-                    </Box>
-                  )}
-                  <IconButton
-                    icon={sendingToDoProjectId === project.projectId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
-                    onClick={() => handleSendToDo(project.projectId)}
-                    colorScheme="green"
-                    mr={2}
-                    isDisabled={sendingToDoProjectId === "unavailable" || !canSendToDo(project)}
-                    isLoading={sendingToDoProjectId === project.projectId}
-                  />
-                </HStack>
+                <IconButton
+                        icon={sendingToDoProjectId === project.projectId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
+                        onClick={() => handleSendToDo(project.projectId)}
+                        colorScheme="green"
+                        ml={2}
+                        isDisabled={sendingToDoProjectId === "unavailable" || !canSendToDo(project)}
+                        isLoading={sendingToDoProjectId === project.projectId}
+                    />
               </ListItem>
               <Collapse in={expandedProjectId === project.projectId} animateOpacity>
                 <Box mt={4} mb={4} p={4} rounded="md" borderWidth="1px" bg="gray.50" zIndex={1}>

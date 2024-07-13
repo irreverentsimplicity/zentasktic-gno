@@ -158,7 +158,7 @@ const DecideProjectsByContext = () => {
                   size={"md"}
                   mr={2}
                 />
-                <Button variant="ghost" flex="1" width={100} colorScheme="green">
+                <Button variant="ghost" flex="1" width={100} colorScheme="orange">
                   {contextName} <Badge ml="2" colorScheme="gray">{projects.length}</Badge>
                 </Button>
               </Flex>

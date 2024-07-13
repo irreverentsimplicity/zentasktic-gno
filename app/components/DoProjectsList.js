@@ -61,6 +61,7 @@ const ProjectsList = ({
                     cursor="pointer"
                     onClick={() => setExpandedProjectId(expandedProjectId === project.projectId ? null : project.projectId)}
                     _hover={{ backgroundColor: "gray.100", borderRadius: "md" }}
+                    borderWidth="1px" rounded="md"
                   >
                     <Text>{project.projectBody}</Text>
                     <HStack spacing={2} justify="flex-end">
@@ -91,6 +92,8 @@ const ProjectsList = ({
                           icon={<FaTasks color="gray" />}
                           aria-label="Done Tasks"
                           onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
+                          backgroundColor={expandedTaskProjectId === project.projectId ? "blue.100" : "gray.100"}
+                          _hover="transparent"
                         />
                         <Badge position="absolute" top="-1" right="-1" colorScheme="gray">{taskCounts.doneTasks}</Badge>
                       </Box>
@@ -101,6 +104,8 @@ const ProjectsList = ({
                           icon={<FaTasks color="red" />}
                           aria-label="Stalled Tasks"
                           onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
+                          backgroundColor={expandedTaskProjectId === project.projectId ? "blue.100" : "gray.100"}
+                          _hover="transparent"
                         />
                         <Badge position="absolute" top="-1" right="-1" colorScheme="red">{taskCounts.stalledTasks}</Badge>
                       </Box>
@@ -111,6 +116,8 @@ const ProjectsList = ({
                           icon={<FaTasks color="green" />}
                           aria-label="Ready To Do Tasks"
                           onClick={() => setExpandedTaskProjectId(expandedTaskProjectId === project.projectId ? null : project.projectId)}
+                          backgroundColor={expandedTaskProjectId === project.projectId ? "blue.100" : "gray.100"}
+                          _hover="transparent"
                         />
                         <Badge position="absolute" top="-1" right="-1" colorScheme="green">{taskCounts.readyToDoTasks}</Badge>
                       </Box>
