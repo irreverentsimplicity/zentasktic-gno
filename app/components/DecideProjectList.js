@@ -15,7 +15,7 @@ import {
   Badge,
   Wrap,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { FaTasks } from 'react-icons/fa';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -72,6 +72,14 @@ const DecideProjectList = ({
                   mr={2}
                   isLoading={sendingProjectId === project.projectId}
                 />
+                <IconButton
+                    icon={expandedProjectId === project.projectId ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                    onClick={() => setExpandedProjectId(expandedProjectId === project.projectId ? null : project.projectId)}
+                    colorScheme="gray"
+                    aria-label="Expand"
+                    size={"md"}
+                    mr={2}
+                    />
                 <Box
                   flex="1"
                   p={2}
@@ -194,7 +202,13 @@ const DecideProjectList = ({
                       <Box key={task.taskId}>
                         <ListItem display="flex" alignItems="center" _hover={{ backgroundColor: "gray.100" }} cursor="pointer" onClick={() => setExpandedTaskId(expandedTaskId === task.taskId ? null : task.taskId)}>
                           <Box flex="1" display="flex" alignItems="center">
-                            <Box as="span" mr={2}>&#8226;</Box>
+                          <IconButton
+                            icon={expandedTaskId === task.taskId ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                            colorScheme="gray"
+                            aria-label="Expand"
+                            size={"sm"}
+                            mr={2}
+                            />
                             <Text>{task.taskBody}</Text>
                           </Box>
                           <HStack spacing={2} justify="flex-end">
@@ -230,7 +244,7 @@ const DecideProjectList = ({
                           <Box mt={4} mb={4} p={4} rounded="md" borderWidth="1px" bg="gray.50" zIndex={1}>
                             <SimpleGrid columns={2} spacing={4}>
                               <Box>
-                                <Text mb={2} borderBottom="1px" borderColor="gray.300">Set context</Text>
+                                <Text mb={2} borderBottom="1px" borderColor="gray.300">Set task context</Text>
                                 <Wrap spacing={2} align="center">
                                   {contexts.map((context) => (
                                     <Button
@@ -245,7 +259,7 @@ const DecideProjectList = ({
                                 </Wrap>
                               </Box>
                               <Box>
-                                <Text mb={2} borderBottom="1px" borderColor="gray.300">Set due date</Text>
+                                <Text mb={2} borderBottom="1px" borderColor="gray.300">Set task due date</Text>
                                 <Calendar
                                   onChange={(date) => {
                                     setSelectedDate(date);
