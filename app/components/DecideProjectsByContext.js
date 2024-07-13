@@ -125,21 +125,6 @@ const DecideProjectsByContext = () => {
     }, {});
   };
 
-  const isProjectStalled = (project) => {
-    
-      const isProjectStalled = project.projectContextId && project.projectDue && isDateInPast(project.projectDue);
-  
-      const areAllTasksReadyToDo = project.projectTasks && project.projectTasks.every((task) => {
-        return task.taskContextId && task.taskDue;
-      });
-  
-      const isAnyTaskStalled = project.projectTasks && project.projectTasks.some((task) => {
-        return task.taskContextId && task.taskDue && isDateInPast(task.taskDue);
-      });
-  
-      return project.projectContextId && project.projectDue && areAllTasksReadyToDo && (isProjectStalled || isAnyTaskStalled);
-    
-  };
 
   const groupedProjects = groupProjectsByContext(decideProjects);
 
@@ -193,7 +178,7 @@ const DecideProjectsByContext = () => {
                   loadingContextProjectTaskId={loadingContextProjectTaskId}
                   loadingDueDateProjectTaskId={loadingDueDateProjectTaskId}
                   sendingProjectId={sendingProjectId}
-                  sendingToDoProjectId={isProjectStalled ? "unavailable" : sendingToDoProjectId}
+                  sendingToDoProjectId={sendingToDoProjectId}
                 />
                 </Box>
               </Collapse>

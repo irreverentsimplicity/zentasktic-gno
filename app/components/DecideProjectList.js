@@ -37,6 +37,7 @@ const DecideProjectList = ({
   sendingProjectId,
   sendingToDoProjectId
 }) => {
+    console.log("sendingToDoProjetId ", sendingToDoProjectId)
   const [expandedProjectId, setExpandedProjectId] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [expandedTaskProjectId, setExpandedTaskProjectId] = useState(null);
@@ -54,6 +55,24 @@ const DecideProjectList = ({
         stalledTasks: stalledTasks.length,
      };
   };
+
+  const canSendToDo = (project) => {
+    
+    const isProjectStalled =  project.projectContextId && project.projectDue && isDateInPast(project.projectDue);
+
+    const areAllTasksReadyToDo = project.projectTasks && project.projectTasks.every((task) => {
+      return task.taskContextId && task.taskDue;
+    });
+
+    const isAnyTaskStalled = project.projectTasks && project.projectTasks.some((task) => {
+      return task.taskContextId && task.taskDue && isDateInPast(task.taskDue);
+    });
+
+    console.log("isProjectStalled, " + isProjectStalled + " areAllTasksReadyToDo, " + areAllTasksReadyToDo + " isAnyTaskStalled, " + isAnyTaskStalled)
+
+    return project.projectContextId && project.projectDue && !isProjectStalled && areAllTasksReadyToDo && !isAnyTaskStalled;
+  
+};
 
   return (
     <List spacing={3}>
@@ -103,7 +122,7 @@ const DecideProjectList = ({
                       )}
                     </Box>
                     <Box
-                      bg={project.projectDue ? "green.200" : "gray.200"}
+                      bg={project.projectDue ? (isDateInFuture(project.projectDue) ?  "green.200" : "red.200") : "gray.200"}
                       borderRadius="md"
                       p={1}
                     >
@@ -153,7 +172,7 @@ const DecideProjectList = ({
                     onClick={() => handleSendToDo(project.projectId)}
                     colorScheme="green"
                     mr={2}
-                    isDisabled={sendingToDoProjectId === "unavailable"}
+                    isDisabled={sendingToDoProjectId === "unavailable" || !canSendToDo(project)}
                     isLoading={sendingToDoProjectId === project.projectId}
                   />
                 </HStack>
