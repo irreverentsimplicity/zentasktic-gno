@@ -18,70 +18,85 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { fetchAllTasksByRealm } from '../util/fetchers';
+import { fetchAllProjectsByRealm } from '../util/fetchers';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { formatDate, isDateInPast } from '../util/dates';
-import TaskList from './DoTasksList';
+import ProjectsList from './DoProjectsList';
 
-const DoTasksByContext = () => {
-  const doTasks = useSelector((state) => state.core.coreDoTasks);
+const DoProjectsByContext = () => {
+  const coreDoProjects = useSelector((state) => state.core.coreDoProjects);
   const contexts = useSelector((state) => state.core.coreContexts);
   const dispatch = useDispatch();
+  const [sendingProjectId, setSendingProjectId] = useState(null);
+  const [markAsDoneProjectId, setMarkAsDoneProjectId] = useState(null);
+  const [markAsDoneProjectTaskID, setMarkAsDoneProjectTaskId] = useState(null);
   const [expandedContextId, setExpandedContextId] = useState(null);
-  const [sendingToDecideTaskId, setSendingToDecideTaskId] = useState(null);
-  const [markAsDoneTaskId, setMarkAsDoneTaskId] = useState(null);
 
   useEffect(() => {
-    fetchAllTasksByRealm(dispatch, "3");
+    fetchAllProjectsByRealm(dispatch, "3");
   }, [dispatch]);
 
-  const groupTasksByContext = (doTasks) => {
-    return doTasks.reduce((acc, task) => {
-      const contextId = task.taskContextId || 'noContext';
+  const groupProjectsByContext = (coreDoProjects) => {
+    return coreDoProjects.reduce((acc, project) => {
+      const contextId = project.projectContextId || 'noContext';
       if (!acc[contextId]) {
         acc[contextId] = [];
       }
-      acc[contextId].push(task);
+      acc[contextId].push(project);
       return acc;
     }, {});
   };
 
-  const groupedTasks = groupTasksByContext(doTasks);
+  const groupedProjects = groupProjectsByContext(coreDoProjects);
 
-  const handleSendToDecide = async (taskId) => {
-    setSendingToDecideTaskId(taskId);
+  const handleSendToDecide = async (projectId) => {
+    setSendingProjectId(projectId);
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
-      await actions.MoveTaskToRealm(taskId, "2");
-      fetchAllTasksByRealm(dispatch, "3");
+      await actions.MoveProjectToRealm(projectId, '2');
+      fetchAllProjectsByRealm(dispatch, '3');
+      fetchAllProjectsByRealm(dispatch, '2');
     } catch (err) {
-      console.log("error in calling handleSendToDecide", err);
+      console.log('error in calling handleSendToDecide', err);
     }
-    setSendingToDecideTaskId(null);
+    setSendingProjectId(null);
   };
 
-  const handleMarkAsDone = async (taskId) => {
-    setMarkAsDoneTaskId(taskId);
+  const handleMarkAsDone = async (projectId) => {
+    setMarkAsDoneProjectId(projectId);
     const actions = await Actions.getInstance();
     actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
     try {
-      await actions.MoveTaskToRealm(taskId, "4");
-      fetchAllTasksByRealm(dispatch, "3");
+      await actions.MoveProjectToRealm(projectId, '4');
+      fetchAllProjectsByRealm(dispatch, '3');
     } catch (err) {
-      console.log("error in calling handleMarkAsDone", err);
+      console.log('error in calling handleMarkAsDone', err);
     }
-    setMarkAsDoneTaskId(null);
+    setMarkAsDoneProjectId(null);
+  };
+
+  const handleProjectTaskMarkAsDone = async (projectId, projectTaskId) => {
+    setMarkAsDoneProjectTaskId(projectTaskId);
+    const actions = await Actions.getInstance();
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    try {
+      await actions.MarkProjectTaskAsDone(projectId, projectTaskId);
+      fetchAllProjectsByRealm(dispatch, '3');
+    } catch (err) {
+      console.log('error in calling handleProjectTaskMarkAsDone', err);
+    }
+    setMarkAsDoneProjectTaskId(null);
   };
 
   return (
     <Box>
       <Wrap spacing={4}>
-        {Object.keys(groupedTasks).map((contextId) => {
+        {Object.keys(groupedProjects).map((contextId) => {
           const context = contexts.find(ctx => ctx.contextId === contextId);
           const contextName = context ? '@' + context.contextName : 'No Context';
-          const tasks = groupedTasks[contextId];
+          const projects = groupedProjects[contextId];
 
           return (
             <Box
@@ -107,18 +122,20 @@ const DoTasksByContext = () => {
                   mr={2}
                 />
                 <Button variant="ghost" flex="1" width={100} colorScheme="green">
-                  {contextName} <Badge ml="2" colorScheme="gray">{tasks.length}</Badge>
+                  {contextName} <Badge ml="2" colorScheme="gray">{projects.length}</Badge>
                 </Button>
               </Flex>
               <Collapse in={expandedContextId === contextId} animateOpacity>
                 <Box p={4} borderTopWidth="1px">
-                  <TaskList 
-                    tasks={tasks} 
-                    handleSendToDecide={handleSendToDecide} 
-                    handleMarkAsDone={handleMarkAsDone} 
-                    sendingTaskId={sendingToDecideTaskId}
-                    markAsDoneTaskId={markAsDoneTaskId}
-                    />
+                  <ProjectsList 
+                  projects={projects} 
+                  handleSendToDecide={handleSendToDecide} 
+                  handleMarkAsDone={handleMarkAsDone}
+                  handleProjectTaskMarkAsDone={handleProjectTaskMarkAsDone}
+                  sendingProjectId={sendingProjectId}
+                  markAsDoneProjectId={markAsDoneProjectId}
+                  markAsDoneProjectTaskID={markAsDoneProjectTaskID}
+                  />
                 </Box>
               </Collapse>
             </Box>
@@ -129,4 +146,4 @@ const DoTasksByContext = () => {
   );
 };
 
-export default DoTasksByContext;
+export default DoProjectsByContext;

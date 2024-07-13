@@ -15,6 +15,7 @@ import DoStalledProjects from './DoStalledProjects';
 import DoTodayProjects from './DoTodayProjects';
 import DoTomorrowProjects from './DoTomorrowProjects';
 import DoSoonProjects from './DoSoonProjects';
+import DoProjectsByContext from './DoProjectsByContext';
 import { isDateToday, isDateTomorrow, isDateSoon, isDateInPast } from '../util/dates';
 
 const TodayIcon = () => (
@@ -133,7 +134,7 @@ const DoProjectsTabBar = () => {
           <DoSoonProjects />
         </TabPanel>
         <TabPanel>
-          Contexts
+          <DoProjectsByContext/>
         </TabPanel>
       </TabPanels>
     </Tabs>
