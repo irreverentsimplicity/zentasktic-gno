@@ -114,7 +114,7 @@ const Dashboard = () => {
   return (
     <div>
       <Header appTitle="Core" userGnotBalances={userGnotBalances}/>
-      <Box height="85vh" padding="4" border="1px" borderRadius="md" borderColor="gray.300">
+      <Box height="95vh" padding="4" border="1px" borderRadius="md" borderColor="gray.300">
         <Grid templateRows="80% 20%" height="100%" padding={2}>
           <GridItem>
             <Grid templateColumns="25% 75%" height="100%">
@@ -296,11 +296,6 @@ const Dashboard = () => {
                 </Grid>
               </GridItem>
             </Grid>
-          </GridItem>
-          <GridItem>
-            <HStack justifyContent="space-between" padding="2" border="1px" borderRadius="15px" borderColor="gray.300" height="85%">
-              <Text>Dashboards</Text>
-            </HStack>
           </GridItem>
         </Grid>
       </Box>

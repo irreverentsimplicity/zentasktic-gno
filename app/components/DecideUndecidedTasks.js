@@ -41,7 +41,7 @@ const DecideUndecidedTasks = () => {
   const handleSendToAssess = async (taskId) => {
     setSendingTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, '1');
       fetchAllTasksByRealm(dispatch, '2');
@@ -55,7 +55,7 @@ const DecideUndecidedTasks = () => {
   const handleSendToDo = async (taskId) => {
     setSendingTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, '3');
       fetchAllTasksByRealm(dispatch, '2');
@@ -69,7 +69,7 @@ const DecideUndecidedTasks = () => {
   const assignContextToTask = async (contextId, taskId) => {
     setLoadingContextTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToTask(contextId, taskId);
       fetchAllTasksByRealm(dispatch, '2');
@@ -82,7 +82,7 @@ const DecideUndecidedTasks = () => {
   const assignDueDateToTask = async (taskId, date) => {
     setLoadingDueDateTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToTask(taskId, formatDate(date));
       fetchAllTasksByRealm(dispatch, '2');

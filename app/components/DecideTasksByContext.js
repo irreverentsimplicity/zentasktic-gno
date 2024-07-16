@@ -55,7 +55,7 @@ const DecideTasksByContext = () => {
   const handleSendToAssess = async (taskId) => {
     setSendingToAssessTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "1");
       fetchAllTasksByRealm(dispatch, "2");
@@ -69,7 +69,7 @@ const DecideTasksByContext = () => {
   const handleSendToDo = async (taskId) => {
     setSendingToDoTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM)
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "3");
       fetchAllTasksByRealm(dispatch, "2");
@@ -83,7 +83,7 @@ const DecideTasksByContext = () => {
   const assignContextToTask = async (contextId, taskId) => {
     setLoadingContextTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToTask(contextId, taskId);
       fetchAllTasksByRealm(dispatch, '2');
@@ -96,7 +96,7 @@ const DecideTasksByContext = () => {
   const assignDueDateToTask = async (taskId, date) => {
     setLoadingDueDateTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToTask(taskId, formatDate(date));
       fetchAllTasksByRealm(dispatch, '2');

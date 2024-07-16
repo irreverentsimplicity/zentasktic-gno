@@ -28,7 +28,7 @@ const DecideUndecidedProjects = () => {
   const handleSendToAssess = async (projectId) => {
     setSendingProjectId(projectId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '1');
       fetchAllProjectsByRealm(dispatch, '2');
@@ -42,7 +42,7 @@ const DecideUndecidedProjects = () => {
   const handleSendToDo = async (projectId) => {
     setSendingProjectId(projectId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '3');
       fetchAllProjectsByRealm(dispatch, '2');
@@ -56,7 +56,7 @@ const DecideUndecidedProjects = () => {
   const assignContextToProject = async (contextId, projectId) => {
     setLoadingContextProjectId(projectId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToProject(contextId, projectId);
       fetchAllProjectsByRealm(dispatch, '2');
@@ -69,7 +69,7 @@ const DecideUndecidedProjects = () => {
   const assignDueDateToProject = async (projectId, date) => {
     setLoadingDueDateProjectId(projectId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToProject(projectId, formatDate(date));
       fetchAllProjectsByRealm(dispatch, '2');
@@ -82,7 +82,7 @@ const DecideUndecidedProjects = () => {
   const assignContextToProjectTask = async (contextId, projectId, projectTaskId) => {
     setLoadingContextProjectTaskId(projectTaskId)
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToProjectTask(contextId, projectId, projectTaskId);
       fetchAllProjectsByRealm(dispatch, '2');
@@ -95,7 +95,7 @@ const DecideUndecidedProjects = () => {
   const assignDueDateToProjectTask = async (projectId, projectTaskId, date) => {
     setLoadingDueDateProjectTaskId(projectTaskId)
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToProjectTask(projectId, projectTaskId, formatDate(date));
       fetchAllProjectsByRealm(dispatch, '2');

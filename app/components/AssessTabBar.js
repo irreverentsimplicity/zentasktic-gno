@@ -75,7 +75,7 @@ const AssessTabBar = () => {
           <CoreContexts />
         </TabPanel>
         <TabPanel>
-          <p>No collections available</p>
+          <p>Not implemented</p>
         </TabPanel>
       </TabPanels>
     </Tabs>

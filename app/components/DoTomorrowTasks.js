@@ -20,7 +20,7 @@ const DoTomorrowTasks = () => {
     const handleSendToDecide = async (taskId) => {
       setSendingTaskId(taskId);
       const actions = await Actions.getInstance();
-      actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+      actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "2");
         fetchAllTasksByRealm(dispatch, "3");
@@ -33,7 +33,7 @@ const DoTomorrowTasks = () => {
     const handleMarkAsDone = async (taskId) => {
       setMarkAsDoneTaskId(taskId);
       const actions = await Actions.getInstance();
-      actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+      actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "4");
         fetchAllTasksByRealm(dispatch, "3");

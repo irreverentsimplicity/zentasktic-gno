@@ -44,7 +44,7 @@ const DoProjectsByContext = () => {
   const handleSendToDecide = async (projectId) => {
     setSendingProjectId(projectId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '2');
       fetchAllProjectsByRealm(dispatch, '3');
@@ -58,7 +58,7 @@ const DoProjectsByContext = () => {
   const handleMarkAsDone = async (projectId) => {
     setMarkAsDoneProjectId(projectId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '4');
       fetchAllProjectsByRealm(dispatch, '3');
@@ -71,7 +71,7 @@ const DoProjectsByContext = () => {
   const handleProjectTaskMarkAsDone = async (projectId, projectTaskId) => {
     setMarkAsDoneProjectTaskId(projectTaskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_PROJECT_REALM);
+    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MarkProjectTaskAsDone(projectId, projectTaskId);
       fetchAllProjectsByRealm(dispatch, '3');
