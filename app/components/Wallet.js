@@ -1,9 +1,12 @@
 
 import React from "react";
+import { useEffect, useState } from 'react';
 import { FaWallet} from 'react-icons/fa';
 import { Icon, Select } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setRpcEndpoint } from "../slices/coreSlice";
+import { getGNOTBalances } from '../util/tokenActions';
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts } from '../util/fetchers';
 import Actions from "../util/actions";
 import Config from '../util/config';
 
@@ -13,6 +16,25 @@ const Wallet = ({ userGnotBalances }) => {
     const dispatch = useDispatch();
     const rpcEndpoint = useSelector(state => state.core.rpcEndpoint);
     
+    useEffect(() => {
+      getGNOTBalances(dispatch, (result) => {
+        if (result.success) {
+          alert(result.message);
+        } else {
+          alert(`Error: ${result.message}`);
+        }
+      });
+      fetchAllTasksByRealm(dispatch, "1");
+      fetchAllTasksByRealm(dispatch, "2");
+      fetchAllTasksByRealm(dispatch, "3");
+      fetchAllProjectsByRealm(dispatch, "1");
+      fetchAllProjectsByRealm(dispatch, "2");
+      fetchAllProjectsByRealm(dispatch, "3"); 
+      fetchAllContexts(dispatch);
+    }, [rpcEndpoint, dispatch]);
+
+
+
     const handleNetworkChange = async (event) => {
       const newNetwork = event.target.value;
       console.log("newNetwork, ", newNetwork)
@@ -22,7 +44,7 @@ const Wallet = ({ userGnotBalances }) => {
       let coreRealm = "";
       if (newNetwork === "http://localhost:26657"){
         faucetUrl = "http://127.0.0.1:5050";
-        coreRealm = "gno.land/p/demo/zentasktic"
+        coreRealm = "gno.land/r/demo/zentasktic_core"
       } else if (newNetwork === "https://rpc.flippando.xyz") {
         faucetUrl = "https://faucet.flippando.xyz";
         coreRealm = "gno.land/r/demo/zentasktic_core"

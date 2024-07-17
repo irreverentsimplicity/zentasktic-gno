@@ -72,7 +72,7 @@ const Dashboard = () => {
     setAssessContent(`There are ${assessTasks.length} tasks, and ${assessProjects.length} projects ready to be assessed. `);
     setDecideContent(`There are ${decideTasks.length} tasks, and ${decideProjects.length} projects you can decide upon right now. `);
     setDoContent(`There are ${doTasks.length} tasks, and ${doProjects.length} projects you are executing right now.`)
-  }, [assessTasks, assessProjects, decideTasks, decideProjects, doTasks, doProjects]);
+  }, [assessTasks, assessProjects, decideTasks, decideProjects, doTasks, doProjects, rpcEndpoint]);
 
   useEffect(() => {
     getGNOTBalances(dispatch, (result) => {
@@ -82,7 +82,7 @@ const Dashboard = () => {
         alert(`Error: ${result.message}`);
       }
     });
-  }, [rpcEndpoint]);
+  }, [dispatch, rpcEndpoint]);
 
   useEffect(() => {
     fetchAllTasksByRealm(dispatch, "1");

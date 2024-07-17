@@ -297,10 +297,10 @@ class Actions {
       gasWanted = defaultGasWanted;
   }
     if (chainId === null) {
-      chainId = "dev"
+      chainId = "test4"
     }
     if (signingKey === null) {
-      signingKey = "test"
+      signingKey = "zentaskticfaucet"
     }
     const gkLog = this.gkLog();
     try {
