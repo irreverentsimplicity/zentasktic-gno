@@ -285,11 +285,17 @@ class Actions {
    */
   public async callMethod(
     method: string,
-    args: string[] | null,
+    args?: string[] | null,
     gasWanted: Long = defaultGasWanted,
-    chainId: string | null,
-    signingKey: string | null,
+    chainId?: string | null,
+    signingKey?: string | null,
   ): Promise<BroadcastTxCommitResult> {
+    if (args === null) {
+      args = [];
+  }
+  if (gasWanted === null) {
+      gasWanted = defaultGasWanted;
+  }
     if (chainId === null) {
       chainId = "dev"
     }
