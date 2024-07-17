@@ -25,7 +25,7 @@ const CoreTasks = () => {
     if (newTask.length >= 3 && newTask.length <= 1000) {
       setIsAdding(true);
       const actions = await Actions.getInstance();
-      actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+      //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
           await actions.AddTask(newTask);
           fetchAllTasksByRealm(dispatch, "1");
@@ -40,7 +40,7 @@ const CoreTasks = () => {
   const handleDeleteTask = async (taskId) => {
     setDeletingTaskId(taskId);
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.RemoveTask(taskId);
         fetchAllTasksByRealm(dispatch, "1");
@@ -53,7 +53,7 @@ const CoreTasks = () => {
   const handleSendTaskToDecide = async (taskId) => {
     setSendingTaskId(taskId)
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.MoveTaskToRealm(taskId, "2");
         fetchAllTasksByRealm(dispatch, "1");
@@ -72,7 +72,7 @@ const CoreTasks = () => {
     if (editTaskBody.length >= 3 && editTaskBody.length <= 1000) {
       setIsUpdating(true);
       const actions = await Actions.getInstance();
-      actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+      //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
           await actions.UpdateTask(editTaskId, editTaskBody);
           fetchAllTasksByRealm(dispatch, "1");

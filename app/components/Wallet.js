@@ -25,7 +25,7 @@ const Wallet = ({ userGnotBalances }) => {
         coreRealm = "gno.land/p/demo/zentasktic"
       } else if (newNetwork === "https://rpc.flippando.xyz") {
         faucetUrl = "https://faucet.flippando.xyz";
-        coreRealm = "gno.land/p/demo/zentasktic"
+        coreRealm = "gno.land/r/demo/zentasktic_core"
       } else if (newNetwork === "https://rpc.irreverentsimplicity.xyz/"){
         faucetUrl = "https://faucet.irreverentsimplicity.xyz";
         coreRealm = "gno.land/r/g17ernafy6ctpcz6uepfsq2js8x2vz0wladh5yc3/zentasktic_core"
@@ -65,7 +65,6 @@ const Wallet = ({ userGnotBalances }) => {
           _hover={{ bg: 'purple.600' }}
           _focus={{ boxShadow: 'outline' }}>
           {showLocalOption && <option value="http://localhost:26657">Local node</option>}
-          <option value="https://rpc.flippando.xyz" >ZenTasktic RPC</option>
           <option value="https://rpc.irreverentsimplicity.xyz/">Test4 IrreverentSimplicity RPC</option>
         </Select>
         </div>

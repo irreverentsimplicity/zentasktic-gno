@@ -12,7 +12,7 @@ import {
 export const fetchAllTasksByRealm = async (dispatch, realmId) => {
 
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         actions.GetTasksByRealm(realmId).then((response) => {
         console.log("getTasksByRealm response in Core, for realm: " +  response + " " + realmId);
@@ -41,7 +41,7 @@ export const fetchAllTasksByRealm = async (dispatch, realmId) => {
 export const fetchAllProjectsByRealm = async (dispatch, realmId) => {
 
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         actions.GetProjectsByRealm(realmId).then((response) => {
         console.log("GetProjectsByRealm response in Core, for realm: " +  response + " " + realmId);
@@ -69,7 +69,7 @@ export const fetchAllProjectsByRealm = async (dispatch, realmId) => {
 
 export const fetchAllContexts = async (dispatch) => {
     const actions = await Actions.getInstance();
-    actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       actions.GetAllContexts().then((response) => {
         console.log("GetAllContexts response in fetchers", response);
