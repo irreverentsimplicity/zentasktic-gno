@@ -26,14 +26,14 @@ const Wallet = ({ userGnotBalances }) => {
       } else if (newNetwork === "https://rpc.flippando.xyz") {
         faucetUrl = "https://faucet.flippando.xyz";
         coreRealm = "gno.land/p/demo/zentasktic"
-      } else if (newNetwork === "http://rpc.irreverentsimplicity.xyz/"){
+      } else if (newNetwork === "https://rpc.irreverentsimplicity.xyz/"){
         faucetUrl = "http://faucet.irreverentsimplicity.xyz";
         coreRealm = "gno.land/r/g17ernafy6ctpcz6uepfsq2js8x2vz0wladh5yc3/zentasktic_core"
       }
       actionsInstance.setFaucetUrl(faucetUrl);
       actionsInstance.setCoreRealm(coreRealm);
       actionsInstance.setRpcUrl(newNetwork);
-      if(newNetwork == "http://rpc.irreverentsimplicity.xyz/"){
+      if(newNetwork == "https://rpc.irreverentsimplicity.xyz/"){
         actionsInstance.setChainId("test4")
         actionsInstance.setSigningKey("zentaskticfaucet")
       }
@@ -66,7 +66,7 @@ const Wallet = ({ userGnotBalances }) => {
           _focus={{ boxShadow: 'outline' }}>
           {showLocalOption && <option value="http://localhost:26657">Local node</option>}
           <option value="https://rpc.flippando.xyz" >ZenTasktic RPC</option>
-          <option value="http://rpc.irreverentsimplicity.xyz/">Test4 IrreverentSimplicity RPC</option>
+          <option value="https://rpc.irreverentsimplicity.xyz/">Test4 IrreverentSimplicity RPC</option>
         </Select>
         </div>
       </div>
