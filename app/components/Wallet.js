@@ -27,7 +27,7 @@ const Wallet = ({ userGnotBalances }) => {
         faucetUrl = "https://faucet.flippando.xyz";
         coreRealm = "gno.land/p/demo/zentasktic"
       } else if (newNetwork === "https://rpc.irreverentsimplicity.xyz/"){
-        faucetUrl = "http://faucet.irreverentsimplicity.xyz";
+        faucetUrl = "https://faucet.irreverentsimplicity.xyz";
         coreRealm = "gno.land/r/g17ernafy6ctpcz6uepfsq2js8x2vz0wladh5yc3/zentasktic_core"
       }
       actionsInstance.setFaucetUrl(faucetUrl);
