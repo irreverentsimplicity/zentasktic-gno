@@ -73,6 +73,8 @@ class Actions {
   private projectRealm: string = Config.GNO_ZENTASKTIC_PROJECT_REALM;
   private userRealm: string = Config.GNO_ZENTASKTIC_USER_REALM;
   private faucetURL: string = Config.FAUCET_URL;
+  private chainId: string = "dev"
+  private signingKey: string = "test"
   
   private constructor() {}
 
@@ -87,6 +89,14 @@ class Actions {
 
   public setCoreRealm(newCoreRealm: string): void {
     this.coreRealm = newCoreRealm;
+  }
+
+  public setChainId(newChainId: string): void {
+    this.chainId = newChainId;
+  }
+
+  public setSigningKey(newSigningKey: string): void {
+    this.signingKey = newSigningKey;
   }
 
   private async reinitializeProvider(): Promise<void> {
@@ -276,8 +286,16 @@ class Actions {
   public async callMethod(
     method: string,
     args: string[] | null,
-    gasWanted: Long = defaultGasWanted
+    gasWanted: Long = defaultGasWanted,
+    chainId: string | null,
+    signingKey: string | null,
   ): Promise<BroadcastTxCommitResult> {
+    if (chainId === null) {
+      chainId = "dev"
+    }
+    if (signingKey === null) {
+      signingKey = "test"
+    }
     const gkLog = this.gkLog();
     try {
       if (gkLog) {
@@ -285,7 +303,7 @@ class Actions {
         console.log(
           `$ gnokey maketx call -broadcast ` +
             `-pkgpath ${this.coreRealm} -gas-wanted ${gasWanted} -gas-fee ${defaultTxFee} ` +
-            `-func ${method} ${gkArgs} test`
+            `-func ${method} ${gkArgs} -chainid ${chainId} ${signingKey}`
         );
       }
             
@@ -337,7 +355,7 @@ class Actions {
     if (gkLog) {
       const quotesEscaped = expr.replace(/'/g, `'\\''`);
       console.info(
-        `$ gnokey query vm/qeval --data '${this.coreRealm}'$'\\n''${quotesEscaped}'`
+        `$ gnokey query vm/qeval --data '${this.coreRealm}.${quotesEscaped}'`
       );
     }
 
