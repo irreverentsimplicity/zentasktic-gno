@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Footer from "./components/Footer";
+import Footer from "./components/core/Footer";
 import './globals.css';
 
 export default function Home() {

@@ -6,9 +6,9 @@ import { Box, Grid, GridItem, Button, Text, VStack, Divider, HStack, IconButton 
 import { PieChart, Pie, Cell } from 'recharts';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { FaQuestion } from 'react-icons/fa';
-import Footer from '../components/Footer';
-import SlidingDrawer from '../components/SlidingDrawer';
-import Header from '../components/Header';
+import Footer from '../components/core/Footer';
+import SlidingDrawer from '../components/core/SlidingDrawer';
+import Header from '../components/core/Header';
 import { getGNOTBalances } from '../util/tokenActions';
 import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts } from '../util/fetchers';
 
@@ -74,12 +74,14 @@ const Dashboard = () => {
     setDoContent(`There are ${doTasks.length} tasks, and ${doProjects.length} projects you are executing right now.`)
   }, [assessTasks, assessProjects, decideTasks, decideProjects, doTasks, doProjects, rpcEndpoint]);
 
+  
   useEffect(() => {
     getGNOTBalances(dispatch, (result) => {
-      if (result.success) {
-        alert(result.message);
+      console.log("page.js get Gnot result,", result)
+      if (!result.error) {
+        alert(result.result);
       } else {
-        alert(`Error: ${result.message}`);
+        alert(`Error: ${result.error}`);
       }
     });
   }, [dispatch, rpcEndpoint]);

@@ -1,7 +1,7 @@
 'use client'
 
-import Actions from "./actions";
-import {setUserGnotBalances} from '../slices/coreSlice';
+import Actions from "./actionsProject";
+import {setUserGnotBalances} from '../slices/projectSlice';
 
 export const getGNOTBalances = async (dispatch) => {
     console.log(typeof dispatch); 
