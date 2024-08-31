@@ -104,14 +104,13 @@ const Dashboard = () => {
     setDrawerOpen(false);
   };
 
-  const renderContentBox = (title, content, color, icon, onClickHandler, displayIcon) => {
-    console.log("displayIcon ", displayIcon)
-    return(
+  const renderContentBox = (title, content, color, iconColor, icon, onClickHandler, displayIcon) => {
+    return (
       <Box 
         display="flex" 
         flexDirection="column"
         justifyContent="space-between"
-        padding="2" 
+        padding="0" 
         border="1px" 
         borderRadius="15px" 
         borderColor="gray.300" 
@@ -119,12 +118,13 @@ const Dashboard = () => {
         width="95%"
         cursor="pointer"
         onClick={onClickHandler}
-        _hover={{backgroundColor: "gray.100"}}
+        _hover={{backgroundColor: "rgba(0, 0, 0, 0.5)"}} // Hover with alpha 0.5 for dimming
       >
         <Box 
           display="flex" 
           flexDirection="column" 
           justifyContent="flex-start"
+          p="2"
           flexGrow={1} // Ensures the content area grows to fill available space
         >
           <Text fontSize="2xl" fontWeight="bold" color={color} alignSelf="flex-start">
@@ -135,47 +135,48 @@ const Dashboard = () => {
             {content}
           </Box>
         </Box>
-        {displayIcon == true &&
-          <Box 
+        {displayIcon && (
+          <Button 
             width="100%" 
-            display="flex" 
-            justifyContent="center" 
-            alignItems="center"
-            marginTop="auto" // Pushes the icon to the bottom
+            height="15%"
+            borderBottomRadius="15px" // Rounded bottom corners
+            borderTopRadius="0px" // Straight upper corners
+            backgroundColor="gray.200" 
+            color="white"
+            p="0"
+            leftIcon={
+              <Box
+                as={icon}
+                borderRadius="50%"
+                color="white"
+                backgroundColor={iconColor}
+                boxSize="3rem"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                p="0.5rem"
+              />
+            }
+            onClick={onClickHandler}
+            aria-label={title}
           >
-            <IconButton
-              icon={
-                <Box
-                  as={icon}
-                  borderRadius="50%"
-                  color="white"
-                  backgroundColor={color}
-                  boxSize="3rem"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  p="0.5rem"
-                />
-              }
-              onClick={onClickHandler}
-              aria-label={title}
-            />
-          </Box>
-        }
+          </Button>
+        )}
       </Box>
     );
   }
   
+  
 
   return (
-    <div>
+    <main className="flex flex-col justify-between bg-gradient-to-tr from-purple-500 to-blue-900 text-white p-10">
       <Header appTitle="Project" userGnotBalances={userGnotBalances}/>
-      <Box height="95vh" padding="4" border="1px" borderRadius="md" borderColor="gray.300">
+      <Box height="95vh">
         <Grid templateRows="80% 20%" height="100%" padding={2}>
           <GridItem>
             <Grid templateColumns="25% 75%" height="100%">
               <GridItem marginBottom={5}>
-                <Box height="100%" background="white" alignContent="center" justifyContent="center" marginBottom={4} border="1px" borderRadius="20px" borderColor="gray.300" marginRight={3}>
+                <Box height="100%" background="gray.100" alignContent="center" justifyContent="center" marginBottom={4} border="1px" borderRadius="20px" borderColor="gray.300" marginRight={3}>
                   <Box height="70%">
                     <PieChart width={300} height={300} background="gray.300">
                       <Pie
@@ -197,9 +198,9 @@ const Dashboard = () => {
                   <Box
                     height="30%"
                     borderTop="1px"
-                    borderColor="gray.300"
-                    background="gray.300"
-                    color="black"
+                    borderColor="gray.600"
+                    background="gray.600"
+                    color="white"
                     borderBottomLeftRadius="20px"
                     borderBottomRightRadius="20px"
                     display="flex"
@@ -215,26 +216,26 @@ const Dashboard = () => {
                   <GridItem marginBottom={0} paddingBottom={0}>
                     <Grid templateColumns="repeat(3, 1fr)" height="100%">
                       <GridItem height="100%">
-                        {renderContentBox('Assess', assessContent, 'red.500', AddIcon, () => openDrawer('Assess', assessContent), true)}
+                        {renderContentBox('Assess', assessContent, 'gray.300', 'red.600', AddIcon, () => openDrawer('Assess', assessContent), true)}
                       </GridItem>
                       <GridItem height="100%">
-                        {renderContentBox('Decide', decideContent, 'orange.500', FaQuestion, () => openDrawer('Decide', decideContent), true)}
+                        {renderContentBox('Decide', decideContent, 'gray.300', 'orange.300', FaQuestion, () => openDrawer('Decide', decideContent), true)}
                       </GridItem>
                       <GridItem height="100%">
-                        {renderContentBox('Do', doContent, 'green.500', MinusIcon, () => openDrawer('Do', doContent), true)}
+                        {renderContentBox('Do', doContent, 'gray.300', 'green.600', MinusIcon, () => openDrawer('Do', doContent), true)}
                       </GridItem>
                     </Grid>
                   </GridItem>
                   <GridItem borderTop="1px" borderTopColor={'black'} paddingTop="2">
                     <Grid templateColumns="repeat(3, 1fr)" height="100%">
                       <GridItem height="100%">
-                        {renderContentBox('Users', 'Users Content', 'blue.500', AddIcon, () => openDrawer('Users', 'Users Content'), false)}
+                        {renderContentBox('Users', 'Users Content', 'gray.400', '', AddIcon, () => openDrawer('Users', 'Users Content'), false)}
                       </GridItem>
                       <GridItem height="100%">
-                        {renderContentBox('Teams', 'Teams Content', 'purple.500', FaQuestion, () => openDrawer('Teams', 'Teams Content'), false)}
+                        {renderContentBox('Teams', 'Teams Content', 'gray.400', '',  FaQuestion, () => openDrawer('Teams', 'Teams Content'), false)}
                       </GridItem>
                       <GridItem height="100%">
-                        {renderContentBox('Rewards', 'Rewards Content', 'yellow.500', MinusIcon, () => openDrawer('Rewards', 'Rewards Content'), false)}
+                        {renderContentBox('Rewards', 'Rewards Content', 'gray.400', '',  MinusIcon, () => openDrawer('Rewards', 'Rewards Content'), false)}
                       </GridItem>
                     </Grid>
                   </GridItem>
@@ -246,7 +247,7 @@ const Dashboard = () => {
       </Box>
       <SlidingDrawer isOpen={isDrawerOpen} onClose={closeDrawer} title={drawerContent.title} content={drawerContent.content} />
       <Footer/>
-    </div>
+    </main>
   );
 };
 
