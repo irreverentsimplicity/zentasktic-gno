@@ -46,7 +46,7 @@ const TodayIcon = () => (
 const DoTasksTabBar = () => {
   const [selectedTab, setSelectedTab] = useState(null);
   const [loading, setLoading] = useState(false);
-  const doTasks = useSelector((state) => state.core.coreDoTasks) || [];
+  const doTasks = useSelector((state) => state.project.projectDoTasks) || [];
 
   const stalledTasks = doTasks.filter(task => isDateInPast(task.taskDue));
   const todayTasks = doTasks.filter(task => isDateToday(task.taskDue));

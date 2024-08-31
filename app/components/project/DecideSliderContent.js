@@ -6,8 +6,8 @@ import DecideTasksTabBar from './DecideTasksTabBar';
 import DecideProjectsTabBar from './DecideProjectsTabBar';
 
 const DecideSliderContent = () => {
-  const decideTasks = useSelector((state) => state.core.coreDecideTasks) || [];
-  const decideProjects = useSelector((state) => state.core.coreDecideProjects) || [];
+  const decideTasks = useSelector((state) => state.project.projectDecideTasks) || [];
+  const decideProjects = useSelector((state) => state.project.projectDecideProjects) || [];
 
   const [activeTab, setActiveTab] = useState('tasks');
 

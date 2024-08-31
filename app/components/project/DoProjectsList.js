@@ -25,7 +25,7 @@ const ProjectsList = ({
   markAsDoneProjectTaskID 
 }) => {
 
-  const contexts = useSelector(state => state.core.coreContexts)
+  const contexts = useSelector(state => state.project.projectContexts)
   const [expandedProjectId, setExpandedProjectId] = useState(null);
   const [expandedTaskProjectId, setExpandedTaskProjectId] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);

@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { Box, Grid, GridItem, Button, Text, VStack, Divider, HStack } from '@chakra-ui/react';
 import { PieChart, Pie, Cell } from 'recharts';
-import Footer from '../components/Footer';
-import SlidingDrawer from '../components/SlidingDrawer';
-import Header from '../components/Header';
+import Footer from '../components/user/Footer';
+import SlidingDrawer from '../components/user/SlidingDrawer';
+import Header from '../components/user/Header';
 
 const pieData = [
   { name: 'Red', value: 1 },

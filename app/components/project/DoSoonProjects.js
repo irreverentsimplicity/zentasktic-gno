@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
-import { fetchAllProjectsByRealm } from '../../util/fetchers';
+import { fetchAllProjectsByRealm } from '../../util/fetchersProject';
 import '../../styles/Home.module.css'; // Import custom CSS for calendar
 import { isDateSoon } from '../../util/dates';
 import ProjectsList from './DoProjectsList';
@@ -20,7 +20,7 @@ const DoSoonProjects = () => {
 
   const handleSendToDecide = async (projectId) => {
     setSendingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '2');
@@ -34,7 +34,7 @@ const DoSoonProjects = () => {
 
   const handleMarkAsDone = async (projectId) => {
     setMarkAsDoneProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '4');
@@ -47,7 +47,7 @@ const DoSoonProjects = () => {
 
   const handleProjectTaskMarkAsDone = async (projectId, projectTaskId) => {
     setMarkAsDoneProjectTaskId(projectTaskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MarkProjectTaskAsDone(projectId, projectTaskId);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import {
   Box,
@@ -18,15 +18,15 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { fetchAllTasksByRealm } from '../../util/fetchers';
+import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { formatDate, isDateInPast } from '../../util/dates';
 import TaskList from './DoTasksList';
 
 const DoTasksByContext = () => {
-  const doTasks = useSelector((state) => state.core.coreDoTasks);
-  const contexts = useSelector((state) => state.core.coreContexts);
+  const doTasks = useSelector((state) => state.project.projectDoTasks);
+  const contexts = useSelector((state) => state.project.projectContexts);
   const dispatch = useDispatch();
   const [expandedContextId, setExpandedContextId] = useState(null);
   const [sendingToDecideTaskId, setSendingToDecideTaskId] = useState(null);
@@ -51,7 +51,7 @@ const DoTasksByContext = () => {
 
   const handleSendToDecide = async (taskId) => {
     setSendingToDecideTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "2");
@@ -64,7 +64,7 @@ const DoTasksByContext = () => {
 
   const handleMarkAsDone = async (taskId) => {
     setMarkAsDoneTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "4");

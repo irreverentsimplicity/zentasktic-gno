@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
-import { fetchAllProjectsByRealm } from '../../util/fetchers';
+import { fetchAllProjectsByRealm } from '../../util/fetchersProject';
 import '../../styles/Home.module.css'; // Import custom CSS for calendar
 import { isDateInPast } from '../../util/dates';
 import ProjectsList from './DoProjectsList';
 
 const DoStalledProjects = () => {
-  const coreDoProjects = useSelector((state) => state.core.coreDoProjects);
+  const doProjects = useSelector((state) => state.project.projectDoProjects);
   const dispatch = useDispatch();
   const [sendingProjectId, setSendingProjectId] = useState(null);
   const [markAsDoneProjectId, setMarkAsDoneProjectId] = useState(null);
@@ -20,7 +20,7 @@ const DoStalledProjects = () => {
 
   const handleSendToDecide = async (projectId) => {
     setSendingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '2');
@@ -34,7 +34,7 @@ const DoStalledProjects = () => {
 
   const handleMarkAsDone = async (projectId) => {
     setMarkAsDoneProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '4');
@@ -47,7 +47,7 @@ const DoStalledProjects = () => {
 
   const handleProjectTaskMarkAsDone = async (projectId, projectTaskId) => {
     setMarkAsDoneProjectTaskId(projectTaskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MarkProjectTaskAsDone(projectId, projectTaskId);
@@ -76,7 +76,7 @@ const DoStalledProjects = () => {
 
   
   return <ProjectsList 
-      projects={getStalledProjects(coreDoProjects)} 
+      projects={getStalledProjects(doProjects)} 
       handleSendToDecide={handleSendToDecide} 
       handleMarkAsDone={handleMarkAsDone}
       handleProjectTaskMarkAsDone={handleProjectTaskMarkAsDone}

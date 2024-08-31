@@ -8,7 +8,7 @@ import DecideTasksByContext from './DecideTasksByContext';
 import { isDateInFuture, isDateInPast } from '../../util/dates';
 
 const DecideTasksTabBar = () => {
-  const decideTasks = useSelector((state) => state.core.coreDecideTasks) || [];
+  const decideTasks = useSelector((state) => state.project.projectDecideTasks) || [];
 
   const stalledTasks = decideTasks.filter(task => task.taskContextId && task.taskDue && isDateInPast(task.taskDue));  
   const undecidedTasks = decideTasks.filter((task) => !task.taskContextId || !task.taskDue);

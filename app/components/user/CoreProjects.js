@@ -34,7 +34,7 @@ const CoreProjects = () => {
   const handleAddProject = async () => {
     if (newProject.length >= 3 && newProject.length <= 1000) {
         setIsAdding(true);
-        const actions = await Actions.getInstance();
+        const actions = await ActionsProject.getInstance();
         //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
         try {
         await actions.AddProject(newProject);
@@ -49,7 +49,7 @@ const CoreProjects = () => {
 
   const handleDeleteProject = async (projectId) => {
     setDeletingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.RemoveProject(projectId);
@@ -62,7 +62,7 @@ const CoreProjects = () => {
 
   const handleSendProjectToDecide = async (projectId) => {
     setSendingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, "2");
@@ -82,7 +82,7 @@ const CoreProjects = () => {
   const handleUpdateProject = async () => {
     if (editProjectBody.length >= 3 && editProjectBody.length <= 1000) {
       setIsUpdating(true);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.UpdateProject(editProjectId, editProjectBody);

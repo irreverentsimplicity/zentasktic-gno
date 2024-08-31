@@ -1,5 +1,4 @@
-import Actions from "./actionsProject";  
-import Config from "../util/config";
+import ActionsProject from "./actionsProject";  
 import { 
     setProjectAssessTasks, 
     setProjectDecideTasks, 
@@ -11,11 +10,11 @@ import {
 
 export const fetchAllTasksByRealm = async (dispatch, realmId) => {
 
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         actions.GetTasksByRealm(realmId).then((response) => {
-        console.log("getTasksByRealm response in Core, for realm: " +  response + " " + realmId);
+        console.log("getTasksByRealm response in Project, for realm: " +  response + " " + realmId);
             if (response !== undefined){
             let parsedResponse = JSON.parse(response);
             
@@ -40,11 +39,11 @@ export const fetchAllTasksByRealm = async (dispatch, realmId) => {
 
 export const fetchAllProjectsByRealm = async (dispatch, realmId) => {
 
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         actions.GetProjectsByRealm(realmId).then((response) => {
-        console.log("GetProjectsByRealm response in Core, for realm: " +  response + " " + realmId);
+        console.log("GetProjectsByRealm response in Project, for realm: " +  response + " " + realmId);
             if (response !== undefined){
             let parsedResponse = JSON.parse(response);
             
@@ -68,7 +67,7 @@ export const fetchAllProjectsByRealm = async (dispatch, realmId) => {
 };
 
 export const fetchAllContexts = async (dispatch) => {
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       actions.GetAllContexts().then((response) => {

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
-import Config from '../../util/config';
-import { fetchAllTasksByRealm } from '../../util/fetchers';
+import ActionsProject from '../../util/actionsProject';
+import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 import 'react-calendar/dist/Calendar.css';
 import '../../styles/Home.module.css'; // Import custom CSS for calendar
-import ContextsTabBar from './ContextsTabBar';
 import TaskList from './DoTasksList';
 import { isDateSoon } from '../../util/dates';
 
 const DoSoonTasks = () => {
-    const coreTasks = useSelector((state) => state.core.coreDoTasks);
-    const coreContexts = useSelector((state) => state.core.coreContexts);
+    const doTasks = useSelector((state) => state.project.projectDoTasks);
     const dispatch = useDispatch();
     const [sendingTaskId, setSendingTaskId] = useState(null);
     const [markAsDoneTaskId, setMarkAsDoneTaskId] = useState(null);
@@ -22,7 +19,7 @@ const DoSoonTasks = () => {
   
     const handleSendToDecide = async (taskId) => {
       setSendingTaskId(taskId);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "2");
@@ -35,7 +32,7 @@ const DoSoonTasks = () => {
   
     const handleMarkAsDone = async (taskId) => {
       setMarkAsDoneTaskId(taskId);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "4");
@@ -46,7 +43,7 @@ const DoSoonTasks = () => {
       setMarkAsDoneTaskId(null);
     };
   
-    const soonTasks = coreTasks.filter(task => isDateSoon(task.taskDue));
+    const soonTasks = doTasks.filter(task => isDateSoon(task.taskDue));
     return <TaskList 
       tasks={soonTasks} 
       handleSendToDecide={handleSendToDecide} 

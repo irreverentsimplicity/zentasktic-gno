@@ -6,8 +6,8 @@ import DoTasksTabBar from './DoTasksTabBar';
 import DoProjectsTabBar from './DoProjectsTabBar';
 
 const DoSliderContent = () => {
-  const doTasks = useSelector((state) => state.core.coreDoTasks) || [];
-  const doProjects = useSelector((state) => state.core.coreDoProjects) || [];
+  const doTasks = useSelector((state) => state.project.projectDoTasks) || [];
+  const doProjects = useSelector((state) => state.project.projectDoProjects) || [];
 
   const [activeTab, setActiveTab] = useState('tasks');
 

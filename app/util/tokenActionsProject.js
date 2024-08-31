@@ -1,11 +1,11 @@
 'use client'
 
-import Actions from "./actionsProject";
+import ActionsProject from "./actionsProject";
 import {setUserGnotBalances} from '../slices/projectSlice';
 
 export const getGNOTBalances = async (dispatch) => {
     console.log(typeof dispatch); 
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     const playerAddress = await actions.getWalletAddress();
     try {
       actions.getBalance().then((response) => {
@@ -28,7 +28,7 @@ export const getGNOTBalances = async (dispatch) => {
 
   export const fetchUserFLIPBalances = async (dispatch) => {
     console.log("fetchUserFLIPBalances");
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     const playerAddress = await actions.getWalletAddress();
     try {
       actions.GetFLIPBalance(playerAddress).then((response) => {

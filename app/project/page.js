@@ -115,7 +115,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Header appTitle="Core" userGnotBalances={userGnotBalances}/>
+      <Header appTitle="Project" userGnotBalances={userGnotBalances}/>
       <Box height="95vh" padding="4" border="1px" borderRadius="md" borderColor="gray.300">
         <Grid templateRows="80% 20%" height="100%" padding={2}>
           <GridItem>

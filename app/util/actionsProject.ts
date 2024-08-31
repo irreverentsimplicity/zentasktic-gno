@@ -55,15 +55,15 @@ const parsedJSONOrRaw = (data: string, nob64 = false, callType: string) => {
 };
 
 /**
- * Actions is a singleton logic bundler
+ * ActionsProject is a singleton logic bundler
  * that is shared throughout the game.
  *
- * Always use as Actions.getInstance()
+ * Always use as ActionsProject.getInstance()
  */
-class Actions {
-  private static instance: Actions;
+class ActionsProject {
+  private static instance: ActionsProject;
 
-  private static initPromise: Actions | PromiseLike<Actions>;
+  private static initPromise: ActionsProject | PromiseLike<ActionsProject>;
   private wallet: GnoWallet | null = null;
   private provider: GnoWSProvider | null = null;
   private providerJSON: GnoJSONRPCProvider | null = null;
@@ -114,24 +114,24 @@ class Actions {
 
 
   /**
-   * Fetches the Actions instance. If no instance is
+   * Fetches the ActionsProject instance. If no instance is
    * initialized, it initializes it
    */
-  public static async getInstance(): Promise<Actions> {
-    if (!Actions.instance) {
-      Actions.instance = new Actions();
-      Actions.initPromise = new Promise(async (resolve) => {
-        await Actions.instance.initialize();
-        resolve(Actions.instance);
+  public static async getInstance(): Promise<ActionsProject> {
+    if (!ActionsProject.instance) {
+      ActionsProject.instance = new ActionsProject();
+      ActionsProject.initPromise = new Promise(async (resolve) => {
+        await ActionsProject.instance.initialize();
+        resolve(ActionsProject.instance);
       });
-      return Actions.initPromise;
+      return ActionsProject.initPromise;
     } else {
-      return Actions.initPromise;
+      return ActionsProject.initPromise;
     }
   }
 
   /**
-   * Prepares the Actions instance
+   * Prepares the ActionsProject instance
    * @private
    */
   private async initialize() {
@@ -184,7 +184,7 @@ class Actions {
   }
 
   /**
-   * Destroys the Actions instance, and closes any running services
+   * Destroys the ActionsProject instance, and closes any running services
    */
   public destroy() {
     if (!this.provider) {
@@ -297,10 +297,12 @@ class Actions {
       gasWanted = defaultGasWanted;
   }
     if (chainId === null) {
-      chainId = "test4"
+      //chainId = "test4"
+      chainId = "dev"
     }
     if (signingKey === null) {
-      signingKey = "zentaskticfaucet"
+      //signingKey = "zentaskticfaucet"
+      signingKey = "test"
     }
     const gkLog = this.gkLog();
     try {
@@ -309,7 +311,7 @@ class Actions {
         console.log(
           `$ gnokey maketx call -broadcast ` +
             `-pkgpath ${this.projectRealm} -gas-wanted ${gasWanted} -gas-fee ${defaultTxFee} ` +
-            `-func ${method} ${gkArgs} -chainid ${chainId} ${signingKey}`
+            `-func ${method} ${gkArgs} -chainid ${this.chainId} ${this.signingKey}`
         );
       }
             
@@ -841,4 +843,4 @@ class Actions {
 
 }
 
-export default Actions;
+export default ActionsProject;

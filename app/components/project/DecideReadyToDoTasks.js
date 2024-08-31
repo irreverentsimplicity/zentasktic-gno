@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import {
   Box,
@@ -17,15 +17,15 @@ import {
   Divider
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { fetchAllTasksByRealm } from '../../util/fetchers';
+import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 import { formatDate, isDateInFuture } from '../../util/dates';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../../styles/Home.module.css'; // Import custom CSS for calendar
 
 const DecideReadyToDoTasks = () => {
-    const coreTasks = useSelector((state) => state.core.coreDecideTasks);
-    const contexts = useSelector((state) => state.core.coreContexts);
+    const tasks = useSelector((state) => state.project.projectDecideTasks);
+    const contexts = useSelector((state) => state.project.projectContexts);
     const dispatch = useDispatch();
     const [sendingToAssessTaskId, setSendingToAssessTaskId] = useState(null);
     const [sendingToDoTaskId, setSendingToDoTaskId] = useState(null);
@@ -41,7 +41,7 @@ const DecideReadyToDoTasks = () => {
 
   const handleSendToAssess = async (taskId) => {
     setSendingToAssessTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "1");
@@ -55,7 +55,7 @@ const DecideReadyToDoTasks = () => {
 
   const handleSendToDo = async (taskId) => {
     setSendingToDoTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "3");
@@ -70,7 +70,7 @@ const DecideReadyToDoTasks = () => {
 
   const assignContextToTask = async (contextId, taskId) => {
     setLoadingContextTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToTask(contextId, taskId);
@@ -83,7 +83,7 @@ const DecideReadyToDoTasks = () => {
 
   const assignDueDateToTask = async (taskId, date) => {
     setLoadingDueDateTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToTask(taskId, formatDate(date));
@@ -102,10 +102,10 @@ const DecideReadyToDoTasks = () => {
   return (
     <Box>
       <List spacing={3}>
-        {getReadyToDoTasks(coreTasks).length === 0 ? (
+        {getReadyToDoTasks(tasks).length === 0 ? (
           <ListItem>No ready to do tasks available</ListItem>
         ) : (
-            getReadyToDoTasks(coreTasks).map((task) => (
+            getReadyToDoTasks(tasks).map((task) => (
             <Box key={task.taskId}>
               <ListItem display="flex" alignItems="center">
                 <IconButton

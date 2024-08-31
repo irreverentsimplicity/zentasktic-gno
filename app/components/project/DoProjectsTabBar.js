@@ -46,7 +46,7 @@ const TodayIcon = () => (
 const DoProjectsTabBar = () => {
   const [selectedTab, setSelectedTab] = useState(null);
   const [loading, setLoading] = useState(false);
-  const doProjects = useSelector((state) => state.core.coreDoProjects) || [];
+  const doProjects = useSelector((state) => state.project.projectDoProjects) || [];
 
   const stalledProjects = doProjects.filter(project => isDateInPast(project.projectDue));
   const todayProjects = doProjects.filter(project => isDateToday(project.projectDue));

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import {
   Box,
 } from '@chakra-ui/react';
-import { fetchAllContexts, fetchAllProjectsByRealm } from '../../util/fetchers';
+import { fetchAllContexts, fetchAllProjectsByRealm } from '../../util/fetchersProject';
 import { formatDate, isDateInFuture, isDateInPast } from '../../util/dates';
 import '../../styles/Home.module.css'; // Import custom CSS for calendar
 import DecideProjectList from './DecideProjectList';
 
 const DecideStalledProjects = () => {
-  const coreProjects = useSelector((state) => state.core.coreDecideProjects);
-  const contexts = useSelector((state) => state.core.coreContexts);
+  const projects = useSelector((state) => state.project.projectDecideProjects);
+  const contexts = useSelector((state) => state.project.projectContexts);
   const dispatch = useDispatch();
   const [sendingProjectId, setSendingProjectId] = useState(null);
   const [loadingContextProjectId, setLoadingContextProjectId] = useState(null);
@@ -27,7 +27,7 @@ const DecideStalledProjects = () => {
 
   const handleSendToAssess = async (projectId) => {
     setSendingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '1');
@@ -41,7 +41,7 @@ const DecideStalledProjects = () => {
 
   const handleSendToDo = async (projectId) => {
     setSendingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '3');
@@ -55,7 +55,7 @@ const DecideStalledProjects = () => {
 
   const assignContextToProject = async (contextId, projectId) => {
     setLoadingContextProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToProject(contextId, projectId);
@@ -68,7 +68,7 @@ const DecideStalledProjects = () => {
 
   const assignDueDateToProject = async (projectId, date) => {
     setLoadingDueDateProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToProject(projectId, formatDate(date));
@@ -81,7 +81,7 @@ const DecideStalledProjects = () => {
 
   const assignContextToProjectTask = async (contextId, projectId, projectTaskId) => {
     setLoadingContextProjectTaskId(projectTaskId)
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToProjectTask(contextId, projectId, projectTaskId);
@@ -94,7 +94,7 @@ const DecideStalledProjects = () => {
 
   const assignDueDateToProjectTask = async (projectId, projectTaskId, date) => {
     setLoadingDueDateProjectTaskId(projectTaskId)
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToProjectTask(projectId, projectTaskId, formatDate(date));
@@ -124,7 +124,7 @@ const DecideStalledProjects = () => {
   return (
     <Box>
       <DecideProjectList
-        projects={getStalledProjects(coreProjects)}
+        projects={getStalledProjects(projects)}
         contexts={contexts}
         handleSendToAssess={handleSendToAssess}
         handleSendToDo={handleSendToDo}

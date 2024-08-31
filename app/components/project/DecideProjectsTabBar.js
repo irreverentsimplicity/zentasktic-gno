@@ -8,7 +8,7 @@ import DecideProjectsByContext from './DecideProjectsByContext';
 import { isDateInFuture, isDateInPast } from '../../util/dates';
 
 const DecideProjectsTabBar = () => {
-  const decideProjects = useSelector((state) => state.core.coreDecideProjects) || [];
+  const decideProjects = useSelector((state) => state.project.projectDecideProjects) || [];
 
   const stalledProjects = (decideProjects) => {
     return decideProjects.filter((project) => {

@@ -1,12 +1,12 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 import coreReducer from '../slices/coreSlice.js';
-import projectSlice from '../slices/coreSlice.js';
+import projectReducer from '../slices/projectSlice.js';
 //import userSlice from   '../slices/coreSlice.js';
 
 const combinedReducer = combineReducers({
   core: coreReducer,
-  project: projectSlice,
+  project: projectReducer,
 });
 
 const rootReducer = (state, action) => {

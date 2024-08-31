@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
-import { fetchAllTasksByRealm } from '../../util/fetchers';
+import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 import TaskList from './DoTasksList';
 import { isDateInPast } from '../../util/dates';
 
 const DoStalledTasks = () => {
-    const coreTasks = useSelector((state) => state.core.coreDoTasks);
+    const doTasks = useSelector((state) => state.project.projectDoTasks);
     const dispatch = useDispatch();
     const [sendingTaskId, setSendingTaskId] = useState(null);
     const [markAsDoneTaskId, setMarkAsDoneTaskId] = useState(null);
@@ -18,7 +18,7 @@ const DoStalledTasks = () => {
   
     const handleSendToDecide = async (taskId) => {
       setSendingTaskId(taskId);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "2");
@@ -31,7 +31,7 @@ const DoStalledTasks = () => {
   
     const handleMarkAsDone = async (taskId) => {
       setMarkAsDoneTaskId(taskId);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.MoveTaskToRealm(taskId, "4");
@@ -42,7 +42,7 @@ const DoStalledTasks = () => {
       setMarkAsDoneTaskId(null);
     };
   
-    const stalledTasks = coreTasks.filter(task => isDateInPast(task.taskDue));
+    const stalledTasks = doTasks.filter(task => isDateInPast(task.taskDue));
   
     return <TaskList 
       tasks={stalledTasks} 

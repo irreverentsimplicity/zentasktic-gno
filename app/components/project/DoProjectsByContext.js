@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import {
   Box,
@@ -12,12 +12,12 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { fetchAllProjectsByRealm } from '../../util/fetchers';
+import { fetchAllProjectsByRealm } from '../../util/fetchersProject';
 import ProjectsList from './DoProjectsList';
 
 const DoProjectsByContext = () => {
-  const coreDoProjects = useSelector((state) => state.core.coreDoProjects);
-  const contexts = useSelector((state) => state.core.coreContexts);
+  const doProjects = useSelector((state) => state.project.projectDoProjects);
+  const contexts = useSelector((state) => state.project.projectContexts);
   const dispatch = useDispatch();
   const [sendingProjectId, setSendingProjectId] = useState(null);
   const [markAsDoneProjectId, setMarkAsDoneProjectId] = useState(null);
@@ -28,8 +28,8 @@ const DoProjectsByContext = () => {
     fetchAllProjectsByRealm(dispatch, "3");
   }, [dispatch]);
 
-  const groupProjectsByContext = (coreDoProjects) => {
-    return coreDoProjects.reduce((acc, project) => {
+  const groupProjectsByContext = (doProjects) => {
+    return doProjects.reduce((acc, project) => {
       const contextId = project.projectContextId || 'noContext';
       if (!acc[contextId]) {
         acc[contextId] = [];
@@ -39,11 +39,11 @@ const DoProjectsByContext = () => {
     }, {});
   };
 
-  const groupedProjects = groupProjectsByContext(coreDoProjects);
+  const groupedProjects = groupProjectsByContext(doProjects);
 
   const handleSendToDecide = async (projectId) => {
     setSendingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '2');
@@ -57,7 +57,7 @@ const DoProjectsByContext = () => {
 
   const handleMarkAsDone = async (projectId) => {
     setMarkAsDoneProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, '4');
@@ -70,7 +70,7 @@ const DoProjectsByContext = () => {
 
   const handleProjectTaskMarkAsDone = async (projectId, projectTaskId) => {
     setMarkAsDoneProjectTaskId(projectTaskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MarkProjectTaskAsDone(projectId, projectTaskId);

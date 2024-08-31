@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import {
   Box,
@@ -17,15 +17,15 @@ import {
   Divider
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { fetchAllTasksByRealm } from '../../util/fetchers';
+import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 import { formatDate, isDateInPast } from '../../util/dates';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../../styles/Home.module.css'; // Import custom CSS for calendar
 
 const DecideStalledTasks = () => {
-  const coreTasks = useSelector((state) => state.core.coreDecideTasks);
-  const contexts = useSelector((state) => state.core.coreContexts);
+  const tasks = useSelector((state) => state.project.projectDecideTasks);
+  const contexts = useSelector((state) => state.project.projectContexts);
   const dispatch = useDispatch();
   const [sendingToAssessTaskId, setSendingToAssessTaskId] = useState(null);
   const [sendingToDoTaskId, setSendingToDoTaskId] = useState(null);
@@ -40,7 +40,7 @@ const DecideStalledTasks = () => {
 
   const handleSendToAssess = async (taskId) => {
     setSendingToAssessTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "1");
@@ -54,7 +54,7 @@ const DecideStalledTasks = () => {
 
   const handleSendToDo = async (taskId) => {
     setSendingToDoTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "3");
@@ -68,7 +68,7 @@ const DecideStalledTasks = () => {
 
   const assignContextToTask = async (contextId, taskId) => {
     setLoadingContextTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToTask(contextId, taskId);
@@ -82,7 +82,7 @@ const DecideStalledTasks = () => {
 
   const assignDueDateToTask = async (taskId, date) => {
     setLoadingDueDateTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToTask(taskId, formatDate(date));
@@ -101,10 +101,10 @@ const DecideStalledTasks = () => {
   return (
     <Box>
       <List spacing={3}>
-        {getStalledTasks(coreTasks).length === 0 ? (
+        {getStalledTasks(tasks).length === 0 ? (
           <ListItem>No stalled tasks available</ListItem>
         ) : (
-            getStalledTasks(coreTasks).map((task) => (
+            getStalledTasks(tasks).map((task) => (
             <Box key={task.taskId}>
               <ListItem display="flex" alignItems="center">
                 <IconButton

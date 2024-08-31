@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import {
   Box,
@@ -18,14 +18,14 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ArrowForwardIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { fetchAllTasksByRealm } from '../../util/fetchers';
+import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { formatDate, isDateInPast } from '../../util/dates';
 
 const DecideTasksByContext = () => {
-  const decideTasks = useSelector((state) => state.core.coreDecideTasks);
-  const contexts = useSelector((state) => state.core.coreContexts);
+  const decideTasks = useSelector((state) => state.project.projectDecideTasks);
+  const contexts = useSelector((state) => state.project.projectContexts);
   const dispatch = useDispatch();
   const [expandedContextId, setExpandedContextId] = useState(null);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
@@ -54,7 +54,7 @@ const DecideTasksByContext = () => {
 
   const handleSendToAssess = async (taskId) => {
     setSendingToAssessTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "1");
@@ -68,7 +68,7 @@ const DecideTasksByContext = () => {
 
   const handleSendToDo = async (taskId) => {
     setSendingToDoTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveTaskToRealm(taskId, "3");
@@ -82,7 +82,7 @@ const DecideTasksByContext = () => {
 
   const assignContextToTask = async (contextId, taskId) => {
     setLoadingContextTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AddContextToTask(contextId, taskId);
@@ -95,7 +95,7 @@ const DecideTasksByContext = () => {
 
   const assignDueDateToTask = async (taskId, date) => {
     setLoadingDueDateTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.AssignDueDateToTask(taskId, formatDate(date));

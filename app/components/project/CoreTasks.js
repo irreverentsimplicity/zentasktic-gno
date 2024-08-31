@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import { Box, IconButton, Textarea, Button, List, ListItem, Flex, Spinner } from '@chakra-ui/react';
 import { DeleteIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { fetchAllTasksByRealm } from '../../util/fetchers';
+import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 
 const CoreTasks = () => {
-  const coreTasks = useSelector(state => state.core.coreAssessTasks);
+  const tasks = useSelector(state => state.project.projectAssessTasks);
   const dispatch = useDispatch();
   const [newTask, setNewTask] = useState('');
   const [editTaskId, setEditTaskId] = useState(null);
@@ -24,7 +24,7 @@ const CoreTasks = () => {
   const handleAddTask = async () => {
     if (newTask.length >= 3 && newTask.length <= 1000) {
       setIsAdding(true);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
           await actions.AddTask(newTask);
@@ -39,7 +39,7 @@ const CoreTasks = () => {
 
   const handleDeleteTask = async (taskId) => {
     setDeletingTaskId(taskId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.RemoveTask(taskId);
@@ -52,7 +52,7 @@ const CoreTasks = () => {
 
   const handleSendTaskToDecide = async (taskId) => {
     setSendingTaskId(taskId)
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.MoveTaskToRealm(taskId, "2");
@@ -71,7 +71,7 @@ const CoreTasks = () => {
   const handleUpdateTask = async () => {
     if (editTaskBody.length >= 3 && editTaskBody.length <= 1000) {
       setIsUpdating(true);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
           await actions.UpdateTask(editTaskId, editTaskBody);
@@ -99,10 +99,10 @@ const CoreTasks = () => {
         </Button>
       </Flex>
       <List spacing={3}>
-        {coreTasks.length === 0 ? (
+        {tasks.length === 0 ? (
           <ListItem>No tasks available</ListItem>
         ) : (
-          coreTasks.map((task) => (
+          tasks.map((task) => (
             <ListItem key={task.taskId} display="flex" alignItems="center">
               <IconButton
                       icon={deletingTaskId === task.taskId ? <Spinner size="sm" /> : <DeleteIcon size="sm" />}

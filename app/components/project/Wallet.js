@@ -6,15 +6,15 @@ import { Icon, Select } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setRpcEndpoint } from "../../slices/projectSlice";
 import { getGNOTBalances } from '../../util/tokenActions';
-import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts } from '../../util/fetchers';
-import Actions from "../../util/actionsProject";
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts } from '../../util/fetchersProject';
+import ActionsProject from "../../util/actionsProject";
 import Config from '../../util/config';
 
 
 const Wallet = ({ userGnotBalances }) => {
 
     const dispatch = useDispatch();
-    const rpcEndpoint = useSelector(state => state.core.rpcEndpoint);
+    const rpcEndpoint = useSelector(state => state.project.rpcEndpoint);
     
     
     useEffect( () => {
@@ -46,7 +46,7 @@ const Wallet = ({ userGnotBalances }) => {
       const newNetwork = event.target.value;
       console.log("newNetwork, ", newNetwork)
       dispatch(setRpcEndpoint(newNetwork))
-      const actionsInstance = await Actions.getInstance();
+      const actionsInstance = await ActionsProject.getInstance();
       let faucetUrl = "";
       let projectRealm = "";
       if (newNetwork === "http://localhost:26657"){

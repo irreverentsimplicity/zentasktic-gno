@@ -6,10 +6,10 @@ import CoreContexts from './CoreContexts';
 import CoreProjects from './CoreProjects';
 
 const AssessTabBar = () => {
-  const coreTasks = useSelector((state) => state.core.coreAssessTasks) || [];
-  const coreProjects = useSelector((state) => state.core.coreAssessProjects) || [];
-  const coreContexts = useSelector((state) => state.core.coreContexts) || [];
-  const coreCollections = useSelector((state) => state.core.coreCollections) || [];
+  const tasks = useSelector((state) => state.project.projectAssessTasks) || [];
+  const projects = useSelector((state) => state.project.projectAssessProjects) || [];
+  const contexts = useSelector((state) => state.project.projectContexts) || [];
+  const collections = useSelector((state) => state.project.projectCollections) || [];
 
   return (
     <Tabs variant="enclosed-colored" colorScheme="red">
@@ -23,7 +23,7 @@ const AssessTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Tasks</span>
-            <Badge colorScheme="red">{coreTasks.length}</Badge>
+            <Badge colorScheme="red">{tasks.length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -35,7 +35,7 @@ const AssessTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Projects</span>
-            <Badge colorScheme="red">{coreProjects.length}</Badge>
+            <Badge colorScheme="red">{projects.length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -47,7 +47,7 @@ const AssessTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Contexts</span>
-            <Badge colorScheme="red">{coreContexts.length}</Badge>
+            <Badge colorScheme="red">{contexts.length}</Badge>
           </HStack>
         </Tab>
         <Tab
@@ -59,7 +59,7 @@ const AssessTabBar = () => {
         >
           <HStack spacing={4}>
             <span>Collections</span>
-            <Badge colorScheme="red">{coreCollections.length}</Badge>
+            <Badge colorScheme="red">{collections.length}</Badge>
           </HStack>
         </Tab>
       </TabList>

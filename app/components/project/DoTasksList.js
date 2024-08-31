@@ -14,7 +14,7 @@ import { isDateInPast } from '../../util/dates';
 
 const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, markAsDoneTaskId }) => {
 
-  const contexts = useSelector(state => state.core.coreContexts)
+  const contexts = useSelector(state => state.project.projectContexts)
   
   return (
   <Box>

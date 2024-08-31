@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const projectSlice = createSlice({
-  name: 'core',
+  name: 'project',
   initialState: {
     blockchainName: undefined,
     testnet: true,

@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 
 const ContextsTabBar = () => {
-    const contexts = useSelector(state => state.core.coreContexts)
+    const contexts = useSelector(state => state.project.projectContexts)
     return (
     <Tabs variant="soft-rounded" colorScheme="green">
       <TabList>

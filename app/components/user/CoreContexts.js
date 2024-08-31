@@ -22,7 +22,7 @@ const CoreContexts = () => {
 
   const handleAddContext = async () => {
     setIsAdding(true);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     console.log("realm, ", Config.GNO_ZENTASKTIC_CORE_REALM)
     try {
@@ -37,7 +37,7 @@ const CoreContexts = () => {
 
   const handleDeleteContext = async (contextId) => {
     setDeletingContextId(contextId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.RemoveContext(contextId);
@@ -55,7 +55,7 @@ const CoreContexts = () => {
 
   const handleUpdateContext = async () => {
     setIsUpdating(true);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.UpdateContext(editContextId, editContextName);

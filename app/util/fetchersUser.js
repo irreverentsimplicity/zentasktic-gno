@@ -1,4 +1,4 @@
-import Actions from "./actions";  
+import ActionsProject from "./actions";  
 import Config from "../util/config";
 import { 
     setCoreAssessTasks, 

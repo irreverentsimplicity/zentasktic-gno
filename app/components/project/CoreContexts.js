@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import { Box, IconButton, Input, Button, List, ListItem, Flex, Spinner } from '@chakra-ui/react';
 import { DeleteIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { fetchAllContexts } from '../../util/fetchers';
+import { fetchAllContexts } from '../../util/fetchersProject';
 
 const CoreContexts = () => {
-  const coreContexts = useSelector(state => state.core.coreContexts);
+  const contexts = useSelector(state => state.project.projectContexts);
   const dispatch = useDispatch();
   const [newContext, setNewContext] = useState('');
   const [editContextId, setEditContextId] = useState(null);
@@ -22,7 +22,7 @@ const CoreContexts = () => {
 
   const handleAddContext = async () => {
     setIsAdding(true);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     console.log("realm, ", Config.GNO_ZENTASKTIC_CORE_REALM)
     try {
@@ -37,7 +37,7 @@ const CoreContexts = () => {
 
   const handleDeleteContext = async (contextId) => {
     setDeletingContextId(contextId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.RemoveContext(contextId);
@@ -55,7 +55,7 @@ const CoreContexts = () => {
 
   const handleUpdateContext = async () => {
     setIsUpdating(true);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.UpdateContext(editContextId, editContextName);
@@ -82,10 +82,10 @@ const CoreContexts = () => {
         </Button>
       </Flex>
       <List spacing={3}>
-        {coreContexts.length === 0 ? (
+        {contexts.length === 0 ? (
           <ListItem>No contexts available</ListItem>
         ) : (
-          coreContexts.map((context) => (
+          contexts.map((context) => (
             <ListItem key={context.contextId} display="flex" alignItems="center">
               <IconButton
                 icon={deletingContextId === context.contextId ? <Spinner size="sm" /> : <DeleteIcon />}

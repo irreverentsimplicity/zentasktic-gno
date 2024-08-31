@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Actions from '../../util/actionsProject';
+import ActionsProject from '../../util/actionsProject';
 import Config from '../../util/config';
 import { Box, IconButton, Textarea, Button, List, ListItem, Flex, Spinner, Input, Badge } from '@chakra-ui/react';
 import { DeleteIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { FaTasks } from 'react-icons/fa';
 import { FaEject } from 'react-icons/fa';
-import { fetchAllTasksByRealm, fetchAllProjectsByRealm } from '../../util/fetchers';
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm } from '../../util/fetchersProject';
 
 const CoreProjects = () => {
-  const coreProjects = useSelector(state => state.core.coreAssessProjects);
+  const coreProjects = useSelector(state => state.project.projectAssessProjects);
   const dispatch = useDispatch();
   const [newProject, setNewProject] = useState('');
   const [editProjectId, setEditProjectId] = useState(null);
@@ -34,7 +34,7 @@ const CoreProjects = () => {
   const handleAddProject = async () => {
     if (newProject.length >= 3 && newProject.length <= 1000) {
         setIsAdding(true);
-        const actions = await Actions.getInstance();
+        const actions = await ActionsProject.getInstance();
         //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
         try {
         await actions.AddProject(newProject);
@@ -49,7 +49,7 @@ const CoreProjects = () => {
 
   const handleDeleteProject = async (projectId) => {
     setDeletingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.RemoveProject(projectId);
@@ -62,7 +62,7 @@ const CoreProjects = () => {
 
   const handleSendProjectToDecide = async (projectId) => {
     setSendingProjectId(projectId);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
       await actions.MoveProjectToRealm(projectId, "2");
@@ -82,7 +82,7 @@ const CoreProjects = () => {
   const handleUpdateProject = async () => {
     if (editProjectBody.length >= 3 && editProjectBody.length <= 1000) {
       setIsUpdating(true);
-      const actions = await Actions.getInstance();
+      const actions = await ActionsProject.getInstance();
       //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
       try {
         await actions.UpdateProject(editProjectId, editProjectBody);
@@ -99,7 +99,7 @@ const CoreProjects = () => {
   const handleAddTaskToProject = async (projectId) => {
     if (newTask.length >= 3){
         setIsAddingTask(true);
-        const actions = await Actions.getInstance();
+        const actions = await ActionsProject.getInstance();
         //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
         try {
         await actions.AttachTaskToProject(newTask, projectId);
@@ -120,7 +120,7 @@ const CoreProjects = () => {
 
   const handleUpdateProjectTask = async () => {
     setIsUpdating(true);
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
         await actions.EditProjectTask(editTaskProjectId, editTaskProjectBody, editTaskCurrentProjectId);
@@ -137,7 +137,7 @@ const CoreProjects = () => {
 
   const handleDeleteTask = async (taskId, projectId) => {
     setDeletingTaskId(taskId)
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
     await actions.RemoveTaskFromProject(taskId, projectId);
@@ -150,7 +150,7 @@ const CoreProjects = () => {
 
   const handleDetachTaskFromProject = async (taskId, projectId) => {
     setDetachingTaskId(taskId)
-    const actions = await Actions.getInstance();
+    const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
     await actions.DetachTaskFromProject(taskId, projectId);
