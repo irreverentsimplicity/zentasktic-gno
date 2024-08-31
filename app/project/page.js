@@ -118,7 +118,7 @@ const Dashboard = () => {
         width="95%"
         cursor="pointer"
         onClick={onClickHandler}
-        _hover={{backgroundColor: "rgba(0, 0, 0, 0.5)"}} // Hover with alpha 0.5 for dimming
+        _hover={{backgroundColor: "rgba(127, 127, 127, 0.3)"}} // Hover with alpha 0.5 for dimming
       >
         <Box 
           display="flex" 

@@ -19,6 +19,9 @@ const projectSlice = createSlice({
     projectDecideProjects: [],
     projectDoTasks: [],
     projectDoProjects: [],
+    projectUsers: [],
+    projectTeams: [],
+    projectRewards: [],
   },
   reducers: {
     setBlockchain(state, action) {
@@ -52,6 +55,15 @@ const projectSlice = createSlice({
     setProjectDoProjects(state, action) {
       state.projectDoProjects = action.payload;
     },
+    setProjectUsers(state, action) {
+      state.projectUsers = action.payload;
+    },
+    setProjectTeams(state, action) {
+        state.projectTeams = action.payload;
+    },
+    setProjectRewards(state, action) {
+      state.projectRewards = action.payload;
+    },
     setRpcEndpoint(state, action) {
       //console.log("slice setRpcEndpoint ", JSON.stringify(action.payload))
       state.rpcEndpoint = action.payload;
@@ -82,7 +94,10 @@ export const {
   setProjectDecideProjects,
   setProjectDoTasks,
   setProjectDoProjects,
-  setRpcEndpoint } = projectSlice.actions;
+  setRpcEndpoint, 
+  setProjectUsers,
+  setProjectTeams,
+  setProjectRewards} = projectSlice.actions;
 
 export default projectSlice.reducer;
 

@@ -6,7 +6,11 @@ import {
     setProjectAssessProjects, 
     setProjectDecideProjects,
     setProjectDoProjects, 
-    setProjectContexts } from "../slices/projectSlice";
+    setProjectContexts,
+    setProjectUsers,
+    setProjectTeams,
+    setProjectRewards
+ } from "../slices/projectSlice";
 
 export const fetchAllTasksByRealm = async (dispatch, realmId) => {
 
@@ -63,6 +67,65 @@ export const fetchAllProjectsByRealm = async (dispatch, realmId) => {
     });
     } catch (err) {
         console.log("error in calling GetProjectsByRealm", err);
+    }
+};
+
+export const fetchAllUsers = async (dispatch) => {
+    const actions = await ActionsProject.getInstance();
+    try {
+      actions.GetAllUsers().then((response) => {
+        console.log("GetAllUsers response in fetchers", response);
+          if (response !== undefined){
+          let parsedResponse = JSON.parse(response);
+          
+          if(parsedResponse.actors !== undefined){  
+            console.log("parseResponse in fetchAllUsers ", JSON.stringify(response, null, 2))
+            dispatch(setProjectUsers(parsedResponse.actors))
+          }
+        }
+      });
+    } catch (err) {
+      console.log("error in calling getAllTeams", err);
+    }
+};
+
+export const fetchAllTeams = async (dispatch) => {
+    const actions = await ActionsProject.getInstance();
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    try {
+      actions.GetAllTeams().then((response) => {
+        console.log("GetAllTeams response in fetchers", response);
+          if (response !== undefined){
+          let parsedResponse = JSON.parse(response);
+          
+          if(parsedResponse.teams !== undefined){  
+            console.log("parseResponse", JSON.stringify(response, null, 2))
+            dispatch(setProjectTeams(parsedResponse.teams))
+          }
+        }
+      });
+    } catch (err) {
+      console.log("error in calling getAllTeams", err);
+    }
+};
+
+export const fetchAllRewards = async (dispatch) => {
+    const actions = await ActionsProject.getInstance();
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    try {
+      actions.GetAllRewards().then((response) => {
+        console.log("GetAllRewards response in fetchers", response);
+          if (response !== undefined){
+          let parsedResponse = JSON.parse(response);
+          
+          if(parsedResponse.rewards !== undefined){  
+            console.log("parseResponse", JSON.stringify(response, null, 2))
+            dispatch(setProjectRewards(parsedResponse.rewards))
+          }
+        }
+      });
+    } catch (err) {
+      console.log("error in calling getAllRewards", err);
     }
 };
 

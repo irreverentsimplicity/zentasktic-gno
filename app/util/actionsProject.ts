@@ -590,6 +590,75 @@ class ActionsProject {
   }
 
 
+  // users
+
+  /**
+   * Adds a new task
+   *
+   * @param userName string - user name
+   * @param userAddress string - user address
+   */
+
+  async AddUser(
+    userName: string,
+    userAddress: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddActorWrap', [
+      userName,
+      userAddress,
+    ]);
+    console.log("actions AddActorWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+   /**
+   * Removes a user
+   *
+   * @param userId string - user id
+   */
+  
+   async RemoveUser(
+    userId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveActorWrap', [
+      userId
+    ]);
+    console.log("actions RemoveUser response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Updates a user
+   *
+   * @param userId string - user id
+   * @param userName string - user name
+   * @param userAddress string - user address
+   */
+  
+  async UpdateUser(
+    userId: string,
+    userName: string,
+    userAddress: string,
+  ): Promise<any> {
+    const response = await this.callMethod('EditActorWrap', [
+      userId,
+      userName,
+      userAddress,
+    ]);
+    console.log("actions EditActorWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Get all users
+   */
+  
+  async GetAllUsers(): Promise<any> {
+    const response = await this.evaluateExpression("GetAllActors()")
+    console.log("actions GetAllActors response ", JSON.stringify(response))
+    return response;
+  }
+
   // projects
 
   /**

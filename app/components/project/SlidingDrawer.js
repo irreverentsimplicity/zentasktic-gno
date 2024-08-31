@@ -12,6 +12,9 @@ import {
   import AssessTabBar from "./AssessTabBar";
   import DecideSliderContent from "./DecideSliderContent";
   import DoSliderContent from "./DoSliderContent";
+  import UsersSliderContent from "./UsersSliderContent";
+  import TeamsSliderContent from "./TeamsSliderContent";
+  import RewardsSliderContent from "./RewardsSliderContent";
   
   const SlidingDrawer = ({ isOpen, onClose, title, content }) => {
     // Determine the color based on the title
@@ -43,6 +46,9 @@ import {
             {title === 'Assess' ? <AssessTabBar /> : 
              title === 'Decide' ? <DecideSliderContent /> : 
              title === "Do" ? <DoSliderContent /> : 
+             title === "Users" ? <UsersSliderContent /> : 
+             title === "Teams" ? <TeamsSliderContent /> : 
+             title === "Rewards" ? <RewardsSliderContent /> : 
              <p>{content}</p>}
           </DrawerBody>
   
