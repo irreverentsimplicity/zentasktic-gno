@@ -37,19 +37,10 @@ const Dashboard = () => {
     { name: 'Do', value: doData !== 0 ? doData : 1 }
   ];
 
-  console.log("assessTasks.length ", assessTasks.length);
-  console.log("decideTasks.length ", decideTasks.length);
-  console.log("doTasks.length ", doTasks.length);
-  console.log("assessProjects.length ", assessProjects.length);
-  console.log("decideProjects.length ", decideProjects.length);
-  console.log("do.doProjects ", doProjects.length);
-
-
   const [zenStatus, setZenStatus] = useState(``);
   const [assessContent, setAssessContent] = useState(``);
   const [decideContent, setDecideContent] = useState(``);
   const [doContent, setDoContent] = useState(``);
-
 
   const dispatch = useDispatch();
   
@@ -113,6 +104,69 @@ const Dashboard = () => {
     setDrawerOpen(false);
   };
 
+  const renderContentBox = (title, content, color, icon, onClickHandler, displayIcon) => {
+    console.log("displayIcon ", displayIcon)
+    return(
+      <Box 
+        display="flex" 
+        flexDirection="column"
+        justifyContent="space-between"
+        padding="2" 
+        border="1px" 
+        borderRadius="15px" 
+        borderColor="gray.300" 
+        height="95%"
+        width="95%"
+        cursor="pointer"
+        onClick={onClickHandler}
+        _hover={{backgroundColor: "gray.100"}}
+      >
+        <Box 
+          display="flex" 
+          flexDirection="column" 
+          justifyContent="flex-start"
+          flexGrow={1} // Ensures the content area grows to fill available space
+        >
+          <Text fontSize="2xl" fontWeight="bold" color={color} alignSelf="flex-start">
+            {title}
+          </Text>
+          <Divider borderColor="gray.300" />
+          <Box marginTop="2">
+            {content}
+          </Box>
+        </Box>
+        {displayIcon == true &&
+          <Box 
+            width="100%" 
+            display="flex" 
+            justifyContent="center" 
+            alignItems="center"
+            marginTop="auto" // Pushes the icon to the bottom
+          >
+            <IconButton
+              icon={
+                <Box
+                  as={icon}
+                  borderRadius="50%"
+                  color="white"
+                  backgroundColor={color}
+                  boxSize="3rem"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  p="0.5rem"
+                />
+              }
+              onClick={onClickHandler}
+              aria-label={title}
+            />
+          </Box>
+        }
+      </Box>
+    );
+  }
+  
+
   return (
     <div>
       <Header appTitle="Project" userGnotBalances={userGnotBalances}/>
@@ -153,147 +207,36 @@ const Dashboard = () => {
                     justifyContent="center"
                     >
                     <Text textAlign="center">{zenStatus}</Text>
-                    </Box>
-
+                  </Box>
                 </Box>
               </GridItem>
               <GridItem>
-                <Grid templateRows="repeat(3, 1fr)" height="100%">
-                  <GridItem height="100%">
-                    <Box 
-                      display="flex" 
-                      justifyContent="space-between" 
-                      alignItems="center" 
-                      padding="2" 
-                      border="1px" 
-                      borderRadius="15px" 
-                      borderColor="gray.300" 
-                      height="85%"
-                      cursor="pointer"
-                      onClick={() => openDrawer('Assess', 'Assess Content')}
-                      _hover={{backgroundColor: "gray.100"}}
-                    >
-                      <Box width="90%" display="flex" flexDirection="column" justifyContent="flex-start">
-                        <Text fontSize="2xl" fontWeight="bold" color="red.500" alignSelf="flex-start">
-                          Assess
-                        </Text>
-                        <Divider borderColor="gray.300" />
-                        <Box marginTop="2">
-                          {assessContent}
-                        </Box>
-                      </Box>
-                      <Divider orientation="vertical" borderColor="gray.300" />
-                      <Box width="10%" display="flex" justifyContent="center" alignItems="center">
-                      <IconButton
-                        icon={
-                            <Box
-                            as={AddIcon}
-                            borderRadius="50%"
-                            color="white"
-                            backgroundColor="red.500"
-                            boxSize="3rem"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            p="0.5rem"
-                            />
-                        }
-                        onClick={() => openDrawer('Assess', 'Assess Content')}
-                        aria-label="Assess"
-                        />
-                      </Box>
-                    </Box>
+                <Grid templateRows="2fr 1fr" height="100%">
+                  <GridItem marginBottom={0} paddingBottom={0}>
+                    <Grid templateColumns="repeat(3, 1fr)" height="100%">
+                      <GridItem height="100%">
+                        {renderContentBox('Assess', assessContent, 'red.500', AddIcon, () => openDrawer('Assess', assessContent), true)}
+                      </GridItem>
+                      <GridItem height="100%">
+                        {renderContentBox('Decide', decideContent, 'orange.500', FaQuestion, () => openDrawer('Decide', decideContent), true)}
+                      </GridItem>
+                      <GridItem height="100%">
+                        {renderContentBox('Do', doContent, 'green.500', MinusIcon, () => openDrawer('Do', doContent), true)}
+                      </GridItem>
+                    </Grid>
                   </GridItem>
-                  <GridItem height="100%">
-                    <Box 
-                      display="flex" 
-                      justifyContent="space-between" 
-                      alignItems="center" 
-                      padding="2" 
-                      border="1px" 
-                      borderRadius="15px" 
-                      borderColor="gray.300" 
-                      height="85%"
-                      cursor="pointer"
-                      onClick={() => openDrawer('Decide', 'Decide Content')}
-                      _hover={{backgroundColor: "gray.100"}}
-                    >
-                      <Box width="90%" display="flex" flexDirection="column" justifyContent="flex-start">
-                        <Text fontSize="2xl" fontWeight="bold" color="orange.500" alignSelf="flex-start">
-                          Decide
-                        </Text>
-                        <Divider borderColor="gray.300" />
-                        <Box marginTop="2">
-                          {decideContent}
-                        </Box>
-                      </Box>
-                      <Divider orientation="vertical" borderColor="gray.300" />
-                      <Box width="10%" display="flex" justifyContent="center" alignItems="center">
-                      <IconButton
-                        icon={
-                            <Box
-                            as={FaQuestion}
-                            borderRadius="50%"
-                            color="white"
-                            backgroundColor="orange.500"
-                            boxSize="3rem"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            p="0.5rem"
-                            />
-                        }
-                        onClick={() => openDrawer('Decide', 'Decide Content')}
-                        aria-label="Decide"
-                        />
-
-                      </Box>
-                    </Box>
-                  </GridItem>
-                  <GridItem height="100%">
-                    <Box 
-                      display="flex" 
-                      justifyContent="space-between" 
-                      alignItems="center" 
-                      padding="2" 
-                      border="1px" 
-                      borderRadius="15px" 
-                      borderColor="gray.300" 
-                      height="85%"
-                      cursor="pointer"
-                      onClick={() => openDrawer('Do', 'Do Content')}
-                      _hover={{backgroundColor: "gray.100"}}
-                    >
-                      <Box width="90%" display="flex" flexDirection="column" justifyContent="flex-start">
-                        <Text fontSize="2xl" fontWeight="bold" color="green.500" alignSelf="flex-start">
-                          Do
-                        </Text>
-                        <Divider borderColor="gray.300" />
-                        <Box marginTop="2">
-                          {doContent}
-                        </Box>
-                      </Box>
-                      <Divider orientation="vertical" borderColor="gray.300" />
-                      <Box width="10%" display="flex" justifyContent="center" alignItems="center">
-                      <IconButton
-                        icon={
-                            <Box
-                            as={MinusIcon}
-                            borderRadius="50%"
-                            color="white"
-                            backgroundColor="green.500"
-                            boxSize="3rem"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            p="0.5rem"
-                            />
-                        }
-                        onClick={() => openDrawer('Do', 'Do Content')}
-                        aria-label="Do"
-                        />
-                      </Box>
-                    </Box>
+                  <GridItem borderTop="1px" borderTopColor={'black'} paddingTop="2">
+                    <Grid templateColumns="repeat(3, 1fr)" height="100%">
+                      <GridItem height="100%">
+                        {renderContentBox('Users', 'Users Content', 'blue.500', AddIcon, () => openDrawer('Users', 'Users Content'), false)}
+                      </GridItem>
+                      <GridItem height="100%">
+                        {renderContentBox('Teams', 'Teams Content', 'purple.500', FaQuestion, () => openDrawer('Teams', 'Teams Content'), false)}
+                      </GridItem>
+                      <GridItem height="100%">
+                        {renderContentBox('Rewards', 'Rewards Content', 'yellow.500', MinusIcon, () => openDrawer('Rewards', 'Rewards Content'), false)}
+                      </GridItem>
+                    </Grid>
                   </GridItem>
                 </Grid>
               </GridItem>
