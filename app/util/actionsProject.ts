@@ -593,7 +593,7 @@ class ActionsProject {
   // users
 
   /**
-   * Adds a new task
+   * Adds a new user
    *
    * @param userName string - user name
    * @param userAddress string - user address
@@ -659,6 +659,108 @@ class ActionsProject {
     return response;
   }
 
+  // teams
+
+  /**
+   * Adds a new team
+   *
+   * @param teamName string - tem name
+   */
+
+  async AddTeam(
+    teamName: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddTeamWrap', [
+      teamName,
+    ]);
+    console.log("actions AddTeamWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+   /**
+   * Removes a team
+   *
+   * @param teamId string - team id
+   */
+  
+   async RemoveTeam(
+    teamId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveTeamWrap', [
+      teamId
+    ]);
+    console.log("actions RemoveTeam response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Updates a team
+   *
+   * @param teamId string - team id
+   * @param teamName string - team name
+   */
+  
+  async UpdateTeam(
+    teamId: string,
+    teamName: string,
+  ): Promise<any> {
+    const response = await this.callMethod('EditTeamWrap', [
+      teamId,
+      teamName,
+    ]);
+    console.log("actions EditTeamWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Get all teams
+   */
+  
+  async GetAllTeams(): Promise<any> {
+    const response = await this.evaluateExpression("GetAllTeams()")
+    console.log("actions GetAllTeams response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Add user to a team
+   *
+   * @param userId string - user id
+   * @param teamId string - team id
+   */
+  
+  async AddActorToTeamWrap(
+    userId: string,
+    teamId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AddActorToTeamWrap', [
+      userId,
+      teamId,
+    ]);
+    console.log("actions AddActorToTeamaWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Add user to a team
+   *
+   * @param userId string - user id
+   * @param teamId string - team id
+   */
+  
+  async RemoveActorFromTeamWrap(
+    userId: string,
+    teamId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveActorFromTeamWrap', [
+      userId,
+      teamId,
+    ]);
+    console.log("actions RemoveActorFromTeamWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  
   // projects
 
   /**

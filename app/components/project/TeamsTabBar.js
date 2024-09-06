@@ -1,14 +1,14 @@
 import React from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, HStack, Badge } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import ProjectUsers from './ProjectUsers';
+import ProjectTeams from './ProjectTeams';
 
 const TeamsTabBar = () => {
-  const users = useSelector((state) => state.project.projectUsers) || [];
+  const teams = useSelector((state) => state.project.projectTeams) || [];
 
   return (
     <Tabs variant="enclosed-colored">
-      <TabList justifyContent={"flex-start"}>
+      <TabList justifyContent={"flex-end"}>
         <Tab
           _selected={{ bg: "#FFA500", color: "white" }}
           _hover={{ bg: "#FFA500", color: "white" }}
@@ -17,15 +17,15 @@ const TeamsTabBar = () => {
           fontWeight="bold"
         >
           <HStack spacing={4}>
-            <span>Users</span>
-            <Badge colorScheme="gray">{users.length}</Badge>
+            <span>Teams</span>
+            <Badge colorScheme="gray">{teams.length}</Badge>
           </HStack>
         </Tab>
       </TabList>
 
       <TabPanels>
         <TabPanel>
-          <ProjectUsers/>
+          <ProjectTeams/>
         </TabPanel>
       </TabPanels>
     </Tabs>

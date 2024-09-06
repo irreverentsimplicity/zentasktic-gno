@@ -8,7 +8,7 @@ const UsersTabBar = () => {
 
   return (
     <Tabs variant="enclosed-colored">
-      <TabList justifyContent={"flex-start"}>
+      <TabList justifyContent={"flex-end"}>
         <Tab
           _selected={{ bg: "#FFA500", color: "white" }}
           _hover={{ bg: "#FFA500", color: "white" }}

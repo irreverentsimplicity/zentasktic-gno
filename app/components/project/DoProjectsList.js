@@ -95,7 +95,7 @@ const ProjectsList = ({
                           backgroundColor={expandedTaskProjectId === project.projectId ? "blue.100" : "gray.100"}
                           _hover="transparent"
                         />
-                        <Badge position="absolute" top="-1" right="-1" colorScheme="gray">{taskCounts.doneTasks}</Badge>
+                        <Badge position="absolute" top="-1" right="-1" colorScheme="red">{taskCounts.doneTasks}</Badge>
                       </Box>
                     )}
                     {taskCounts.stalledTasks > 0 && (

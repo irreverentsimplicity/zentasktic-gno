@@ -46,9 +46,9 @@ import {
             {title === 'Assess' ? <AssessTabBar /> : 
              title === 'Decide' ? <DecideSliderContent /> : 
              title === "Do" ? <DoSliderContent /> : 
-             title === "Users" ? <UsersSliderContent /> : 
-             title === "Teams" ? <TeamsSliderContent /> : 
-             title === "Rewards" ? <RewardsSliderContent /> : 
+             title === "Manage Users" ? <UsersSliderContent /> : 
+             title === "Manage Teams" ? <TeamsSliderContent /> : 
+             title === "Manage Rewards" ? <RewardsSliderContent /> : 
              <p>{content}</p>}
           </DrawerBody>
   

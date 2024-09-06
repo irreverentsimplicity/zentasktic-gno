@@ -229,13 +229,13 @@ const Dashboard = () => {
                   <GridItem borderTop="1px" borderTopColor={'black'} paddingTop="2">
                     <Grid templateColumns="repeat(3, 1fr)" height="100%">
                       <GridItem height="100%">
-                        {renderContentBox('Users', 'Users Content', 'gray.400', '', AddIcon, () => openDrawer('Users', 'Users Content'), false)}
+                        {renderContentBox('Manage Users', 'Users Content', 'gray.400', '', AddIcon, () => openDrawer('Manage Users', 'Users Content'), false)}
                       </GridItem>
                       <GridItem height="100%">
-                        {renderContentBox('Teams', 'Teams Content', 'gray.400', '',  FaQuestion, () => openDrawer('Teams', 'Teams Content'), false)}
+                        {renderContentBox('Manage Teams', 'Teams Content', 'gray.400', '',  FaQuestion, () => openDrawer('Manage Teams', 'Teams Content'), false)}
                       </GridItem>
                       <GridItem height="100%">
-                        {renderContentBox('Rewards', 'Rewards Content', 'gray.400', '',  MinusIcon, () => openDrawer('Rewards', 'Rewards Content'), false)}
+                        {renderContentBox('Manage Rewards', 'Rewards Content', 'gray.400', '',  MinusIcon, () => openDrawer('Manage Rewards', 'Rewards Content'), false)}
                       </GridItem>
                     </Grid>
                   </GridItem>
