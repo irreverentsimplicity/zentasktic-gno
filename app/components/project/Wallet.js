@@ -6,7 +6,7 @@ import { Icon, Select } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setRpcEndpoint } from "../../slices/projectSlice";
 import { getGNOTBalances } from '../../util/tokenActions';
-import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts } from '../../util/fetchersProject';
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts, fetchAllTeams, fetchAllUsers } from '../../util/fetchersProject';
 import ActionsProject from "../../util/actionsProject";
 import Config from '../../util/config';
 
@@ -38,6 +38,8 @@ const Wallet = ({ userGnotBalances }) => {
       fetchAllProjectsByRealm(dispatch, "2");
       fetchAllProjectsByRealm(dispatch, "3"); 
       fetchAllContexts(dispatch);
+      fetchAllTeams(dispatch);
+      fetchAllUsers(dispatch);
     }, [rpcEndpoint, dispatch]);
 
 

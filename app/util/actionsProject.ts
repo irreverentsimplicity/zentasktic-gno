@@ -897,6 +897,50 @@ class ActionsProject {
   }
 
   /**
+   * Assigns a task to a team
+   *
+   * @param teamId string - team id
+   * @param taskId string - task id
+   */
+
+  async AssignTeamToTask(
+    teamId: string,
+    taskId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('AssignTeamToTaskWrap', [
+      teamId,
+      taskId,
+    ]);
+    console.log("actions AssignTeamToTaskWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Unassigns a team from a task
+   *
+   * @param teamId string - team id
+   * @param taskId string - task id
+   */
+
+  async UnassignTeamFromTask(
+    teamId: string,
+    taskId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('UnassignTeamFromTaskWrap', [
+      teamId,
+      taskId,
+    ]);
+    console.log("actions UnassignTeamFromTaskWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  async GetTeamsWithAssignedTasks(): Promise<any> {
+    const response = await this.evaluateExpression("GetTeamsWithAssignedTasks()")
+    console.log("actions GetTeamsWithAssignedTasks response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
    * Moves a project to a realm
    *
    * @param projectId string - project id

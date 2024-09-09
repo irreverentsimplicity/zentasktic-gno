@@ -10,7 +10,7 @@ import Footer from '../components/project/Footer';
 import SlidingDrawer from '../components/project/SlidingDrawer';
 import Header from '../components/project/Header';
 import { getGNOTBalances } from '../util/tokenActionsProject';
-import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts } from '../util/fetchersProject';
+import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts, fetchAllTeams, fetchAllUsers, fetchAllTeamsTasks } from '../util/fetchersProject';
 
 const COLORS = ['#FF0000', '#FFA500', '#008000'];
 
@@ -23,6 +23,8 @@ const Dashboard = () => {
   const decideProjects = useSelector(state => state.project.projectDecideProjects) || [];
   const doTasks = useSelector(state => state.project.projectDoTasks) || [];
   const doProjects = useSelector(state => state.project.projectDoProjects) || [];
+  const projectTeams = useSelector(state => state.project.projectTeams);
+  const projectUsers = useSelector(state => state.project.projectUsers);
   
   const rpcEndpoint = useSelector(state => state.project.rpcEndpoint);
   const userGnotBalances = useSelector(state => state.project.userGnotBalances);
@@ -41,7 +43,9 @@ const Dashboard = () => {
   const [assessContent, setAssessContent] = useState(``);
   const [decideContent, setDecideContent] = useState(``);
   const [doContent, setDoContent] = useState(``);
-
+  const [teamsContent, setTeamsContent] = useState(``);
+  const [usersContent, setUsersContent] = useState(``);
+ 
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -63,7 +67,17 @@ const Dashboard = () => {
     setAssessContent(`There are ${assessTasks.length} tasks, and ${assessProjects.length} projects ready to be assessed. `);
     setDecideContent(`There are ${decideTasks.length} tasks, and ${decideProjects.length} projects you can decide upon right now. `);
     setDoContent(`There are ${doTasks.length} tasks, and ${doProjects.length} projects you are executing right now.`)
-  }, [assessTasks, assessProjects, decideTasks, decideProjects, doTasks, doProjects, rpcEndpoint]);
+    setUsersContent(`There are ${projectUsers.length} users in the system right now.`)
+    setTeamsContent(`${projectTeams.length} teams active in the system right now.`)
+  }, [assessTasks, 
+    assessProjects, 
+    decideTasks, 
+    decideProjects, 
+    doTasks, 
+    doProjects, 
+    projectUsers, 
+    projectTeams, 
+    rpcEndpoint]);
 
   
   useEffect(() => {
@@ -93,6 +107,12 @@ const Dashboard = () => {
     fetchAllProjectsByRealm(dispatch, "3");
     // uncomment when adding Collections
     // fetchAllTasksByRealm(dispatch,"4");
+  }, []);
+
+  useEffect( () => {
+    fetchAllTeams(dispatch);
+    fetchAllTeamsTasks(dispatch);
+    fetchAllUsers(dispatch);
   }, []);
 
   const openDrawer = (title, content) => {
@@ -229,10 +249,10 @@ const Dashboard = () => {
                   <GridItem borderTop="1px" borderTopColor={'black'} paddingTop="2">
                     <Grid templateColumns="repeat(3, 1fr)" height="100%">
                       <GridItem height="100%">
-                        {renderContentBox('Manage Users', 'Users Content', 'gray.400', '', AddIcon, () => openDrawer('Manage Users', 'Users Content'), false)}
+                        {renderContentBox('Manage Users', usersContent, 'gray.400', '', AddIcon, () => openDrawer('Manage Users', usersContent), false)}
                       </GridItem>
                       <GridItem height="100%">
-                        {renderContentBox('Manage Teams', 'Teams Content', 'gray.400', '',  FaQuestion, () => openDrawer('Manage Teams', 'Teams Content'), false)}
+                        {renderContentBox('Manage Teams', teamsContent, 'gray.400', '',  FaQuestion, () => openDrawer('Manage Teams', teamsContent), false)}
                       </GridItem>
                       <GridItem height="100%">
                         {renderContentBox('Manage Rewards', 'Rewards Content', 'gray.400', '',  MinusIcon, () => openDrawer('Manage Rewards', 'Rewards Content'), false)}

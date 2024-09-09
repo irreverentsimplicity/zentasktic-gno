@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ActionsProject from '../../util/actionsProject';
-import Config from '../../util/config';
+import { FaFileCirclePlus, FaFileCircleMinus} from 'react-icons/fa6';
 import {
   Box,
   IconButton,
@@ -14,10 +14,10 @@ import {
   Button,
   Collapse,
   SimpleGrid,
-  Divider
+  VStack
 } from '@chakra-ui/react';
-import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { fetchAllContexts, fetchAllTasksByRealm } from '../../util/fetchersProject';
+import { ArrowBackIcon, ArrowForwardIcon, ArrowUpIcon } from '@chakra-ui/icons';
+import { fetchAllContexts, fetchAllTasksByRealm, fetchAllTeamsTasks } from '../../util/fetchersProject';
 import { formatDate } from '../../util/dates';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -25,6 +25,8 @@ import '../../styles/Home.module.css'; // Import custom CSS for calendar
 
 const DecideUndecidedTasks = () => {
   const tasks = useSelector((state) => state.project.projectDecideTasks);
+  const teams = useSelector((state) => state.project.projectTeams);
+  const teamsWithAssignedTasks = useSelector((state) => state.project.projectTeamsWithAssignedTasks);
   const contexts = useSelector((state) => state.project.projectContexts);
   const dispatch = useDispatch();
   const [sendingTaskId, setSendingTaskId] = useState(null);
@@ -32,11 +34,19 @@ const DecideUndecidedTasks = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loadingContextTaskId, setLoadingContextTaskId] = useState(null);
   const [loadingDueDateTaskId, setLoadingDueDateTaskId] = useState(null);
+  const [assignedTaskId, setAssignedTaskId] = useState(null);
+  const [rewardedTaskId, setRewardedTaskId] = useState(null);
+  const [loadingAssignTaskId, setLoadingAssignTaskId] = useState(null)
+  const [loadingRewardTaskId, setLoadingRewardTaskId] = useState(null)
 
   useEffect(() => {
     fetchAllTasksByRealm(dispatch, '2');
     fetchAllContexts(dispatch);
   }, [dispatch]);
+
+  useEffect(() => {
+    fetchAllTeamsTasks(dispatch);
+  },[dispatch]);
 
   const handleSendToAssess = async (taskId) => {
     setSendingTaskId(taskId);
@@ -91,6 +101,76 @@ const DecideUndecidedTasks = () => {
     }
     setLoadingDueDateTaskId(null);
   };
+
+  const assignTeamToTask = async (teamId, taskId) => {
+    setLoadingAssignTaskId(taskId);
+    const actions = await ActionsProject.getInstance();
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    try {
+      await actions.AssignTeamToTask(teamId, taskId);
+      fetchAllTasksByRealm(dispatch, '2');
+      fetchAllTeamsTasks(dispatch);
+    } catch (err) {
+      console.log('error in calling assignTeamToTasl', err);
+    }
+    setLoadingAssignTaskId(null);
+  };
+
+  const unassignTeamFromTask = async (teamId, taskId) => {
+    setLoadingAssignTaskId(taskId);
+    const actions = await ActionsProject.getInstance();
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    try {
+      await actions.UnassignTeamFromTask(teamId, taskId);
+      fetchAllTasksByRealm(dispatch, '2');
+      fetchAllTeamsTasks(dispatch);
+    } catch (err) {
+      console.log('error in calling assignTeamToTasl', err);
+    }
+    setLoadingAssignTaskId(null);
+  };
+
+  const assignRewardToTask = async (reward, taskId) => {
+    // reward is an object: denom : amount, mimicking stdCoins
+    setLoadingRewardTaskId(taskId);
+    const actions = await ActionsProject.getInstance();
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    try {
+      await actions.AssignRewardToTask(reward, taskId);
+      fetchAllTasksByRealm(dispatch, '2');
+    } catch (err) {
+      console.log('error in calling assignRewardToTasl', err);
+    }
+    setLoadingRewardTaskId(null);
+  };
+
+  const taskAssignedTo = (taskId) => {
+    let count = 0;
+    console.log("teamsWithAssignedTasks in taskAssignedTo ", JSON.stringify(teamsWithAssignedTasks))
+    // Iterate over each team's tasks
+    teamsWithAssignedTasks.forEach(teamTaskObject => {
+      console.log("teamTaskObject ", JSON.stringify(teamTaskObject))
+        const isTaskAssigned = teamTaskObject.tasks.some(task => task.taskId === taskId);
+        if (isTaskAssigned) {
+            count++;
+        }
+    });
+    console.log("count in taskAssignedTo ", count)
+    return count;
+  }
+
+  const isTaskAssignedToTeam = (teamId, taskId) => {
+    // Find the team with the matching teamId
+    const team = teamsWithAssignedTasks.find(team => team.teamId === teamId);
+  
+    if (team) {
+      // Check if the task with the matching taskId exists in the team's tasks array
+      return team.tasks.some(task => task.taskId === taskId);
+    }
+  
+    // If the team is not found or the task is not found in the team's tasks, return false
+    return false;
+  }
 
 
   const getUndecidedTasks = (tasks) => {
@@ -147,6 +227,32 @@ const DecideUndecidedTasks = () => {
                       </Text>
                     )}
                     </Box>
+                    <Box
+                    bg={task.taskDue ? "red.200" : "gray.200"}
+                    borderRadius="md"
+                    p={1}
+                    >
+                     {loadingDueDateTaskId === task.taskId ? (
+                      <Spinner size="sm" />
+                    ) : (
+                      <Text fontSize="sm" color="gray.700">
+                        {taskAssignedTo(task.taskId) !== 0 ? 'assigned to ' + taskAssignedTo(task.taskId) + ' teams' : 'unassigned'}
+                      </Text>
+                    )}
+                    </Box>
+                    <Box
+                    bg={task.taskDue ? "red.200" : "gray.200"}
+                    borderRadius="md"
+                    p={1}
+                    >
+                     {loadingDueDateTaskId === task.taskId ? (
+                      <Spinner size="sm" />
+                    ) : (
+                      <Text fontSize="sm" color="gray.700">
+                        {task.taskDue ? task.taskDue : 'not rewarded'}
+                      </Text>
+                    )}
+                    </Box>
                 </HStack>
                 </Box>
                 <IconButton
@@ -162,7 +268,7 @@ const DecideUndecidedTasks = () => {
                   <SimpleGrid columns={2} spacing={4}>
                     <Box>
                       <Text mb={2} borderBottom="1px" borderColor="gray.300">Set context</Text>
-                      <Wrap spacing={2} align="center">
+                      <Wrap spacing={2} align="center" mb={4}>
                         {contexts.map((context) => (
                           <Button
                             key={context.contextId}
@@ -174,8 +280,6 @@ const DecideUndecidedTasks = () => {
                           </Button>
                         ))}
                       </Wrap>
-                    </Box>
-                    <Box>
                       <Text mb={2} borderBottom="1px" borderColor="gray.300">Set due date</Text>
                       <Calendar
                         onChange={(date) => {
@@ -190,6 +294,32 @@ const DecideUndecidedTasks = () => {
                           return null;
                         }}
                       />
+                    </Box>
+                    <Box>
+                    <Text mb={2} borderBottom="1px" borderColor="gray.300">Assign to</Text>
+                    <VStack spacing={2} align="left" mb={4}>
+                      {teams.map((team) => {
+                        const isTaskAssigned = isTaskAssignedToTeam(team.teamId, task.taskId);
+                        console.log("isTaskAssigned ", isTaskAssigned)
+                        return (
+                          <HStack key={team.teamId} justify="space-between" width="100%">
+                            <Text>{team.teamName}</Text>
+                            <IconButton
+                              icon={isTaskAssigned ? <FaFileCircleMinus /> : <FaFileCirclePlus />}
+                              color={isTaskAssigned? "#FF0000" : "#008000"}
+                              aria-label={isTaskAssigned ? "Unassign Task" : "Assign Task"}
+                              onClick={async () => {
+                                if (isTaskAssigned) {
+                                  await unassignTeamFromTask(team.teamId, task.taskId);
+                                } else {
+                                  await assignTeamToTask(team.teamId, task.taskId);
+                                }
+                              }}
+                            />
+                          </HStack>
+                        );
+                      })}
+                    </VStack>
                     </Box>
                   </SimpleGrid>
                 </Box>

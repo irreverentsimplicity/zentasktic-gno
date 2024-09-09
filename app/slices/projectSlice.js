@@ -21,6 +21,7 @@ const projectSlice = createSlice({
     projectDoProjects: [],
     projectUsers: [],
     projectTeams: [],
+    projectTeamsWithAssignedTasks: [],
     projectRewards: [],
   },
   reducers: {
@@ -61,6 +62,9 @@ const projectSlice = createSlice({
     setProjectTeams(state, action) {
         state.projectTeams = action.payload;
     },
+    setProjectTeamsWithAssignedTasks(state, action) {
+        state.projectTeamsWithAssignedTasks = action.payload;
+    },
     setProjectRewards(state, action) {
       state.projectRewards = action.payload;
     },
@@ -97,6 +101,7 @@ export const {
   setRpcEndpoint, 
   setProjectUsers,
   setProjectTeams,
+  setProjectTeamsWithAssignedTasks,
   setProjectRewards} = projectSlice.actions;
 
 export default projectSlice.reducer;

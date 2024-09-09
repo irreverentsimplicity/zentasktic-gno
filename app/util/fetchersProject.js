@@ -9,6 +9,7 @@ import {
     setProjectContexts,
     setProjectUsers,
     setProjectTeams,
+    setProjectTeamsWithAssignedTasks,
     setProjectRewards
  } from "../slices/projectSlice";
 
@@ -106,6 +107,26 @@ export const fetchAllTeams = async (dispatch) => {
       });
     } catch (err) {
       console.log("error in calling getAllTeams", err);
+    }
+};
+
+export const fetchAllTeamsTasks = async (dispatch) => {
+    const actions = await ActionsProject.getInstance();
+    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
+    try {
+      actions.GetTeamsWithAssignedTasks().then((response) => {
+        console.log("GetTeamsWithAssignedTasks response in fetchers", response);
+          if (response !== undefined){
+          let parsedResponse = JSON.parse(response);
+          
+          if(parsedResponse.teamsTasks != undefined){  
+            console.log("parseResponse.teamsTasks", JSON.stringify(parsedResponse.teamsTasks, null, 2))
+            dispatch(setProjectTeamsWithAssignedTasks(parsedResponse.teamsTasks))
+          }
+        }
+      });
+    } catch (err) {
+      console.log("error in calling GetTeamsWithAssignedTasks", err);
     }
 };
 
