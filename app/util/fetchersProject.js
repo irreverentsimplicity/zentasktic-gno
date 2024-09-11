@@ -139,9 +139,9 @@ export const fetchAllRewards = async (dispatch) => {
           if (response !== undefined){
           let parsedResponse = JSON.parse(response);
           
-          if(parsedResponse.rewards !== undefined){  
+          if(parsedResponse.rewardsPoints !== undefined){  
             console.log("parseResponse", JSON.stringify(response, null, 2))
-            dispatch(setProjectRewards(parsedResponse.rewards))
+            dispatch(setProjectRewards(parsedResponse.rewardsPoints))
           }
         }
       });

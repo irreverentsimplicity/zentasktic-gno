@@ -10,7 +10,13 @@ import Footer from '../components/project/Footer';
 import SlidingDrawer from '../components/project/SlidingDrawer';
 import Header from '../components/project/Header';
 import { getGNOTBalances } from '../util/tokenActionsProject';
-import { fetchAllTasksByRealm, fetchAllProjectsByRealm, fetchAllContexts, fetchAllTeams, fetchAllUsers, fetchAllTeamsTasks } from '../util/fetchersProject';
+import { fetchAllTasksByRealm, 
+  fetchAllProjectsByRealm, 
+  fetchAllContexts, 
+  fetchAllTeams, 
+  fetchAllUsers, 
+  fetchAllTeamsTasks, 
+  fetchAllRewards } from '../util/fetchersProject';
 
 const COLORS = ['#FF0000', '#FFA500', '#008000'];
 
@@ -113,6 +119,7 @@ const Dashboard = () => {
     fetchAllTeams(dispatch);
     fetchAllTeamsTasks(dispatch);
     fetchAllUsers(dispatch);
+    fetchAllRewards(dispatch);
   }, []);
 
   const openDrawer = (title, content) => {

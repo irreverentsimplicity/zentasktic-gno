@@ -19,6 +19,9 @@ const ProjectTeams = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [editError, setEditError] = useState('');
   const [addError, setAddError] = useState('');
+  const [addingUserId, setAddingUserId] = useState(null)
+  const [deletingUserId, setDeletingUserId] = useState(null)
+
 
   useEffect(() => {
     fetchAllTeams(dispatch);
@@ -81,6 +84,7 @@ const ProjectTeams = () => {
   };
 
   const handleAddUserToTeam = async (userId, teamId) => {
+    setAddingUserId(userId)
     const actions = await ActionsProject.getInstance();
     try {
       await actions.AddActorToTeamWrap(userId, teamId);
@@ -88,9 +92,11 @@ const ProjectTeams = () => {
     } catch (err) {
       console.log("error in adding user to team", err);
     }
+    setAddingUserId(null)
   };
 
   const handleRemoveUserFromTeam = async (userId, teamId) => {
+    setDeletingUserId(userId)
     const actions = await ActionsProject.getInstance();
     try {
       await actions.RemoveActorFromTeamWrap(userId, teamId);
@@ -98,6 +104,7 @@ const ProjectTeams = () => {
     } catch (err) {
       console.log("error in removing user from team", err);
     }
+    setDeletingUserId(null)
   };
 
   return (
@@ -207,12 +214,13 @@ const ProjectTeams = () => {
                         team.teamMembers.map((user) => (
                           <ListItem key={user.actorId} display="flex" alignItems="center">
                             <Box flex="1">{user.actorName}</Box>
-                            <IconButton
-                              icon={<ArrowForwardIcon />}
-                              onClick={() => handleRemoveUserFromTeam(user.actorId, team.teamId)}
-                              colorScheme="red"
-                              aria-label="Remove from Team"
-                            />
+                              <IconButton
+                                icon={deletingUserId === user.actorId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
+                                onClick={() => handleRemoveUserFromTeam(user.actorId, team.teamId)}
+                                colorScheme="red"
+                                aria-label="Remove from Team"
+                                isLoading={deletingUserId === user.actorId}
+                              />
                           </ListItem>
                         ))
                       )}
@@ -224,12 +232,13 @@ const ProjectTeams = () => {
                       {users.filter(user => !team.teamMembers.some(member => member.actorId === user.actorId)).map((user) => (
                         <ListItem key={user.actorId} display="flex" alignItems="center">
                           <Box flex="1">{user.actorName}</Box>
-                          <IconButton
-                            icon={<AddIcon />}
-                            onClick={() => handleAddUserToTeam(user.actorId, team.teamId)}
-                            colorScheme="green"
-                            aria-label="Add to Team"
-                          />
+                            <IconButton
+                              icon={addingUserId === user.actorId ? <Spinner size="sm" /> : <AddIcon />}
+                              onClick={() => handleAddUserToTeam(user.actorId, team.teamId)}
+                              colorScheme="green"
+                              aria-label="Add to Team"
+                              isLoading={addingUserId === user.actorId}
+                            />
                         </ListItem>
                       ))}
                     </List>

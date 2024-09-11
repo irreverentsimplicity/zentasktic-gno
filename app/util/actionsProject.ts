@@ -941,6 +941,65 @@ class ActionsProject {
   }
 
   /**
+   * AssignRewardToTask assign a reward to a specific task id
+   * 
+   * @param taksId id of the task
+   * @param denom the denom of the token: 'GNOT', 'FLIP', 'ZEN'
+   * @param amount the amount of the above token, in the backed we're using std.Coins
+   */
+
+  async AssignRewardToObject(
+    objectId: string,
+    objectType: string,
+    denom: string,
+    amount: string
+  ): Promise<any> {
+    const response = await this.callMethod('AddRewardsPointsWrap', [
+      objectId,
+      objectType,
+      denom,
+      amount
+    ]);
+    console.log("actions AddRewardsPointsWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * AssignRewardToTask assign a reward to a specific task id
+   * 
+   * @param rewardId payment id to be updated
+   * @param objectId id of the object
+   * @param objectType object type: task / project
+   * @param denom the denom of the token: 'GNOT', 'FLIP', 'ZEN'
+   * @param amount the amount of the above token, in the backed we're using std.Coins
+   */
+
+  async UpdateRewardForObject(
+    rewardId: string,
+    objectId: string,
+    objectType: string,
+    denom: string,
+    amount: string
+  ): Promise<any> {
+    console.log("UpdateRewardForObject")
+    const response = await this.callMethod('UpdateRewardsPointsWrap', [
+      rewardId,
+      objectId,
+      objectType,
+      denom,
+      amount
+    ]);
+    console.log("actions UpdateRewardsPointsWrap response ", JSON.stringify(response))
+    return response;
+  }
+
+  async GetAllRewards(): Promise<any> {
+    const response = await this.evaluateExpression("GetAllRewardsPoints()")
+    console.log("actions GetAllRewards response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
    * Moves a project to a realm
    *
    * @param projectId string - project id
