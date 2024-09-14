@@ -141,7 +141,6 @@ const DecideUndecidedTasks = () => {
     setAssigningTeamId(null);
   };
 
-  
   const handleAssignReward = async (taskId, denom, amount) => {
     // reward is an object: denom : amount, mimicking stdCoins
     console.log("rewards ", JSON.stringify(rewards))
@@ -196,7 +195,6 @@ const DecideUndecidedTasks = () => {
     return assignedTeams.length > 0 ? assignedTeams.join(', ') : '';
 }
 
-
   const isTaskAssignedToTeam = (teamId, taskId) => {
     // Find the team with the matching teamId
     const team = teamsWithAssignedTasks.find(team => team.teamId === teamId);
@@ -250,52 +248,53 @@ const isRewarded = (task) => {
   }
 };
 
+const filterRewards = (rewards) => {
+  // Initialize an empty object to store rewards by taskId
+  const rewardsByTask = {};
 
+  // Iterate over the rewards points array
+  rewards.forEach(reward => {
+      const taskId = reward.objectId;
+      const amountStr = reward.rewardsPointsAmount;
+      const rewardPointId = reward.rewardsPointId;
 
-  const filterRewards = (rewards) => {
-    // Initialize an empty object to store rewards by taskId
-    const rewardsByTask = {};
+      // Extract the denomination and amount
+      const amount = parseInt(amountStr.match(/\d+/)[0], 10);
+      const denom = amountStr.match(/[A-Z]+/i)[0];
 
-    // Iterate over the rewards points array
-    rewards.forEach(reward => {
-        const taskId = reward.objectId;
-        const amountStr = reward.rewardsPointsAmount;
-        const rewardPointId = reward.rewardsPointId;
+      // Initialize the task rewards if it doesn't exist
+      if (!rewardsByTask[taskId]) {
+          rewardsByTask[taskId] = {
+              taskId: taskId,
+              rewards: {}
+          };
+      }
 
-        // Extract the denomination and amount
-        const amount = parseInt(amountStr.match(/\d+/)[0], 10);
-        const denom = amountStr.match(/[A-Z]+/i)[0];
+      // Add the reward with amount and rewardPointId for the given denomination
+      rewardsByTask[taskId].rewards[denom] = {
+          amount: amount,
+          rewardPointId: rewardPointId
+      };
+  });
+  setRewardsByTaskId(Object.values(rewardsByTask))
+}
 
-        // Initialize the task rewards if it doesn't exist
-        if (!rewardsByTask[taskId]) {
-            rewardsByTask[taskId] = {
-                taskId: taskId,
-                rewards: {}
-            };
-        }
-
-        // Add the reward with amount and rewardPointId for the given denomination
-        rewardsByTask[taskId].rewards[denom] = {
-            amount: amount,
-            rewardPointId: rewardPointId
-        };
-    });
-    setRewardsByTaskId(Object.values(rewardsByTask))
+const getExistingRewardAmount = (taskId, denom) => {
+  if (rewardsByTaskId !== null) {
+      const taskRewards = rewardsByTaskId.find(task => task.taskId === taskId);
+      if (taskRewards && taskRewards.rewards[denom]) {
+          return [taskRewards.rewards[denom].amount, taskRewards.rewards[denom].rewardPointId];
+      }
   }
-
-  const getExistingRewardAmount = (taskId, denom) => {
-    if (rewardsByTaskId !== null) {
-        const taskRewards = rewardsByTaskId.find(task => task.taskId === taskId);
-        if (taskRewards && taskRewards.rewards[denom]) {
-            return [taskRewards.rewards[denom].amount, taskRewards.rewards[denom].rewardPointId];
-        }
-    }
-    return [0, null]; // Return 0 for amount and null for rewardPointId if not found
+  return [0, null]; // Return 0 for amount and null for rewardPointId if not found
 };
 
-  const getUndecidedTasks = (tasks) => {
-    return tasks.filter((task) => !task.taskContextId || !task.taskDue);
-  };
+const getUndecidedTasks = (tasks) => {
+  return tasks.filter((task) => !task.taskContextId || 
+  !task.taskDue || 
+  isRewarded(task) === '' || 
+  taskAssignedTo(task.taskId) === '');
+};
 
   return (
     <Box>
@@ -320,60 +319,60 @@ const isRewarded = (task) => {
                 _hover={{ backgroundColor: "gray.100" }} borderWidth="1px" rounded="md" p="2"
                 >
                 <Text>{task.taskBody}</Text>
-                <HStack spacing={2} justify="flex-end">
-                    <Box
-                    bg={task.taskContextId ? "orange.200" : "gray.200"}
-                    borderRadius="md"
-                    p={1}
-                    >
-                    {loadingContextTaskId === task.taskId ? (
-                      <Spinner size="sm" />
-                    ) : (
-                      <Text fontSize="sm" color="gray.700">
-                        @{task.taskContextId ? contexts.find(context => context.contextId === task.taskContextId)?.contextName : 'no context'}
-                      </Text>
-                    )}
-                    </Box>
-                    <Box
-                    bg={task.taskDue ? "orange.200" : "gray.200"}
-                    borderRadius="md"
-                    p={1}
-                    >
-                    {loadingDueDateTaskId === task.taskId ? (
-                      <Spinner size="sm" />
-                    ) : (
-                      <Text fontSize="sm" color="gray.700">
-                        {task.taskDue ? task.taskDue : 'no due date'}
-                      </Text>
-                    )}
-                    </Box>
-                    <Box
-                    bg={taskAssignedTo(task.taskId) !== '' ? "orange.200" : "gray.200"}
-                    borderRadius="md"
-                    p={1}
-                    >
-                     {loadingDueDateTaskId === task.taskId ? (
-                      <Spinner size="sm" />
-                    ) : (
-                      <Text fontSize="sm" color="gray.700">
-                        {taskAssignedTo(task.taskId) !== '' ? taskAssignedTo(task.taskId) : 'unassigned'}
-                      </Text>
-                    )}
-                    </Box>
-                    <Box
-                    bg={isRewarded(task) !== '' ? "orange.200" : "gray.200"}
-                    borderRadius="md"
-                    p={1}
-                    >
-                     {loadingDueDateTaskId === task.taskId ? (
-                      <Spinner size="sm" />
-                    ) : (
-                      <Text fontSize="sm" color="gray.700">
-                        {isRewarded(task) !== '' ? isRewarded(task) : 'not rewarded'}
-                      </Text>
-                    )}
-                    </Box>
-                </HStack>
+                  <HStack spacing={2} justify="flex-end">
+                      <Box
+                      bg={task.taskContextId ? "orange.200" : "gray.200"}
+                      borderRadius="md"
+                      p={1}
+                      >
+                      {loadingContextTaskId === task.taskId ? (
+                        <Spinner size="sm" />
+                      ) : (
+                        <Text fontSize="sm" color="gray.700">
+                          @{task.taskContextId ? contexts.find(context => context.contextId === task.taskContextId)?.contextName : 'no context'}
+                        </Text>
+                      )}
+                      </Box>
+                      <Box
+                      bg={task.taskDue ? "orange.200" : "gray.200"}
+                      borderRadius="md"
+                      p={1}
+                      >
+                      {loadingDueDateTaskId === task.taskId ? (
+                        <Spinner size="sm" />
+                      ) : (
+                        <Text fontSize="sm" color="gray.700">
+                          {task.taskDue ? task.taskDue : 'no due date'}
+                        </Text>
+                      )}
+                      </Box>
+                      <Box
+                      bg={taskAssignedTo(task.taskId) !== '' ? "orange.200" : "gray.200"}
+                      borderRadius="md"
+                      p={1}
+                      >
+                      {loadingDueDateTaskId === task.taskId ? (
+                        <Spinner size="sm" />
+                      ) : (
+                        <Text fontSize="sm" color="gray.700">
+                          {taskAssignedTo(task.taskId) !== '' ? taskAssignedTo(task.taskId) : 'unassigned'}
+                        </Text>
+                      )}
+                      </Box>
+                      <Box
+                      bg={isRewarded(task) !== '' ? "orange.200" : "gray.200"}
+                      borderRadius="md"
+                      p={1}
+                      >
+                      {loadingDueDateTaskId === task.taskId ? (
+                        <Spinner size="sm" />
+                      ) : (
+                        <Text fontSize="sm" color="gray.700">
+                          {isRewarded(task) !== '' ? isRewarded(task) : 'not rewarded'}
+                        </Text>
+                      )}
+                      </Box>
+                  </HStack>
                 </Box>
                 <IconButton
                   isDisabled
