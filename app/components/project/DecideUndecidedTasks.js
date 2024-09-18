@@ -40,8 +40,6 @@ const DecideUndecidedTasks = () => {
   const denominations = ['GNOT', 'FLIP', 'ZEN'];
   const [loadingContextTaskId, setLoadingContextTaskId] = useState(null);
   const [loadingDueDateTaskId, setLoadingDueDateTaskId] = useState(null);
-  const [assignedTaskId, setAssignedTaskId] = useState(null);
-  const [rewardedTaskId, setRewardedTaskId] = useState(null);
   const [loadingAssignTaskId, setLoadingAssignTaskId] = useState(null)
   const [loadingRewardTaskId, setLoadingRewardTaskId] = useState(null)
   const [assigningTeamId, setAssigningTeamId] = useState(null)
@@ -116,6 +114,7 @@ const DecideUndecidedTasks = () => {
 
   const assignTeamToTask = async (teamId, taskId) => {
     setAssigningTeamId(teamId);
+    setLoadingAssignTaskId(taskId);
     const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
@@ -126,10 +125,12 @@ const DecideUndecidedTasks = () => {
       console.log('error in calling assignTeamToTasl', err);
     }
     setAssigningTeamId(null);
+    setLoadingAssignTaskId(null);
   };
 
   const unassignTeamFromTask = async (teamId, taskId) => {
     setAssigningTeamId(teamId);
+    setLoadingAssignTaskId(taskId);
     const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
@@ -140,6 +141,7 @@ const DecideUndecidedTasks = () => {
       console.log('error in calling assignTeamToTasl', err);
     }
     setAssigningTeamId(null);
+    setLoadingAssignTaskId(null);
   };
 
   const handleAssignReward = async (taskId, denom, amount) => {
@@ -291,7 +293,7 @@ const getUndecidedTasks = (tasks) => {
                       borderRadius="md"
                       p={1}
                       >
-                      {loadingDueDateTaskId === task.taskId ? (
+                      {loadingAssignTaskId === task.taskId ? (
                         <Spinner size="sm" />
                       ) : (
                         <Text fontSize="sm" color="gray.700">
@@ -304,7 +306,7 @@ const getUndecidedTasks = (tasks) => {
                       borderRadius="md"
                       p={1}
                       >
-                      {loadingDueDateTaskId === task.taskId ? (
+                      {loadingRewardTaskId === task.taskId ? (
                         <Spinner size="sm" />
                       ) : (
                         <Text fontSize="sm" color="gray.700">

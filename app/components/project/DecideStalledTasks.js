@@ -42,7 +42,7 @@ const DecideStalledTasks = () => {
   const [loadingContextTaskId, setLoadingContextTaskId] = useState(null);
   const [loadingDueDateTaskId, setLoadingDueDateTaskId] = useState(null);
   const [loadingRewardTaskId, setLoadingRewardTaskId] = useState(null)
-  const [loadingAssingTaskId, setLoadingAssignTaskId] = useState(null)
+  const [loadingAssignTaskId, setLoadingAssignTaskId] = useState(null)
   const [assigningTeamId, setAssigningTeamId] = useState(null)
 
   useEffect(() => {
@@ -131,6 +131,7 @@ const DecideStalledTasks = () => {
 
   const unassignTeamFromTask = async (teamId, taskId) => {
     setAssigningTeamId(teamId);
+    setLoadingAssignTaskId(taskId);
     const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
@@ -141,6 +142,7 @@ const DecideStalledTasks = () => {
       console.log('error in calling assignTeamToTasl', err);
     }
     setAssigningTeamId(null);
+    setLoadingAssignTaskId(null);
   };
 
   const handleAssignReward = async (taskId, denom, amount) => {
@@ -295,7 +297,7 @@ const DecideStalledTasks = () => {
                       borderRadius="md"
                       p={1}
                       >
-                      {loadingAssingTaskId === task.taskId ? (
+                      {loadingAssignTaskId === task.taskId ? (
                         <Spinner size="sm" />
                       ) : (
                         <Text fontSize="sm" color="gray.700">
