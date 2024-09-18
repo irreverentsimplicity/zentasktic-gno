@@ -232,8 +232,6 @@ const DecideStalledTasks = () => {
       return currentAmount !== undefined ? currentAmount : (existingAmount || '');
   };
 
-
-
   const getStalledTasks = (tasks) => {
     return tasks.filter(task => task.taskContextId && 
       task.taskDue && isDateInPast(task.taskDue) &&
