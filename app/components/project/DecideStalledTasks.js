@@ -20,6 +20,7 @@ import {
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { fetchAllTasksByRealm, fetchAllRewards, fetchAllTeamsTasks } from '../../util/fetchersProject';
 import { formatDate, isDateInPast } from '../../util/dates';
+import { isRewarded, taskAssignedTo, isTaskAssignedToTeam} from '../../util/metadataChecks';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../../styles/Home.module.css'; // Import custom CSS for calendar
@@ -41,6 +42,7 @@ const DecideStalledTasks = () => {
   const [loadingContextTaskId, setLoadingContextTaskId] = useState(null);
   const [loadingDueDateTaskId, setLoadingDueDateTaskId] = useState(null);
   const [loadingRewardTaskId, setLoadingRewardTaskId] = useState(null)
+  const [loadingAssingTaskId, setLoadingAssignTaskId] = useState(null)
   const [assigningTeamId, setAssigningTeamId] = useState(null)
 
   useEffect(() => {
@@ -111,9 +113,9 @@ const DecideStalledTasks = () => {
     setLoadingDueDateTaskId(null);
   };
 
-
   const assignTeamToTask = async (teamId, taskId) => {
     setAssigningTeamId(teamId);
+    setLoadingAssignTaskId(taskId)
     const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
@@ -124,6 +126,7 @@ const DecideStalledTasks = () => {
       console.log('error in calling assignTeamToTasl', err);
     }
     setAssigningTeamId(null);
+    setLoadingAssignTaskId(null)
   };
 
   const unassignTeamFromTask = async (teamId, taskId) => {
@@ -168,44 +171,46 @@ const DecideStalledTasks = () => {
     setLoadingRewardTaskId(null);
   };
 
-  const taskAssignedTo = (taskId) => {
-    // Initialize an empty array to store the team names or IDs
-    const assignedTeams = [];
+  const filterRewards = (rewards) => {
+    // Initialize an empty object to store rewards by taskId
+    const rewardsByTask = {};
 
-    console.log("teamsWithAssignedTasks in taskAssignedTo ", JSON.stringify(teamsWithAssignedTasks));
+    // Iterate over the rewards points array
+    rewards.forEach(reward => {
+        const taskId = reward.objectId;
+        const amountStr = reward.rewardsPointsAmount;
+        const rewardPointId = reward.rewardsPointId;
 
-    // Iterate over each team's tasks
-    teamsWithAssignedTasks.forEach(teamTaskObject => {
-        console.log("teamTaskObject ", JSON.stringify(teamTaskObject));
+        // Extract the denomination and amount
+        const amount = parseInt(amountStr.match(/\d+/)[0], 10);
+        const denom = amountStr.match(/[A-Z]+/i)[0];
 
-        // Check if the task is assigned to the current team
-        const isTaskAssigned = teamTaskObject.tasks.some(task => task.taskId === taskId);
-
-        if (isTaskAssigned) {
-          const teamId = teamTaskObject.teamId
-          const teamName = (teams, teamId) => teams.find(team => team.teamId === teamId)?.teamName || '';
-          assignedTeams.push(teamName(teams, teamTaskObject.teamId)); 
+        // Initialize the task rewards if it doesn't exist
+        if (!rewardsByTask[taskId]) {
+            rewardsByTask[taskId] = {
+                taskId: taskId,
+                rewards: {}
+            };
         }
+
+        // Add the reward with amount and rewardPointId for the given denomination
+        rewardsByTask[taskId].rewards[denom] = {
+            amount: amount,
+            rewardPointId: rewardPointId
+        };
     });
-
-    console.log("assignedTeams in taskAssignedTo ", assignedTeams);
-
-    // Return the joined team names or IDs as a string, or an empty string if none are found
-    return assignedTeams.length > 0 ? assignedTeams.join(', ') : '';
-}
-
-  const isTaskAssignedToTeam = (teamId, taskId) => {
-    // Find the team with the matching teamId
-    const team = teamsWithAssignedTasks.find(team => team.teamId === teamId);
-  
-    if (team) {
-      // Check if the task with the matching taskId exists in the team's tasks array
-      return team.tasks.some(task => task.taskId === taskId);
-    }
-  
-    // If the team is not found or the task is not found in the team's tasks, return false
-    return false;
+    setRewardsByTaskId(Object.values(rewardsByTask))
   }
+
+  const getExistingRewardAmount = (taskId, denom) => {
+    if (rewardsByTaskId !== null) {
+        const taskRewards = rewardsByTaskId.find(task => task.taskId === taskId);
+        if (taskRewards && taskRewards.rewards[denom]) {
+            return [taskRewards.rewards[denom].amount, taskRewards.rewards[denom].rewardPointId];
+        }
+    }
+    return [0, null]; // Return 0 for amount and null for rewardPointId if not found
+  };
 
   const handleAmountChange = (task, denom, value) => {
     setAmounts((prevAmounts) => ({
@@ -215,81 +220,24 @@ const DecideStalledTasks = () => {
   };
 
   const getCurrentAmount = (task, denom) => {
-    // Retrieve the current amount from the amounts object using the taskId and denom
-    const currentAmount = amounts[`${task.taskId}-${denom}`];
-    
-    // Destructure the tuple returned by getExistingRewardAmount to get existingAmount and rewardPointId
-    const [existingAmount] = getExistingRewardAmount(task.taskId, denom);
+      // Retrieve the current amount from the amounts object using the taskId and denom
+      const currentAmount = amounts[`${task.taskId}-${denom}`];
+      
+      // Destructure the tuple returned by getExistingRewardAmount to get existingAmount and rewardPointId
+      const [existingAmount] = getExistingRewardAmount(task.taskId, denom);
 
-    // Return the current amount if it exists, otherwise return the existing amount or an empty string
-    return currentAmount !== undefined ? currentAmount : (existingAmount || '');
-};
+      // Return the current amount if it exists, otherwise return the existing amount or an empty string
+      return currentAmount !== undefined ? currentAmount : (existingAmount || '');
+  };
 
-const isRewarded = (task) => {
-  // Find the rewards associated with the given task
-  if(rewardsByTaskId !== null){
-  const taskRewards = rewardsByTaskId.find(reward => reward.taskId === task.taskId);
 
-  // If no rewards are found, return an empty string
-  if (!taskRewards || !taskRewards.rewards || Object.keys(taskRewards.rewards).length === 0) {
-      return '';
-  }
-
-  // Construct a string that summarizes the rewards
-  const rewardSummary = Object.keys(taskRewards.rewards)
-      .map(denom => {
-          const { amount } = taskRewards.rewards[denom];
-          return `${amount} ${denom}`;
-      })
-      .join(', ');
-
-  return rewardSummary;
-  }
-};
-
-const filterRewards = (rewards) => {
-  // Initialize an empty object to store rewards by taskId
-  const rewardsByTask = {};
-
-  // Iterate over the rewards points array
-  rewards.forEach(reward => {
-      const taskId = reward.objectId;
-      const amountStr = reward.rewardsPointsAmount;
-      const rewardPointId = reward.rewardsPointId;
-
-      // Extract the denomination and amount
-      const amount = parseInt(amountStr.match(/\d+/)[0], 10);
-      const denom = amountStr.match(/[A-Z]+/i)[0];
-
-      // Initialize the task rewards if it doesn't exist
-      if (!rewardsByTask[taskId]) {
-          rewardsByTask[taskId] = {
-              taskId: taskId,
-              rewards: {}
-          };
-      }
-
-      // Add the reward with amount and rewardPointId for the given denomination
-      rewardsByTask[taskId].rewards[denom] = {
-          amount: amount,
-          rewardPointId: rewardPointId
-      };
-  });
-  setRewardsByTaskId(Object.values(rewardsByTask))
-}
-
-const getExistingRewardAmount = (taskId, denom) => {
-  if (rewardsByTaskId !== null) {
-      const taskRewards = rewardsByTaskId.find(task => task.taskId === taskId);
-      if (taskRewards && taskRewards.rewards[denom]) {
-          return [taskRewards.rewards[denom].amount, taskRewards.rewards[denom].rewardPointId];
-      }
-  }
-  return [0, null]; // Return 0 for amount and null for rewardPointId if not found
-};
 
   const getStalledTasks = (tasks) => {
-    return tasks.filter(task => task.taskContextId && task.taskDue && isDateInPast(task.taskDue));
+    return tasks.filter(task => task.taskContextId && 
+      task.taskDue && isDateInPast(task.taskDue) &&
+        (taskAssignedTo(task.taskId, teams, teamsWithAssignedTasks) !== '' &&
+        isRewarded(task, rewardsByTaskId) !== '')
+      );
   };
 
   return (
@@ -343,28 +291,28 @@ const getExistingRewardAmount = (taskId, denom) => {
                     )}
                     </Box>
                     <Box
-                      bg={taskAssignedTo(task.taskId) !== '' ? "orange.200" : "gray.200"}
+                      bg={taskAssignedTo(task.taskId, teams, teamsWithAssignedTasks) !== '' ? "orange.200" : "gray.200"}
                       borderRadius="md"
                       p={1}
                       >
-                      {loadingDueDateTaskId === task.taskId ? (
+                      {loadingAssingTaskId === task.taskId ? (
                         <Spinner size="sm" />
                       ) : (
                         <Text fontSize="sm" color="gray.700">
-                          {taskAssignedTo(task.taskId) !== '' ? taskAssignedTo(task.taskId) : 'unassigned'}
+                          {taskAssignedTo(task.taskId, teams, teamsWithAssignedTasks) !== '' ? taskAssignedTo(task.taskId, teams, teamsWithAssignedTasks) : 'unassigned'}
                         </Text>
                       )}
                     </Box>
                     <Box
-                    bg={isRewarded(task) !== '' ? "orange.200" : "gray.200"}
+                    bg={isRewarded(task, rewardsByTaskId) !== '' ? "orange.200" : "gray.200"}
                     borderRadius="md"
                     p={1}
                     >
-                    {loadingDueDateTaskId === task.taskId ? (
+                    {loadingRewardTaskId === task.taskId ? (
                       <Spinner size="sm" />
                     ) : (
                       <Text fontSize="sm" color="gray.700">
-                        {isRewarded(task) !== '' ? isRewarded(task) : 'not rewarded'}
+                        {isRewarded(task, rewardsByTaskId) !== '' ? isRewarded(task, rewardsByTaskId) : 'not rewarded'}
                       </Text>
                     )}
                     </Box>
@@ -414,7 +362,7 @@ const getExistingRewardAmount = (taskId, denom) => {
                     <Text mb={2} borderBottom="1px" borderColor="gray.300" fontWeight={"bold"}>Assign to</Text>
                     <VStack spacing={2} align="left" mb={4}>
                       {teams.map((team) => {
-                        const isTaskAssigned = isTaskAssignedToTeam(team.teamId, task.taskId);
+                        const isTaskAssigned = isTaskAssignedToTeam(team.teamId, task.taskId, teamsWithAssignedTasks);
                         console.log("isTaskAssigned ", isTaskAssigned)
                         return (
                           <HStack key={team.teamId} justify="space-between" width="100%">
