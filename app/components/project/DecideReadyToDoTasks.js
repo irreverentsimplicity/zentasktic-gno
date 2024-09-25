@@ -54,8 +54,8 @@ const DecideReadyToDoTasks = () => {
       fetchAllTeamsTasks(dispatch);
     },[dispatch]);
 
-    useEffect( () => {
-      filterRewards(rewards);
+  useEffect( () => {
+    filterRewards(rewards);
   }, [rewards])
 
   const handleSendToAssess = async (taskId) => {

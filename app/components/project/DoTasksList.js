@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -11,10 +11,50 @@ import {
 } from '@chakra-ui/react';
 import { ArrowBackIcon, CheckIcon } from '@chakra-ui/icons';
 import { isDateInPast } from '../../util/dates';
+import { isRewarded, taskAssignedTo} from '../../util/metadataChecks';
 
 const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, markAsDoneTaskId }) => {
 
   const contexts = useSelector(state => state.project.projectContexts)
+  const teams = useSelector((state) => state.project.projectTeams);
+  const teamsWithAssignedTasks = useSelector((state) => state.project.projectTeamsWithAssignedTasks);  
+  const rewards = useSelector( (state) => state.project.projectRewards);
+  const [rewardsByTaskId, setRewardsByTaskId] = useState(null);
+
+  useEffect( () => {
+    filterRewards(rewards);
+  }, [rewards])
+
+  const filterRewards = (rewards) => {
+    // Initialize an empty object to store rewards by taskId
+    const rewardsByTask = {};
+
+    // Iterate over the rewards points array
+    rewards.forEach(reward => {
+        const taskId = reward.objectId;
+        const amountStr = reward.rewardsPointsAmount;
+        const rewardPointId = reward.rewardsPointId;
+
+        // Extract the denomination and amount
+        const amount = parseInt(amountStr.match(/\d+/)[0], 10);
+        const denom = amountStr.match(/[A-Z]+/i)[0];
+
+        // Initialize the task rewards if it doesn't exist
+        if (!rewardsByTask[taskId]) {
+            rewardsByTask[taskId] = {
+                taskId: taskId,
+                rewards: {}
+            };
+        }
+
+        // Add the reward with amount and rewardPointId for the given denomination
+        rewardsByTask[taskId].rewards[denom] = {
+            amount: amount,
+            rewardPointId: rewardPointId
+        };
+    });
+    setRewardsByTaskId(Object.values(rewardsByTask))
+  }
   
   return (
   <Box>
@@ -57,6 +97,25 @@ const TaskList = ({ tasks, handleSendToDecide, handleMarkAsDone, sendingTaskId, 
                       {task.taskDue ? task.taskDue : 'no due date'}
                     </Text>
                   </Box>
+                  <Box
+                      bg={"green.200"}
+                      borderRadius="md"
+                      p={1}
+                      >
+                      <Text fontSize="sm" color="gray.700">
+                        {taskAssignedTo(task.taskId, teams, teamsWithAssignedTasks)}
+                      </Text>
+                    
+                    </Box>
+                    <Box
+                    bg={"green.200"}
+                    borderRadius="md"
+                    p={1}
+                    >
+                    <Text fontSize="sm" color="gray.700">
+                      {isRewarded(task, rewardsByTaskId)}
+                    </Text>                    
+                    </Box>
                 </HStack>
               </Box>
               <IconButton

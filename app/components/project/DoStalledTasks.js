@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ActionsProject from '../../util/actionsProject';
-import Config from '../../util/config';
 import { fetchAllTasksByRealm } from '../../util/fetchersProject';
 import TaskList from './DoTasksList';
 import { isDateInPast } from '../../util/dates';
