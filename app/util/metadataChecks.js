@@ -62,3 +62,7 @@ return rewardSummary;
 }
 
 };
+
+export const isGnoAddress = (address) => {
+    return /^g1[0-9a-z]{38}$/.test(address);
+  };

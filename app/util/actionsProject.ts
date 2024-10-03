@@ -669,9 +669,11 @@ class ActionsProject {
 
   async AddTeam(
     teamName: string,
+    teamAddress: string,
+    teamOwner: string,
   ): Promise<any> {
     const response = await this.callMethod('AddTeamWrap', [
-      teamName,
+      teamName, teamAddress, teamOwner
     ]);
     console.log("actions AddTeamWrap response ", JSON.stringify(response))
     return response;

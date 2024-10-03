@@ -5,12 +5,15 @@ import { Box, Text, Input, IconButton, Button, List, ListItem, Flex, Spinner, Fo
 import { DeleteIcon, ArrowForwardIcon, AddIcon } from '@chakra-ui/icons';
 import { FaUsers } from 'react-icons/fa';
 import { fetchAllUsers, fetchAllTeams } from '../../util/fetchersProject';
+import { isGnoAddress } from '../../util/metadataChecks';
 
 const ProjectTeams = () => {
   const users = useSelector(state => state.project.projectUsers);
   const teams = useSelector(state => state.project.projectTeams);
   const dispatch = useDispatch();
   const [newTeam, setNewTeam] = useState('');
+  const [teamAddress, setTeamAddress] = useState('');
+  const [teamOwner, setTeamOwner] = useState('');
   const [editTeamId, setEditTeamId] = useState(null);
   const [editTeamName, setEditTeamName] = useState('');
   const [expandedTeamId, setExpandedTeamId] = useState(null);
@@ -28,18 +31,29 @@ const ProjectTeams = () => {
     fetchAllUsers(dispatch);
   }, [dispatch]);
 
+  // Validate team name and addresses
+  const isTeamNameValid = newTeam.length > 0;
+  const isTeamAddressValid = isGnoAddress(teamAddress);
+  const isTeamOwnerValid = isGnoAddress(teamOwner);
+
+  // Check if there are any errors (invalid team name, address, or owner)
+  const isFormValid = isTeamNameValid && isTeamAddressValid && isTeamOwnerValid;
+  
+
   const handleAddTeam = async () => {
     if (newTeam) {
       setIsAdding(true);
       const actions = await ActionsProject.getInstance();
       try {
-        await actions.AddTeam(newTeam);
+        await actions.AddTeam(newTeam, teamAddress, teamOwner);
         fetchAllTeams(dispatch);
       } catch (err) {
         console.log("error in calling AddTeam", err);
       }
       setIsAdding(false);
       setNewTeam('');
+      setTeamAddress('');
+      setTeamOwner('');
     }
   };
 
@@ -111,24 +125,44 @@ const ProjectTeams = () => {
     <Box>
       {/* Form for adding teams */}
       <FormControl isInvalid={addError}>
-        <Input
-          value={newTeam}
-          onChange={(e) => setNewTeam(e.target.value)}
-          placeholder="Team Name"
-          mb={2}
-        />
-        {addError && <FormErrorMessage>Invalid team name</FormErrorMessage>}
-        <Flex justifyContent="flex-end">
-          <Button 
-            onClick={handleAddTeam} 
-            colorScheme="blue" 
-            isLoading={isAdding}
-            isDisabled={!newTeam || addError}
-          >
-            {isAdding ? <Spinner size="sm" /> : 'Add Team'}
-          </Button>
-        </Flex>
-      </FormControl>
+      {/* Team Name Input */}
+      <Input
+        value={newTeam}
+        onChange={(e) => setNewTeam(e.target.value)}
+        placeholder="Team Name"
+        mb={2}
+      />
+      {!isTeamNameValid && <FormErrorMessage>Invalid team name</FormErrorMessage>}
+      
+      {/* Team Address Input */}
+      <Input
+        value={teamAddress}
+        onChange={(e) => setTeamAddress(e.target.value)}
+        placeholder="Team Address"
+        mb={2}
+      />
+      {!isTeamAddressValid && <FormErrorMessage>Invalid team address</FormErrorMessage>}
+      
+      {/* Team Owner Input */}
+      <Input
+        value={teamOwner}
+        onChange={(e) => setTeamOwner(e.target.value)}
+        placeholder="Team Owner"
+        mb={2}
+      />
+      {!isTeamOwnerValid && <FormErrorMessage>Invalid team owner address</FormErrorMessage>}
+      
+      <Flex justifyContent="flex-end">
+        <Button 
+          onClick={handleAddTeam} 
+          colorScheme="blue" 
+          isLoading={isAdding}
+          isDisabled={!isFormValid}
+        >
+          {isAdding ? <Spinner size="sm" /> : 'Add Team'}
+        </Button>
+      </Flex>
+    </FormControl>
 
       {/* List of teams with edit, delete, and user management options */}
       <List spacing={3} mt={4}>

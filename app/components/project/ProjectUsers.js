@@ -4,6 +4,7 @@ import ActionsProject from '../../util/actionsProject';
 import { Box, Input, IconButton, Button, List, ListItem, Flex, Spinner, FormControl, FormErrorMessage } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { fetchAllUsers } from '../../util/fetchersProject';
+import { isGnoAddress } from '../../util/metadataChecks';
 
 const ProjectUsers = () => {
   const users = useSelector(state => state.project.projectUsers);
@@ -22,10 +23,6 @@ const ProjectUsers = () => {
   useEffect(() => {
     fetchAllUsers(dispatch);
   }, []);
-
-  const isGnoAddress = (address) => {
-    return /^g1[0-9a-z]{38}$/.test(address);
-  };
 
   const handleAddUser = async () => {
     if (newUser && userAddress && isGnoAddress(userAddress)) {
