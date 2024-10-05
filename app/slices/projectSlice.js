@@ -23,8 +23,12 @@ const projectSlice = createSlice({
     projectTeams: [],
     projectTeamsWithAssignedTasks: [],
     projectRewards: [],
+    userLoggedIn: 0,
   },
   reducers: {
+    setUserLoggedStatus(state, action){
+      state.userLoggedIn = action.payload;
+    },
     setBlockchain(state, action) {
       state.blockchainName = action.payload;
     },
@@ -87,6 +91,7 @@ const projectSlice = createSlice({
 });
 
 export const { 
+  setUserLoggedStatus,
   setBlockchain, 
   setNetwork, 
   setUserGnotBalances, 

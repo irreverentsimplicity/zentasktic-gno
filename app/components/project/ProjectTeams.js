@@ -57,11 +57,11 @@ const ProjectTeams = () => {
     }
   };
 
-  const handleDeleteTeam = async (teamId) => {
-    setDeletingTeamId(teamId);
+  const handleDeleteTeam = async (teamAddress) => {
+    setDeletingTeamId(teamAddress);
     const actions = await ActionsProject.getInstance();
     try {
-      await actions.RemoveTeam(teamId);
+      await actions.RemoveTeam(teamAddress);
       fetchAllTeams(dispatch);
     } catch (err) {
       console.log("error in calling RemoveTeam", err);
@@ -70,7 +70,7 @@ const ProjectTeams = () => {
   };
 
   const handleEditTeam = (team) => {
-    setEditTeamId(team.teamId);
+    setEditTeamId(team.teamAddress);
     setEditTeamName(team.teamName);
     setExpandedTeamId(null); // Collapse the expanded panel when editing
   };
@@ -93,15 +93,15 @@ const ProjectTeams = () => {
     }
   };
 
-  const handleToggleTeamExpansion = (teamId) => {
-    setExpandedTeamId(expandedTeamId === teamId ? null : teamId);
+  const handleToggleTeamExpansion = (teamAddress) => {
+    setExpandedTeamId(expandedTeamId === teamAddress ? null : teamAddress);
   };
 
-  const handleAddUserToTeam = async (userId, teamId) => {
+  const handleAddUserToTeam = async (userId, teamAddress) => {
     setAddingUserId(userId)
     const actions = await ActionsProject.getInstance();
     try {
-      await actions.AddActorToTeamWrap(userId, teamId);
+      await actions.AddActorToTeamWrap(userId, teamAddress);
       fetchAllTeams(dispatch); // Refresh the team list after adding
     } catch (err) {
       console.log("error in adding user to team", err);
@@ -109,11 +109,11 @@ const ProjectTeams = () => {
     setAddingUserId(null)
   };
 
-  const handleRemoveUserFromTeam = async (userId, teamId) => {
+  const handleRemoveUserFromTeam = async (userId, teamAddress) => {
     setDeletingUserId(userId)
     const actions = await ActionsProject.getInstance();
     try {
-      await actions.RemoveActorFromTeamWrap(userId, teamId);
+      await actions.RemoveActorFromTeamWrap(userId, teamAddress);
       fetchAllTeams(dispatch); // Refresh the team list after removing
     } catch (err) {
       console.log("error in removing user from team", err);
@@ -170,18 +170,18 @@ const ProjectTeams = () => {
           <ListItem>No teams in the system</ListItem>
         ) : (
           teams.map((team) => (
-            <Box key={team.teamId}>
+            <Box key={team.teamAddress}>
               <ListItem display="flex" alignItems="center">
-                {editTeamId !== team.teamId && (
+                {editTeamId !== team.teamAddress && (
                   <IconButton
-                    icon={deletingTeamId === team.teamId ? <Spinner size="sm" /> : <DeleteIcon size="sm" />}
-                    onClick={() => handleDeleteTeam(team.teamId)}
+                    icon={deletingTeamId === team.teamAddress ? <Spinner size="sm" /> : <DeleteIcon size="sm" />}
+                    onClick={() => handleDeleteTeam(team.teamAddress)}
                     colorScheme="red"
                     mr={2}
-                    isLoading={deletingTeamId === team.teamId}
+                    isLoading={deletingTeamId === team.teamAddress}
                   />
                 )}
-                {editTeamId === team.teamId ? (
+                {editTeamId === team.teamAddress ? (
                   <Flex flex="1" alignItems="center" flexDirection="column">
                     <FormControl isInvalid={!editTeamName}>
                       <Input
@@ -217,7 +217,7 @@ const ProjectTeams = () => {
                     <Flex alignItems="center" ml={2} position="relative">
                       <IconButton
                         icon={<FaUsers />}
-                        onClick={() => handleToggleTeamExpansion(team.teamId)}
+                        onClick={() => handleToggleTeamExpansion(team.teamAddress)}
                         aria-label="Manage Team"
                       />
                       <Badge 
@@ -230,14 +230,12 @@ const ProjectTeams = () => {
                       </Badge>
                     </Flex>
                   </Flex>
-
-
                 )}
               </ListItem>
 
               {/* Expandable panel for managing users in the team */}
-              {expandedTeamId === team.teamId && (
-                <Collapse in={expandedTeamId === team.teamId} animateOpacity>
+              {expandedTeamId === team.teamAddress && (
+                <Collapse in={expandedTeamId === team.teamAddress} animateOpacity>
                   <Box mt={4} mb={2} pl={6} pr={6}>
                     {/* List of users in the team */}
                     <List spacing={2} mb={4}>
@@ -250,7 +248,7 @@ const ProjectTeams = () => {
                             <Box flex="1">{user.actorName}</Box>
                               <IconButton
                                 icon={deletingUserId === user.actorId ? <Spinner size="sm" /> : <ArrowForwardIcon />}
-                                onClick={() => handleRemoveUserFromTeam(user.actorId, team.teamId)}
+                                onClick={() => handleRemoveUserFromTeam(user.actorId, team.teamAddress)}
                                 colorScheme="red"
                                 aria-label="Remove from Team"
                                 isLoading={deletingUserId === user.actorId}
@@ -268,7 +266,7 @@ const ProjectTeams = () => {
                           <Box flex="1">{user.actorName}</Box>
                             <IconButton
                               icon={addingUserId === user.actorId ? <Spinner size="sm" /> : <AddIcon />}
-                              onClick={() => handleAddUserToTeam(user.actorId, team.teamId)}
+                              onClick={() => handleAddUserToTeam(user.actorId, team.teamAddress)}
                               colorScheme="green"
                               aria-label="Add to Team"
                               isLoading={addingUserId === user.actorId}

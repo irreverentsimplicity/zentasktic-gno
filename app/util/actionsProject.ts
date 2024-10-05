@@ -221,6 +221,11 @@ class ActionsProject {
     return true;
   }
 
+
+  public setWallet(wallet: GnoWallet) {
+    this.wallet = wallet;
+  }
+
   /**
    * Return user Addres
    */
@@ -682,14 +687,14 @@ class ActionsProject {
    /**
    * Removes a team
    *
-   * @param teamId string - team id
+   * @param teamAddress string - team id
    */
   
    async RemoveTeam(
-    teamId: string,
+    teamAddress: string,
   ): Promise<any> {
     const response = await this.callMethod('RemoveTeamWrap', [
-      teamId
+      teamAddress
     ]);
     console.log("actions RemoveTeam response ", JSON.stringify(response))
     return response;
@@ -698,16 +703,16 @@ class ActionsProject {
   /**
    * Updates a team
    *
-   * @param teamId string - team id
+   * @param teamAddress string - team id
    * @param teamName string - team name
    */
   
   async UpdateTeam(
-    teamId: string,
+    teamAddress: string,
     teamName: string,
   ): Promise<any> {
     const response = await this.callMethod('EditTeamWrap', [
-      teamId,
+      teamAddress,
       teamName,
     ]);
     console.log("actions EditTeamWrap response ", JSON.stringify(response))
@@ -728,16 +733,16 @@ class ActionsProject {
    * Add user to a team
    *
    * @param userId string - user id
-   * @param teamId string - team id
+   * @param teamAddress string - team id
    */
   
   async AddActorToTeamWrap(
     userId: string,
-    teamId: string,
+    teamAddress: string,
   ): Promise<any> {
     const response = await this.callMethod('AddActorToTeamWrap', [
       userId,
-      teamId,
+      teamAddress,
     ]);
     console.log("actions AddActorToTeamaWrap response ", JSON.stringify(response))
     return response;
@@ -747,16 +752,16 @@ class ActionsProject {
    * Add user to a team
    *
    * @param userId string - user id
-   * @param teamId string - team id
+   * @param teamAddress string - team id
    */
   
   async RemoveActorFromTeamWrap(
     userId: string,
-    teamId: string,
+    teamAddress: string,
   ): Promise<any> {
     const response = await this.callMethod('RemoveActorFromTeamWrap', [
       userId,
-      teamId,
+      teamAddress,
     ]);
     console.log("actions RemoveActorFromTeamWrap response ", JSON.stringify(response))
     return response;
@@ -901,16 +906,16 @@ class ActionsProject {
   /**
    * Assigns a task to a team
    *
-   * @param teamId string - team id
+   * @param teamAddress string - team id
    * @param taskId string - task id
    */
 
   async AssignTeamToTask(
-    teamId: string,
+    teamAddress: string,
     taskId: string,
   ): Promise<any> {
     const response = await this.callMethod('AssignTeamToTaskWrap', [
-      teamId,
+      teamAddress,
       taskId,
     ]);
     console.log("actions AssignTeamToTaskWrap response ", JSON.stringify(response))
@@ -920,16 +925,16 @@ class ActionsProject {
   /**
    * Unassigns a team from a task
    *
-   * @param teamId string - team id
+   * @param teamAddress string - team id
    * @param taskId string - task id
    */
 
   async UnassignTeamFromTask(
-    teamId: string,
+    teamAddress: string,
     taskId: string,
   ): Promise<any> {
     const response = await this.callMethod('UnassignTeamFromTaskWrap', [
-      teamId,
+      teamAddress,
       taskId,
     ]);
     console.log("actions UnassignTeamFromTaskWrap response ", JSON.stringify(response))

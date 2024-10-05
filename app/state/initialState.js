@@ -7,6 +7,7 @@ const initialState = {
       zentaskticProjectAddress: undefined,
       zentsskticUserAddress: undefined,
     },
+    userLoggedIn: 0,
   };
   
   

@@ -112,13 +112,13 @@ const DecideUndecidedTasks = () => {
     setLoadingDueDateTaskId(null);
   };
 
-  const assignTeamToTask = async (teamId, taskId) => {
-    setAssigningTeamId(teamId);
+  const assignTeamToTask = async (teamAddress, taskId) => {
+    setAssigningTeamId(teamAddress);
     setLoadingAssignTaskId(taskId);
     const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
-      await actions.AssignTeamToTask(teamId, taskId);
+      await actions.AssignTeamToTask(teamAddress, taskId);
       fetchAllTasksByRealm(dispatch, '2');
       fetchAllTeamsTasks(dispatch);
     } catch (err) {
@@ -128,13 +128,13 @@ const DecideUndecidedTasks = () => {
     setLoadingAssignTaskId(null);
   };
 
-  const unassignTeamFromTask = async (teamId, taskId) => {
-    setAssigningTeamId(teamId);
+  const unassignTeamFromTask = async (teamAddress, taskId) => {
+    setAssigningTeamId(teamAddress);
     setLoadingAssignTaskId(taskId);
     const actions = await ActionsProject.getInstance();
     //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
     try {
-      await actions.UnassignTeamFromTask(teamId, taskId);
+      await actions.UnassignTeamFromTask(teamAddress, taskId);
       fetchAllTasksByRealm(dispatch, '2');
       fetchAllTeamsTasks(dispatch);
     } catch (err) {
@@ -360,23 +360,23 @@ const getUndecidedTasks = (tasks) => {
                     <Text mb={2} borderBottom="1px" borderColor="gray.300" fontWeight={"bold"}>Assign to</Text>
                     <VStack spacing={2} align="left" mb={4}>
                       {teams.map((team) => {
-                        const isTaskAssigned = isTaskAssignedToTeam(team.teamId, task.taskId, teamsWithAssignedTasks);
+                        const isTaskAssigned = isTaskAssignedToTeam(team.teamAddress, task.taskId, teamsWithAssignedTasks);
                         console.log("isTaskAssigned ", isTaskAssigned)
                         return (
-                          <HStack key={team.teamId} justify="space-between" width="100%">
+                          <HStack key={team.teamAddress} justify="space-between" width="100%">
                             <Text>{team.teamName}</Text>
                             <IconButton
-                              icon={assigningTeamId === team.teamId ? <Spinner size="sm"/> : isTaskAssigned ? <FaFileCircleMinus size={24} /> : <FaFileCirclePlus size={24} />}
+                              icon={assigningTeamId === team.teamAddress ? <Spinner size="sm"/> : isTaskAssigned ? <FaFileCircleMinus size={24} /> : <FaFileCirclePlus size={24} />}
                               color={isTaskAssigned?  "#FF0000" : "#008000"}
                               aria-label={isTaskAssigned ? "Unassign Task" : "Assign Task"}
                               onClick={async () => {
                                 if (isTaskAssigned) {
-                                  await unassignTeamFromTask(team.teamId, task.taskId);
+                                  await unassignTeamFromTask(team.teamAddress, task.taskId);
                                 } else {
-                                  await assignTeamToTask(team.teamId, task.taskId);
+                                  await assignTeamToTask(team.teamAddress, task.taskId);
                                 }
                               }}
-                              isLoading={assigningTeamId === team.teamId}
+                              isLoading={assigningTeamId === team.teamAddress}
                             />
                           </HStack>
                         );

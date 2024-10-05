@@ -12,9 +12,9 @@ export const taskAssignedTo = (taskId, teams, teamsWithAssignedTasks) => {
             const isTaskAssigned = teamTaskObject.tasks.some(task => task.taskId === taskId);
 
             if (isTaskAssigned) {
-            const teamId = teamTaskObject.teamId
-            const teamName = (teams, teamId) => teams.find(team => team.teamId === teamId)?.teamName || '';
-            assignedTeams.push(teamName(teams, teamTaskObject.teamId)); 
+            const teamAddress = teamTaskObject.teamAddress
+            const teamName = (teams, teamAddress) => teams.find(team => team.teamAddress === teamAddress)?.teamName || '';
+            assignedTeams.push(teamName(teams, teamTaskObject.teamAddress)); 
             }
         });
 
@@ -25,10 +25,10 @@ export const taskAssignedTo = (taskId, teams, teamsWithAssignedTasks) => {
     }
 }
 
-export const isTaskAssignedToTeam = (teamId, taskId, teamsWithAssignedTasks) => {
+export const isTaskAssignedToTeam = (teamAddress, taskId, teamsWithAssignedTasks) => {
     if(teamsWithAssignedTasks !== undefined){
-        // Find the team with the matching teamId
-        const team = teamsWithAssignedTasks.find(team => team.teamId === teamId);
+        // Find the team with the matching teamAddress
+        const team = teamsWithAssignedTasks.find(team => team.teamAddress === teamAddress);
 
         if (team) {
             // Check if the task with the matching taskId exists in the team's tasks array
